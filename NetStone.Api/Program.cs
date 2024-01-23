@@ -1,4 +1,5 @@
 using System.Configuration;
+using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using NetStone;
@@ -22,7 +23,10 @@ builder.Services.AddSingleton<LodestoneClient>(sp =>
 });
 
 builder.Services.AddTransient<ICharacterService, CharacterService>();
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddJsonOptions(x =>
+{
+    x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 AddAuthentication(builder.Services);
 
