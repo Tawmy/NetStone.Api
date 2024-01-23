@@ -7,7 +7,7 @@ using NetStone.Search.Character;
 
 namespace NetStone.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 [Authorize]
 public class CharacterController : ControllerBase
