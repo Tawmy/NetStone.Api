@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Api.Interfaces;
 using NetStone.Model.Parseables.Character;
@@ -8,6 +9,7 @@ namespace NetStone.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class CharacterController : ControllerBase
 {
     private readonly ICharacterService _characterService;

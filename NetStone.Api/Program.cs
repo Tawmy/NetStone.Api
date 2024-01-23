@@ -1,13 +1,17 @@
+using System.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 using NetStone;
+using NetStone.Api;
 using NetStone.Api.Interfaces;
+using NetStone.Api.Messages;
 using NetStone.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+ConfigureSwagger(builder.Services);
 
 builder.Services.AddSingleton<LodestoneClient>(sp =>
 {
@@ -19,6 +23,8 @@ builder.Services.AddSingleton<LodestoneClient>(sp =>
 
 builder.Services.AddTransient<ICharacterService, CharacterService>();
 builder.Services.AddControllers();
+
+AddAuthentication(builder.Services);
 
 var app = builder.Build();
 
@@ -33,4 +39,43 @@ app.UseHttpsRedirection();
 
 app.MapControllers();
 
+app.UseAuthentication();
+app.UseAuthorization();
+
 app.Run();
+
+return;
+
+void ConfigureSwagger(IServiceCollection services)
+{
+    services.AddEndpointsApiExplorer();
+    services.AddSwaggerGen(options => { options.SupportNonNullableReferenceTypes(); });
+    services.ConfigureOptions<ConfigureSwaggerOptions>();
+}
+
+void AddAuthentication(IServiceCollection services)
+{
+    services.AddAuthentication(options =>
+        {
+            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAuthority) ??
+                                throw new ConfigurationErrorsException(
+                                    Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAuthority));
+            options.Audience = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAudience) ??
+                               throw new ConfigurationErrorsException(
+                                   Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAudience));
+
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateActor = true,
+                ValidateAudience = true,
+                ValidateTokenReplay = true
+            };
+        });
+}

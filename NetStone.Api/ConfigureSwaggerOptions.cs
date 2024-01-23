@@ -1,0 +1,59 @@
+using System.Configuration;
+using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using NetStone.Api.Messages;
+using Swashbuckle.AspNetCore.SwaggerGen;
+
+namespace NetStone.Api;
+
+internal class ConfigureSwaggerOptions : IConfigureNamedOptions<SwaggerGenOptions>
+{
+    /// <summary>
+    ///     Configure each API discovered for Swagger Documentation
+    /// </summary>
+    public void Configure(SwaggerGenOptions options)
+    {
+        // Get environment variables for Swagger auth
+        var authority = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAuthority) ??
+                        throw new ConfigurationErrorsException(
+                            Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAuthority));
+
+        var tokenUrl = Path.Combine(authority, "protocol/openid-connect/token");
+
+        // Add Keycloak auth to Swagger UI
+        options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
+        {
+            Type = SecuritySchemeType.OAuth2,
+            Flows = new OpenApiOAuthFlows
+            {
+                ClientCredentials = new OpenApiOAuthFlow
+                {
+                    TokenUrl = new Uri(tokenUrl)
+                }
+            }
+        });
+
+        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Keycloak"
+                    }
+                },
+                Array.Empty<string>()
+            }
+        });
+    }
+
+    /// <summary>
+    ///     Configure Swagger Options. Inherited from the Interface
+    /// </summary>
+    public void Configure(string? name, SwaggerGenOptions options)
+    {
+        Configure(options);
+    }
+}
