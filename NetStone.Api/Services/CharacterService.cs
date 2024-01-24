@@ -6,7 +6,7 @@ using NetStone.Search.Character;
 
 namespace NetStone.Api.Services;
 
-public class CharacterService : ICharacterService
+internal class CharacterService : ICharacterService
 {
     private readonly LodestoneClient _client;
     private readonly IMapper _mapper;

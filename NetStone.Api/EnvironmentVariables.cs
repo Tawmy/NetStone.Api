@@ -1,5 +1,8 @@
 namespace NetStone.Api;
 
+/// <summary>
+///     Environment variables, to avoid typos.
+/// </summary>
 public class EnvironmentVariables
 {
     /// <summary>

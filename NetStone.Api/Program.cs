@@ -15,7 +15,7 @@ var builder = WebApplication.CreateBuilder(args);
 ConfigureSwagger(builder.Services);
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddSingleton<LodestoneClient>(sp =>
+builder.Services.AddSingleton<LodestoneClient>(_ =>
 {
     // Assuming that GetClientAsync returns a Task<LodestoneClient>
     var clientTask = LodestoneClient.GetClientAsync();
@@ -54,7 +54,14 @@ return;
 void ConfigureSwagger(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
-    services.AddSwaggerGen(options => { options.SupportNonNullableReferenceTypes(); });
+    services.AddSwaggerGen(options =>
+    {
+        options.SupportNonNullableReferenceTypes();
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+            $"{typeof(Program).Assembly.GetName().Name}.xml"));
+        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
+            $"{typeof(LodestoneClient).Assembly.GetName().Name}.xml"));
+    });
     services.ConfigureOptions<ConfigureSwaggerOptions>();
 }
 

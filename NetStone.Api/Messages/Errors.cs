@@ -1,6 +1,6 @@
 namespace NetStone.Api.Messages;
 
-public static class Errors
+internal static class Errors
 {
     public static class Environment
     {

@@ -3,7 +3,7 @@ using NetStone.StaticData;
 
 namespace NetStone.Api.Extensions;
 
-public static class LodestoneCharacterExtension
+internal static class LodestoneCharacterExtension
 {
     /// <summary>
     ///     Convert a job icon URL to its respective ClassJob

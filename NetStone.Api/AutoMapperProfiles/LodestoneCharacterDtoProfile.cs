@@ -5,7 +5,7 @@ using NetStone.Model.Parseables.Character;
 
 namespace NetStone.Api.AutoMapperProfiles;
 
-public class LodestoneCharacterDtoProfile : Profile
+internal class LodestoneCharacterDtoProfile : Profile
 {
     public LodestoneCharacterDtoProfile()
     {
