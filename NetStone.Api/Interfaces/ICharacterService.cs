@@ -1,4 +1,4 @@
-using NetStone.Model.Parseables.Character;
+using NetStone.Api.DTOs;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -8,5 +8,5 @@ public interface ICharacterService
 {
     public Task<CharacterSearchPage?> SearchCharacterAsync(CharacterSearchQuery query);
 
-    public Task<LodestoneCharacter?> GetCharacterAsync(string lodestoneId);
+    public Task<LodestoneCharacterDto?> GetCharacterAsync(string lodestoneId);
 }

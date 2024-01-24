@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NetStone.Api.DTOs;
 using NetStone.Api.Interfaces;
-using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -26,7 +26,7 @@ public class CharacterController : ControllerBase
     }
 
     [HttpGet("{lodestoneId}")]
-    public async Task<LodestoneCharacter?> GetAsync(string lodestoneId)
+    public async Task<LodestoneCharacterDto?> GetAsync(string lodestoneId)
     {
         return await _characterService.GetCharacterAsync(lodestoneId);
     }

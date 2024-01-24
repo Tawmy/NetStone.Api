@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 ConfigureSwagger(builder.Services);
 
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddSingleton<LodestoneClient>(sp =>
 {
     // Assuming that GetClientAsync returns a Task<LodestoneClient>
