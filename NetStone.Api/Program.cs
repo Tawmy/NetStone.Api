@@ -24,6 +24,7 @@ builder.Services.AddSingleton<LodestoneClient>(_ =>
 });
 
 builder.Services.AddTransient<ICharacterService, CharacterService>();
+builder.Services.AddTransient<IFreeCompanyService, FreeCompanyService>();
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -61,6 +62,7 @@ void ConfigureSwagger(IServiceCollection services)
             $"{typeof(Program).Assembly.GetName().Name}.xml"));
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
             $"{typeof(LodestoneClient).Assembly.GetName().Name}.xml"));
+        options.CustomSchemaIds(type => type.ToString());
     });
     services.ConfigureOptions<ConfigureSwaggerOptions>();
 }
