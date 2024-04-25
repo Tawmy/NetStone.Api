@@ -1,9 +1,9 @@
 using NetStone.Model.Parseables.Character;
 using NetStone.StaticData;
 
-namespace NetStone.Api.Extensions;
+namespace NetStone.Common.Extensions;
 
-internal static class LodestoneCharacterExtension
+public static class LodestoneCharacterExtension
 {
     /// <summary>
     ///     Convert a job icon URL to its respective ClassJob

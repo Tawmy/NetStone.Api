@@ -4,6 +4,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Api", "NetStone.Ap
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone", "NetStone\NetStone\NetStone.csproj", "{2629B535-4293-4433-849C-1BE3E04AA7DE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Cache", "NetStone.Cache\NetStone.Cache.csproj", "{D7C602A0-860A-41B2-B49E-0CD12DF50094}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Common", "NetStone.Common\NetStone.Common.csproj", "{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +22,13 @@ Global
 		{2629B535-4293-4433-849C-1BE3E04AA7DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2629B535-4293-4433-849C-1BE3E04AA7DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2629B535-4293-4433-849C-1BE3E04AA7DE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Release|Any CPU.Build.0 = Release|Any CPU
+		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

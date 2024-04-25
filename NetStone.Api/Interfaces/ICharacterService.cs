@@ -1,6 +1,6 @@
 using NetStone.Api.Controllers;
-using NetStone.Api.DTOs;
 using NetStone.Api.Exceptions;
+using NetStone.Common.DTOs;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
@@ -32,7 +32,7 @@ public interface ICharacterService
     /// <param name="lodestoneId">Lodestone character ID. Use <see cref="SearchCharacterAsync" /> first if unknown.</param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<LodestoneCharacterDto> GetCharacterAsync(string lodestoneId);
+    public Task<CharacterDto> GetCharacterAsync(string lodestoneId);
 
     /// <summary>
     ///     Get a character's ClassJobs.

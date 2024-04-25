@@ -1,7 +1,8 @@
 using AutoMapper;
-using NetStone.Api.DTOs;
 using NetStone.Api.Exceptions;
 using NetStone.Api.Interfaces;
+using NetStone.Common.DTOs;
+using NetStone.Common.Interfaces;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
@@ -12,13 +13,15 @@ namespace NetStone.Api.Services;
 
 internal class CharacterService : ICharacterService
 {
+    private readonly ICharacterCachingService _cachingService;
     private readonly LodestoneClient _client;
     private readonly IMapper _mapper;
 
-    public CharacterService(LodestoneClient client, IMapper mapper)
+    public CharacterService(LodestoneClient client, IMapper mapper, ICharacterCachingService cachingService)
     {
         _client = client;
         _mapper = mapper;
+        _cachingService = cachingService;
     }
 
     public async Task<CharacterSearchPage> SearchCharacterAsync(CharacterSearchQuery query, int page)
@@ -29,11 +32,24 @@ internal class CharacterService : ICharacterService
         return result;
     }
 
-    public async Task<LodestoneCharacterDto> GetCharacterAsync(string lodestoneId)
+    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId)
     {
-        var character = await _client.GetCharacter(lodestoneId);
-        if (character == null) throw new NotFoundException();
-        return _mapper.Map<LodestoneCharacterDto>(character);
+        var cachedCharacterDto = await _cachingService.GetCharacterAsync(lodestoneId);
+
+        if (cachedCharacterDto != null)
+        {
+            // return cached character if possible
+            return cachedCharacterDto;
+        }
+
+        var lodestoneCharacter = await _client.GetCharacter(lodestoneId);
+        if (lodestoneCharacter == null) throw new NotFoundException();
+
+        // cache character before returning
+        await _cachingService.CacheCharacterAsync(lodestoneCharacter, lodestoneId);
+
+        var characterDto = _mapper.Map<CharacterDto>(lodestoneCharacter);
+        return characterDto with { Id = lodestoneId };
     }
 
     public async Task<CharacterClassJob> GetCharacterClassJobsAsync(string lodestoneId)

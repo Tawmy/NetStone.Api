@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetStone.Api.DTOs;
 using NetStone.Api.Exceptions;
 using NetStone.Api.Interfaces;
+using NetStone.Common.DTOs;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
@@ -51,7 +51,7 @@ public class CharacterController : ControllerBase
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     [HttpGet("{lodestoneId}")]
-    public async Task<ActionResult<LodestoneCharacterDto>> GetAsync(string lodestoneId)
+    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId)
     {
         try
         {
