@@ -15,7 +15,7 @@ public class Character
     public required string Avatar { get; set; }
     public required string Bio { get; set; }
 
-    // TODO Free Company
+    public CharacterFreeCompany? FreeCompany { get; set; }
 
     public GrandCompany GrandCompany { get; set; }
     public string? GrandCompanyRank { get; set; }

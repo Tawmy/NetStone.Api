@@ -24,7 +24,7 @@ public class CharacterMapping : IEntityTypeConfiguration<Character>
         builder.Property(x => x.GuardianDeityName).HasMaxLength(63);
         builder.Property(x => x.GuardianDeityIcon).HasMaxLength(127);
 
-        builder.Property(x => x.Name).HasMaxLength(17);
+        builder.Property(x => x.Name).HasMaxLength(21);
         builder.Property(x => x.Nameday).HasMaxLength(63);
 
         builder.Property(x => x.Portrait).HasMaxLength(255);

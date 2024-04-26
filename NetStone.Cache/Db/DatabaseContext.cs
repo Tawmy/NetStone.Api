@@ -18,12 +18,6 @@ public class DatabaseContext : DbContext
         MapEnums();
     }
 
-    #region DbSets
-
-    internal DbSet<Character> Characters => Set<Character>();
-
-    #endregion
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (!optionsBuilder.IsConfigured)
@@ -52,4 +46,11 @@ public class DatabaseContext : DbContext
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<GrandCompany>();
     }
+
+    #region DbSets
+
+    internal DbSet<Character> Characters => Set<Character>();
+    internal DbSet<CharacterFreeCompany> CharacterFreeCompanies => Set<CharacterFreeCompany>();
+
+    #endregion
 }

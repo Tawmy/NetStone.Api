@@ -20,6 +20,8 @@ public record CharacterDto
     public GrandCompany GrandCompany { get; set; }
     public string? GrandCompanyRank { get; set; }
 
+    public CharacterFreeCompanyDto? FreeCompany { get; set; }
+
     public required string GuardianDeityName { get; set; }
     public required string GuardianDeityIcon { get; set; }
 

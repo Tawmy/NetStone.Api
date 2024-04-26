@@ -12,8 +12,9 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper) : 
 {
     public async Task CacheCharacterAsync(LodestoneCharacter lodestoneCharacter, string lodestoneId)
     {
-        var character = await context.Characters.SingleOrDefaultAsync(x =>
-            x.Name == lodestoneCharacter.Name && x.Server == lodestoneCharacter.Server);
+        var character = await context.Characters
+            .Include(x => x.FreeCompany)
+            .SingleOrDefaultAsync(x => x.Name == lodestoneCharacter.Name && x.Server == lodestoneCharacter.Server);
 
         if (character != null)
         {
