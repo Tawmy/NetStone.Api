@@ -49,13 +49,17 @@ public class CharacterController : ControllerBase
     ///     Get character with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     [HttpGet("{lodestoneId}")]
-    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId)
+    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _characterService.GetCharacterAsync(lodestoneId);
+            return await _characterService.GetCharacterAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

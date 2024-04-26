@@ -32,11 +32,12 @@ internal class CharacterService : ICharacterService
         return result;
     }
 
-    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId)
+    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge)
     {
         var cachedCharacterDto = await _cachingService.GetCharacterAsync(lodestoneId);
 
-        if (cachedCharacterDto != null)
+        if (cachedCharacterDto != null &&
+            (DateTime.UtcNow - cachedCharacterDto.LastUpdated).TotalMinutes <= (maxAge ?? int.MaxValue))
         {
             // return cached character if possible
             return cachedCharacterDto;

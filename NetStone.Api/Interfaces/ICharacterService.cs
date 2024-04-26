@@ -30,9 +30,13 @@ public interface ICharacterService
     ///     Get character with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use <see cref="SearchCharacterAsync" /> first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterDto> GetCharacterAsync(string lodestoneId);
+    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's ClassJobs.
