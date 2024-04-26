@@ -9,6 +9,7 @@ internal static class QueryableCharacterExtension
     {
         return queryable
             .Include(x => x.FreeCompany)
-            .Include(x => x.Gear);
+            .Include(x => x.Gear)
+            .Include(x => x.Attributes);
     }
 }

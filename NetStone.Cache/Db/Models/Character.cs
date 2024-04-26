@@ -41,5 +41,5 @@ public class Character
 
     public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 
-    // TODO attributes
+    public CharacterAttributes Attributes { get; set; } = null!;
 }

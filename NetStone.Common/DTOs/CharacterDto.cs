@@ -6,30 +6,32 @@ public record CharacterDto
 {
     public required string Id { get; init; }
     public required string Name { get; init; }
-    public required string Server { get; set; }
-    public string? Title { get; set; }
+    public required string Server { get; init; }
+    public string? Title { get; init; }
     public required string Avatar { get; init; }
     public required string Portrait { get; init; }
-    public required string Bio { get; set; }
-    public required string Nameday { get; set; }
+    public required string Bio { get; init; }
+    public required string Nameday { get; init; }
 
     public required ClassJob ActiveClassJob { get; init; }
     public required short ActiveClassJobLevel { get; init; }
     public required string ActiveClassJobIcon { get; init; }
 
-    public GrandCompany GrandCompany { get; set; }
-    public string? GrandCompanyRank { get; set; }
+    public GrandCompany GrandCompany { get; init; }
+    public string? GrandCompanyRank { get; init; }
 
-    public CharacterFreeCompanyDto? FreeCompany { get; set; }
+    public CharacterFreeCompanyDto? FreeCompany { get; init; }
 
-    public required string GuardianDeityName { get; set; }
-    public required string GuardianDeityIcon { get; set; }
+    public required string GuardianDeityName { get; init; }
+    public required string GuardianDeityIcon { get; init; }
 
-    public string? PvpTeam { get; set; }
-    public required string RaceClanGender { get; set; }
+    public string? PvpTeam { get; init; }
+    public required string RaceClanGender { get; init; }
 
-    public string? TownName { get; set; }
-    public string? TownIcon { get; set; }
+    public string? TownName { get; init; }
+    public string? TownIcon { get; init; }
 
-    public IEnumerable<CharacterGearDto> Gear { get; set; } = [];
+    public required IEnumerable<CharacterGearDto> Gear { get; init; }
+
+    public required CharacterAttributesDto Attributes { get; init; }
 }
