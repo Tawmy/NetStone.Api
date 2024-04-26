@@ -39,7 +39,7 @@ public class Character
     public string? TownName { get; set; }
     public string? TownIcon { get; set; }
 
-    // TODO gear
+    public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 
     // TODO attributes
 }

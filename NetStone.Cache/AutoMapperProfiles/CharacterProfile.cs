@@ -1,5 +1,6 @@
 using AutoMapper;
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Db.Resolvers;
 using NetStone.Common.DTOs;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character;
@@ -17,7 +18,8 @@ internal class CharacterProfile : Profile
                 x => x.MapFrom((y, _) =>
                     Enum.TryParse<GrandCompany>(y.GrandCompanyName, true, out var result)
                         ? result
-                        : GrandCompany.None));
+                        : GrandCompany.None))
+            .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>());
 
         CreateMap<Character, CharacterDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId));

@@ -33,6 +33,7 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddTransient<ICharacterCachingService, CharacterCachingService>();
 builder.Services.AddTransient<ICharacterService, CharacterService>();
 builder.Services.AddTransient<IFreeCompanyService, FreeCompanyService>();
+builder.Services.AddTransient<CharacterGearService>();
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());

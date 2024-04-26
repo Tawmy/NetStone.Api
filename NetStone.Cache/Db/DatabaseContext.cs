@@ -51,6 +51,7 @@ public class DatabaseContext : DbContext
 
     internal DbSet<Character> Characters => Set<Character>();
     internal DbSet<CharacterFreeCompany> CharacterFreeCompanies => Set<CharacterFreeCompany>();
+    internal DbSet<CharacterGear> CharacterGears => Set<CharacterGear>();
 
     #endregion
 }

@@ -30,4 +30,6 @@ public record CharacterDto
 
     public string? TownName { get; set; }
     public string? TownIcon { get; set; }
+
+    public IEnumerable<CharacterGearDto> Gear { get; set; } = [];
 }

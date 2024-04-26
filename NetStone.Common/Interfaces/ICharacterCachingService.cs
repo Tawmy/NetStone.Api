@@ -5,7 +5,7 @@ namespace NetStone.Common.Interfaces;
 
 public interface ICharacterCachingService
 {
-    Task CacheCharacterAsync(LodestoneCharacter character, string lodestoneId);
+    Task<CharacterDto> CacheCharacterAsync(LodestoneCharacter character, string lodestoneId);
     Task<CharacterDto?> GetCharacterAsync(int id);
     Task<CharacterDto?> GetCharacterAsync(string lodestoneId);
 }

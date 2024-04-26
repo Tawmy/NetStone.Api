@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetStone.Cache.Db;
 using NetStone.StaticData;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240426091805_AddCharacterGear")]
+    partial class AddCharacterGear
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -283,9 +286,8 @@ namespace NetStone.Cache.Db.Migrations
                     b.HasKey("Id")
                         .HasName("pk_character_gears");
 
-                    b.HasIndex("CharacterId", "Slot")
-                        .IsUnique()
-                        .HasDatabaseName("ix_character_gears_character_id_slot");
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_gears_character_id");
 
                     b.ToTable("character_gears", (string)null);
                 });

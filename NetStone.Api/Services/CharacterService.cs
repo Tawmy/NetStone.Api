@@ -45,11 +45,8 @@ internal class CharacterService : ICharacterService
         var lodestoneCharacter = await _client.GetCharacter(lodestoneId);
         if (lodestoneCharacter == null) throw new NotFoundException();
 
-        // cache character before returning
-        await _cachingService.CacheCharacterAsync(lodestoneCharacter, lodestoneId);
-
-        var characterDto = _mapper.Map<CharacterDto>(lodestoneCharacter);
-        return characterDto with { Id = lodestoneId };
+        // cache character and return
+        return await _cachingService.CacheCharacterAsync(lodestoneCharacter, lodestoneId);
     }
 
     public async Task<CharacterClassJob> GetCharacterClassJobsAsync(string lodestoneId)

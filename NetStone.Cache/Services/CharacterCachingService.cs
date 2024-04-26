@@ -2,6 +2,7 @@ using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db;
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Extensions;
 using NetStone.Common.DTOs;
 using NetStone.Common.Interfaces;
 using NetStone.Model.Parseables.Character;
@@ -10,10 +11,10 @@ namespace NetStone.Cache.Services;
 
 public class CharacterCachingService(DatabaseContext context, IMapper mapper) : ICharacterCachingService
 {
-    public async Task CacheCharacterAsync(LodestoneCharacter lodestoneCharacter, string lodestoneId)
+    public async Task<CharacterDto> CacheCharacterAsync(LodestoneCharacter lodestoneCharacter, string lodestoneId)
     {
         var character = await context.Characters
-            .Include(x => x.FreeCompany)
+            .IncludeAll()
             .SingleOrDefaultAsync(x => x.Name == lodestoneCharacter.Name && x.Server == lodestoneCharacter.Server);
 
         if (character != null)
@@ -29,17 +30,19 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper) : 
         }
 
         await context.SaveChangesAsync();
+
+        return mapper.Map<CharacterDto>(character);
     }
 
     public async Task<CharacterDto?> GetCharacterAsync(int id)
     {
-        var character = await context.Characters.SingleOrDefaultAsync(x => x.Id == id);
+        var character = await context.Characters.IncludeAll().SingleOrDefaultAsync(x => x.Id == id);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
     }
 
     public async Task<CharacterDto?> GetCharacterAsync(string lodestoneId)
     {
-        var character = await context.Characters.SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
+        var character = await context.Characters.IncludeAll().SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
     }
 }
