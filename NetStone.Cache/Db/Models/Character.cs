@@ -1,8 +1,9 @@
+using NetStone.Cache.Interfaces;
 using NetStone.StaticData;
 
 namespace NetStone.Cache.Db.Models;
 
-public class Character
+public class Character : IUpdatable
 {
     public int Id { get; set; } //PK
 
@@ -42,4 +43,7 @@ public class Character
     public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 
     public CharacterAttributes Attributes { get; set; } = null!;
+
+    public DateTime CreatedAt { get; set; }
+    public DateTime? UpdatedAt { get; set; }
 }

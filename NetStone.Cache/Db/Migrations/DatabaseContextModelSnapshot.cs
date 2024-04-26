@@ -60,6 +60,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("character varying(3000)")
                         .HasColumnName("bio");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
                     b.Property<GrandCompany>("GrandCompany")
                         .HasColumnType("grand_company")
                         .HasColumnName("grand_company");
@@ -136,6 +140,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasMaxLength(31)
                         .HasColumnType("character varying(31)")
                         .HasColumnName("town_name");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
 
                     b.HasKey("Id")
                         .HasName("pk_characters");

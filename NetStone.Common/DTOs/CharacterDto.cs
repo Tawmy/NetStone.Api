@@ -34,4 +34,6 @@ public record CharacterDto
     public required IEnumerable<CharacterGearDto> Gear { get; init; }
 
     public required CharacterAttributesDto Attributes { get; init; }
+
+    public DateTime LastUpdated { get; set; }
 }
