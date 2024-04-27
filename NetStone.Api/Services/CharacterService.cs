@@ -1,7 +1,7 @@
 using AutoMapper;
 using NetStone.Api.Interfaces;
 using NetStone.Cache.Interfaces;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Search.Character;

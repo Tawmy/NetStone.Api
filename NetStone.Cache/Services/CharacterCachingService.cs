@@ -4,7 +4,7 @@ using NetStone.Cache.Db;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
 using NetStone.Cache.Interfaces;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.Collectable;

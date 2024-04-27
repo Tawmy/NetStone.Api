@@ -1,9 +1,9 @@
 using AutoMapper;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using CharacterClassJob = NetStone.Cache.Db.Models.CharacterClassJob;
 
-namespace NetStone.Cache.AutoMapperProfiles;
+namespace NetStone.Cache.AutoMapperProfiles.Character;
 
 internal class CharacterClassJobProfile : Profile
 {

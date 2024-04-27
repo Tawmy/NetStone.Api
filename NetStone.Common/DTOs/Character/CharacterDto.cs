@@ -1,6 +1,6 @@
 using NetStone.Common.Enums;
 
-namespace NetStone.Common.DTOs;
+namespace NetStone.Common.DTOs.Character;
 
 public record CharacterDto
 {

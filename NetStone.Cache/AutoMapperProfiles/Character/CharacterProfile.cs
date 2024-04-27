@@ -1,18 +1,17 @@
 using AutoMapper;
-using NetStone.Cache.Db.Models;
 using NetStone.Cache.Db.Resolvers;
 using NetStone.Cache.Extensions;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character;
 using NetStone.StaticData;
 
-namespace NetStone.Cache.AutoMapperProfiles;
+namespace NetStone.Cache.AutoMapperProfiles.Character;
 
 internal class CharacterProfile : Profile
 {
     public CharacterProfile()
     {
-        CreateMap<LodestoneCharacter, Character>()
+        CreateMap<LodestoneCharacter, Db.Models.Character>()
             .ForMember(x => x.ActiveClassJob, x => x.MapFrom(y => y.GetActiveClassJob()))
             .ForMember(x => x.GrandCompany,
                 x => x.MapFrom((y, _) =>
@@ -23,7 +22,7 @@ internal class CharacterProfile : Profile
             .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
             .ForMember(x => x.Mounts, x => x.Ignore()); // same here
 
-        CreateMap<Character, CharacterDto>()
+        CreateMap<Db.Models.Character, CharacterDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.CharacterUpdatedAt));
     }

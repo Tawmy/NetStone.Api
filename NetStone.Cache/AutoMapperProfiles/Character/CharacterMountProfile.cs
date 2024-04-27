@@ -1,9 +1,9 @@
 using AutoMapper;
 using NetStone.Cache.Db.Models;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character.Collectable;
 
-namespace NetStone.Cache.AutoMapperProfiles;
+namespace NetStone.Cache.AutoMapperProfiles.Character;
 
 public class CharacterMountProfile : Profile
 {

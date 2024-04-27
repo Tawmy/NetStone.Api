@@ -1,9 +1,9 @@
 using AutoMapper;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character.Gear;
 using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 
-namespace NetStone.Cache.AutoMapperProfiles;
+namespace NetStone.Cache.AutoMapperProfiles.Character;
 
 internal class CharacterGearProfile : Profile
 {

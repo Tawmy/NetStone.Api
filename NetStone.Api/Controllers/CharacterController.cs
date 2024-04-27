@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Api.Interfaces;
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;

@@ -1,4 +1,4 @@
-using NetStone.Common.DTOs;
+using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
