@@ -1,24 +1,21 @@
-using AutoMapper;
-using NetStone.Api.Interfaces;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
+using NetStone.Data.Interfaces;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
-namespace NetStone.Api.Services;
+namespace NetStone.Data.Services;
 
 internal class CharacterService : ICharacterService
 {
     private readonly ICharacterCachingService _cachingService;
     private readonly LodestoneClient _client;
-    private readonly IMapper _mapper;
 
-    public CharacterService(LodestoneClient client, IMapper mapper, ICharacterCachingService cachingService)
+    public CharacterService(LodestoneClient client, ICharacterCachingService cachingService)
     {
         _client = client;
-        _mapper = mapper;
         _cachingService = cachingService;
     }
 

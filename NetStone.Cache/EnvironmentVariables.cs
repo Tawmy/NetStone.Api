@@ -1,6 +1,6 @@
 namespace NetStone.Cache;
 
-public static class EnvironmentVariables
+internal static class EnvironmentVariables
 {
     /// <summary>
     ///     EFCore connection string for Postgres database.

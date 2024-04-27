@@ -1,4 +1,3 @@
-using System.Configuration;
 using System.Data;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -6,12 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetStone;
 using NetStone.Api;
-using NetStone.Api.Interfaces;
-using NetStone.Api.Messages;
-using NetStone.Api.Services;
+using NetStone.Cache;
 using NetStone.Cache.Db;
-using NetStone.Cache.Interfaces;
-using NetStone.Cache.Services;
+using NetStone.Common.Extensions;
+using NetStone.Data;
+using NetStone.Queue;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,17 +28,17 @@ builder.Services.AddSingleton<LodestoneClient>(_ =>
 });
 
 builder.Services.AddDbContext<DatabaseContext>();
-builder.Services.AddTransient<ICharacterCachingService, CharacterCachingService>();
-builder.Services.AddTransient<ICharacterService, CharacterService>();
-builder.Services.AddTransient<IFreeCompanyService, FreeCompanyService>();
-builder.Services.AddTransient<CharacterGearService>();
-builder.Services.AddTransient<CharacterClassJobsService>();
+builder.Services.AddCacheServices();
+builder.Services.AddDataServices();
+builder.Services.AddQueueServices(builder.Configuration);
+builder.Services.AddApiServices();
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-AddAuthentication(builder.Services);
+AddAuthentication(builder);
 
 var app = builder.Build();
 
@@ -79,21 +77,17 @@ void ConfigureSwagger(IServiceCollection services)
     services.ConfigureOptions<ConfigureSwaggerOptions>();
 }
 
-void AddAuthentication(IServiceCollection services)
+void AddAuthentication(WebApplicationBuilder webAppBuilder)
 {
-    services.AddAuthentication(options =>
+    webAppBuilder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
-            options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAuthority) ??
-                                throw new ConfigurationErrorsException(
-                                    Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAuthority));
-            options.Audience = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAudience) ??
-                               throw new ConfigurationErrorsException(
-                                   Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAudience));
+            options.Authority = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
+            options.Audience = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAudience);
 
             options.TokenValidationParameters = new TokenValidationParameters
             {

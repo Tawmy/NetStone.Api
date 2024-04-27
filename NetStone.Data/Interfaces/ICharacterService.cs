@@ -1,14 +1,13 @@
-using NetStone.Api.Controllers;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
-namespace NetStone.Api.Interfaces;
+namespace NetStone.Data.Interfaces;
 
 /// <summary>
-///     Controller service for <see cref="CharacterController" />.
+///     Data service for character data.
 /// </summary>
 public interface ICharacterService
 {

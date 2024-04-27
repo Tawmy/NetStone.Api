@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetStone.Api.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
+using NetStone.Data.Interfaces;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -75,9 +75,9 @@ public class CharacterController : ControllerBase
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDto.LastUpdated" />
-    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
-    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
-    ///     applies as expected.
+    ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
+    ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
+    ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character class jobs.</returns>
     [HttpGet("ClassJobs/{lodestoneId}")]
@@ -118,9 +118,9 @@ public class CharacterController : ControllerBase
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMinionOuterDto.LastUpdated" />
-    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
-    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
-    ///     applies as expected.
+    ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
+    ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
+    ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character minions.</returns>
     [HttpGet("Minions/{lodestoneId}")]
@@ -146,9 +146,9 @@ public class CharacterController : ControllerBase
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMountOuterDto.LastUpdated" />
-    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
-    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
-    ///     applies as expected.
+    ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
+    ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
+    ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character mounts.</returns>
     [HttpGet("Mounts/{lodestoneId}")]

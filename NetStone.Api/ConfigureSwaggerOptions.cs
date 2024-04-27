@@ -1,12 +1,11 @@
-using System.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using NetStone.Api.Messages;
+using NetStone.Common.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NetStone.Api;
 
-internal class ConfigureSwaggerOptions : IConfigureNamedOptions<SwaggerGenOptions>
+internal class ConfigureSwaggerOptions(IConfiguration configuration) : IConfigureNamedOptions<SwaggerGenOptions>
 {
     /// <summary>
     ///     Configure each API discovered for Swagger Documentation
@@ -14,9 +13,7 @@ internal class ConfigureSwaggerOptions : IConfigureNamedOptions<SwaggerGenOption
     public void Configure(SwaggerGenOptions options)
     {
         // Get environment variables for Swagger auth
-        var authority = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAuthority) ??
-                        throw new ConfigurationErrorsException(
-                            Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAuthority));
+        var authority = configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
 
         var tokenUrl = Path.Combine(authority, "protocol/openid-connect/token");
 
