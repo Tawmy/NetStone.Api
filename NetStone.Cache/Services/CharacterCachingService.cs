@@ -5,7 +5,6 @@ using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs;
-using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character;
 using CharacterClassJob = NetStone.Model.Parseables.Character.ClassJob.CharacterClassJob;
 
@@ -20,6 +19,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
             .IncludeBasic()
             .SingleOrDefaultAsync(x => x.Name == lodestoneCharacter.Name && x.Server == lodestoneCharacter.Server);
 
+        await using var transaction = await context.Database.BeginTransactionAsync();
+
         if (character != null)
         {
             mapper.Map(lodestoneCharacter, character);
@@ -30,11 +31,28 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
             character = mapper.Map<Character>(lodestoneCharacter);
             character.LodestoneId = lodestoneId;
             await context.Characters.AddAsync(character);
+            await context.SaveChangesAsync();
+
+            var classJobs = await context.CharacterClassJobs.Where(x =>
+                    x.CharacterLodestoneId == character.LodestoneId)
+                .ToListAsync();
+
+            classJobs.ForEach(x => x.CharacterId = character.Id);
         }
 
         character.CharacterUpdatedAt = DateTime.UtcNow;
 
-        await context.SaveChangesAsync();
+        try
+        {
+            await context.SaveChangesAsync();
+            await transaction.CommitAsync();
+        }
+        catch (Exception e)
+        {
+            await transaction.RollbackAsync();
+            Console.WriteLine(e);
+            throw;
+        }
 
         return mapper.Map<CharacterDto>(character);
     }
@@ -58,27 +76,32 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
                 x.LodestoneId == lodestoneId)
             .FirstOrDefaultAsync();
 
-        if (character is null)
-        {
-            throw new NotFoundException();
-        }
-
         var dbClassJobs = await context.CharacterClassJobs.Where(x =>
-                x.Character.LodestoneId == lodestoneId)
+                x.CharacterLodestoneId == lodestoneId)
             .ToListAsync();
 
         dbClassJobs = jobsService.GetCharacterClassJobs(lodestoneClassJobs, dbClassJobs).ToList();
 
-        foreach (var dbClassJob in dbClassJobs.Where(x => x.CharacterId == default))
+        if (character is not null)
         {
-            // Set FK for new entries
-            dbClassJob.CharacterId = character.Id;
+            foreach (var dbClassJob in dbClassJobs.Where(x => x.CharacterId == null))
+            {
+                // Set FK for new entries
+                dbClassJob.CharacterId = character.Id;
+            }
         }
 
         // add new entries to context
-        await context.AddRangeAsync(dbClassJobs.Where(x => x.Id == default));
+        foreach (var newDbClassJob in dbClassJobs.Where(x => x.Id == default))
+        {
+            newDbClassJob.CharacterLodestoneId = lodestoneId;
+            await context.AddAsync(newDbClassJob);
+        }
 
-        character.CharacterClassJobsUpdatedAt = DateTime.UtcNow;
+        if (character is not null)
+        {
+            character.CharacterClassJobsUpdatedAt = DateTime.UtcNow;
+        }
 
         await context.SaveChangesAsync();
 

@@ -10,6 +10,9 @@ public class CharacterClassJobMapping : IEntityTypeConfiguration<CharacterClassJ
     {
         builder.HasKey(x => x.Id);
 
+        builder.HasIndex(x => new { x.CharacterLodestoneId, x.ClassJob }).IsUnique();
+        builder.Property(x => x.CharacterLodestoneId).HasMaxLength(10);
+
         builder.HasOne(x => x.Character)
             .WithMany(y => y.CharacterClassJobs)
             .HasForeignKey(x => x.CharacterId)

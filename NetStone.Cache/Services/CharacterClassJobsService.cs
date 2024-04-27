@@ -143,7 +143,8 @@ public class CharacterClassJobsService(IMapper mapper)
         var currentDbClassJob = dbClassJobs.FirstOrDefault(x => x.ClassJob == classJob.ClassJob);
 
         classJob.Id = currentDbClassJob?.Id ?? default;
-        classJob.CharacterId = currentDbClassJob?.CharacterId ?? default;
+        classJob.CharacterId = currentDbClassJob?.CharacterId ?? null;
+        classJob.CharacterLodestoneId = currentDbClassJob?.CharacterLodestoneId ?? string.Empty;
 
         return classJob;
     }

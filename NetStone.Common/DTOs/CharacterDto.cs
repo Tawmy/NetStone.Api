@@ -35,5 +35,6 @@ public record CharacterDto
 
     public required CharacterAttributesDto Attributes { get; init; }
 
-    public DateTime LastUpdated { get; set; }
+    public bool Cached { get; init; }
+    public DateTime LastUpdated { get; init; }
 }

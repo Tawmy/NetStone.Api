@@ -39,7 +39,7 @@ internal class CharacterService : ICharacterService
             (DateTime.UtcNow - cachedCharacterDto.LastUpdated).TotalMinutes <= (maxAge ?? int.MaxValue))
         {
             // return cached character if possible
-            return cachedCharacterDto;
+            return cachedCharacterDto with { Cached = true };
         }
 
         var lodestoneCharacter = await _client.GetCharacter(lodestoneId);
@@ -57,7 +57,7 @@ internal class CharacterService : ICharacterService
             lastUpdated is not null &&
             (DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
         {
-            return new CharacterClassJobOuterDto(cachedClassJobsDtos, lastUpdated.Value);
+            return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, lastUpdated.Value);
         }
 
         var lodestoneCharacterClassJobs = await _client.GetCharacterClassJob(lodestoneId);
@@ -65,7 +65,7 @@ internal class CharacterService : ICharacterService
 
         cachedClassJobsDtos =
             await _cachingService.CacheCharacterClassJobsAsync(lodestoneId, lodestoneCharacterClassJobs);
-        return new CharacterClassJobOuterDto(cachedClassJobsDtos, DateTime.UtcNow);
+        return new CharacterClassJobOuterDto(cachedClassJobsDtos, false, DateTime.UtcNow);
     }
 
     public async Task<CharacterAchievementPage> GetCharacterAchievements(string lodestoneId, int page)

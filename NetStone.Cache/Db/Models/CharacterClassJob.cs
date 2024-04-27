@@ -6,8 +6,10 @@ public class CharacterClassJob
 {
     public int Id { get; set; } // PK
 
-    public required int CharacterId { get; set; }
-    public Character Character { get; set; } = null!;
+    public required string CharacterLodestoneId { get; set; }
+
+    public int? CharacterId { get; set; }
+    public Character? Character { get; set; }
 
     public required ClassJob ClassJob { get; set; }
 
