@@ -4,7 +4,6 @@ using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
-using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -120,11 +119,34 @@ internal class CharacterService : ICharacterService
         return new CharacterMinionOuterDto(cachedMinionsDtos, false, DateTime.UtcNow);
     }
 
-    public async Task<CharacterCollectable> GetCharacterMounts(string lodestoneId)
+    public async Task<CharacterMountOuterDto> GetCharacterMounts(string lodestoneId, int? maxAge)
     {
-        var result = await _client.GetCharacterMount(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        var (cachedMountsDtos, lastUpdated) = await _cachingService.GetCharacterMountsAsync(lodestoneId);
 
-        return result;
+        if (cachedMountsDtos.Any())
+        {
+            if (lastUpdated is not null)
+            {
+                if ((DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+                {
+                    // if character was cached before, last time mounts were cached can be saved.
+                    // If cache is not older than the max age submitted, return cache.
+                    return new CharacterMountOuterDto(cachedMountsDtos, true, lastUpdated.Value);
+                }
+            }
+            else if (maxAge is null)
+            {
+                // Character was never cached, so LastUpdated value cannot be saved.
+                // If no max age given, return. If any max age value given, refresh.
+                return new CharacterMountOuterDto(cachedMountsDtos, true, null);
+            }
+        }
+
+        var lodestoneMounts = await _client.GetCharacterMount(lodestoneId);
+        if (lodestoneMounts == null) throw new NotFoundException();
+
+        cachedMountsDtos = await _cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
+
+        return new CharacterMountOuterDto(cachedMountsDtos, false, DateTime.UtcNow);
     }
 }

@@ -36,4 +36,14 @@ public interface ICharacterCachingService
     Task<(ICollection<CharacterMinionDto>, DateTime? LastUpdated)> GetCharacterMinionsAsync(string lodestoneId);
 
     #endregion
+
+    #region CharacterMounts
+
+    Task<ICollection<CharacterMountDto>> CacheCharacterMountsAsync(string lodestoneId,
+        CharacterCollectable lodestoneMounts);
+
+    Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(int id);
+    Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(string lodestoneId);
+
+    #endregion
 }

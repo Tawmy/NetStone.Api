@@ -44,6 +44,11 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
                     x.CharacterLodestoneId == lodestoneId)
                 .ToListAsync();
             minions.ForEach(x => x.CharacterId = character.Id);
+
+            var mounts = await context.CharacterMounts.Where(x =>
+                    x.CharacterLodestoneId == lodestoneId)
+                .ToListAsync();
+            mounts.ForEach(x => x.CharacterId = character.Id);
         }
 
         character.CharacterUpdatedAt = DateTime.UtcNow;
@@ -209,5 +214,75 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
         var minionDtos = minions.Select(mapper.Map<CharacterMinionDto>);
         return (minionDtos.ToList(), null);
+    }
+
+    public async Task<ICollection<CharacterMountDto>> CacheCharacterMountsAsync(string lodestoneId,
+        CharacterCollectable lodestoneMounts)
+    {
+        var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
+
+        var dbMounts = await context.CharacterMounts.Where(x => x.CharacterLodestoneId == lodestoneId).ToListAsync();
+
+        // add new Lodestone mounts
+        var newLodestoneMounts =
+            lodestoneMounts.Collectables.Where(x => !dbMounts.Select(y => y.Name).Contains(x.Name));
+        var newDbMounts = new List<CharacterMount>();
+        foreach (var newLodestoneMount in newLodestoneMounts)
+        {
+            var newDbMount = mapper.Map<CharacterMount>(newLodestoneMount);
+            newDbMount.CharacterLodestoneId = lodestoneId;
+            newDbMount.CharacterId = character?.Id ?? null;
+            newDbMounts.AddIfNotNull(newDbMount);
+        }
+
+        await context.CharacterMounts.AddRangeAsync(newDbMounts);
+        dbMounts.AddRange(newDbMounts);
+
+        // set FK if necessary
+        if (character is not null)
+        {
+            var dbMountsWithoutFk = dbMounts.Where(x => x.CharacterId is null);
+            foreach (var dbMountWithoutFk in dbMountsWithoutFk)
+            {
+                dbMountWithoutFk.CharacterId = character.Id;
+            }
+        }
+
+        if (character is not null)
+        {
+            character.CharacterMountsUpdatedAt = DateTime.UtcNow;
+        }
+
+        await context.SaveChangesAsync();
+
+        return dbMounts.Select(mapper.Map<CharacterMountDto>).ToList();
+    }
+
+    public async Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(int id)
+    {
+        var character = await context.Characters.Where(x =>
+                x.Id == id)
+            .Include(x =>
+                x.Mounts)
+            .FirstOrDefaultAsync();
+
+        if (character == null)
+        {
+            return (new List<CharacterMountDto>(), null);
+        }
+
+        var mounts = character.Mounts.Select(mapper.Map<CharacterMountDto>);
+        return (mounts.ToList(), character.CharacterMountsUpdatedAt);
+    }
+
+    public async Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(
+        string lodestoneId)
+    {
+        var mounts = await context.CharacterMounts.Where(x =>
+                x.CharacterLodestoneId == lodestoneId)
+            .ToListAsync();
+
+        var mountDtos = mounts.Select(mapper.Map<CharacterMountDto>);
+        return (mountDtos.ToList(), null);
     }
 }

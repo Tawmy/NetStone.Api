@@ -20,7 +20,8 @@ internal class CharacterProfile : Profile
                         ? result
                         : GrandCompany.None))
             .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>())
-            .ForMember(x => x.Minions, x => x.Ignore()); // why is this necessary, but ignoring ClassJobs is not?
+            .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
+            .ForMember(x => x.Mounts, x => x.Ignore()); // same here
 
         CreateMap<Character, CharacterDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))

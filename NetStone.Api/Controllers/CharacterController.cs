@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NetStone.Api.Interfaces;
 using NetStone.Common.DTOs;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -141,13 +140,23 @@ public class CharacterController : ControllerBase
     ///     Get a character's mounts.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
+    /// <remarks>
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMountOuterDto.LastUpdated" />
+    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
+    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
+    ///     applies as expected.
+    /// </remarks>
     /// <returns>Character mounts.</returns>
     [HttpGet("Mounts/{lodestoneId}")]
-    public async Task<ActionResult<CharacterCollectable>> GetMountsAsync(string lodestoneId)
+    public async Task<ActionResult<CharacterMountOuterDto>> GetMountsAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _characterService.GetCharacterMounts(lodestoneId);
+            return await _characterService.GetCharacterMounts(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

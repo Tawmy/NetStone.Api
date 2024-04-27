@@ -5,9 +5,9 @@ using NetStone.Model.Parseables.Character.Collectable;
 
 namespace NetStone.Cache.AutoMapperProfiles;
 
-public class CharacterMinionsProfile : Profile
+public class CharacterMinionProfile : Profile
 {
-    public CharacterMinionsProfile()
+    public CharacterMinionProfile()
     {
         CreateMap<CharacterCollectableEntry, CharacterMinion>();
 

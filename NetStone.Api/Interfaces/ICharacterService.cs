@@ -2,7 +2,6 @@ using NetStone.Api.Controllers;
 using NetStone.Common.DTOs;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
-using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
 
@@ -74,7 +73,11 @@ public interface ICharacterService
     ///     Get a character's mounts.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterCollectable> GetCharacterMounts(string lodestoneId);
+    public Task<CharacterMountOuterDto> GetCharacterMounts(string lodestoneId, int? maxAge);
 }
