@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using NetStone.StaticData;
+using NetStone.Common.Enums;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -14,8 +14,8 @@ namespace NetStone.Cache.Db.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:Enum:class_job", "none,gladiator,pugilist,marauder,lancer,archer,conjurer,thaumaturge,carpenter,blacksmith,armorer,goldsmith,leatherworker,weaver,alchemist,culinarian,miner,botanist,fisher,paladin,monk,warrior,dragoon,bard,white_mage,black_mage,arcanist,summoner,scholar,rogue,ninja,machinist,dark_knight,astrologian,samurai,red_mage,blue_mage,gunbreaker,dancer,reaper,sage")
-                .Annotation("Npgsql:Enum:grand_company", "none,no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames");
+                .Annotation("Npgsql:Enum:class_job", "gladiator,pugilist,marauder,lancer,archer,conjurer,thaumaturge,carpenter,blacksmith,armorer,goldsmith,leatherworker,weaver,alchemist,culinarian,miner,botanist,fisher,paladin,monk,warrior,dragoon,bard,white_mage,black_mage,arcanist,summoner,scholar,rogue,ninja,machinist,dark_knight,astrologian,samurai,red_mage,blue_mage,gunbreaker,dancer,reaper,sage")
+                .Annotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames");
 
             migrationBuilder.CreateTable(
                 name: "characters",
@@ -43,7 +43,8 @@ namespace NetStone.Cache.Db.Migrations
                     town_name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
                     town_icon = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    character_class_jobs_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -83,6 +84,34 @@ namespace NetStone.Cache.Db.Migrations
                     table.PrimaryKey("pk_character_attributes", x => x.id);
                     table.ForeignKey(
                         name: "fk_character_attributes_characters_character_id",
+                        column: x => x.character_id,
+                        principalTable: "characters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "character_class_jobs",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    character_id = table.Column<int>(type: "integer", nullable: false),
+                    class_job = table.Column<ClassJob>(type: "class_job", nullable: false),
+                    is_job_unlocked = table.Column<bool>(type: "boolean", nullable: false),
+                    level = table.Column<short>(type: "smallint", nullable: false),
+                    exp_current = table.Column<int>(type: "integer", nullable: false),
+                    exp_max = table.Column<int>(type: "integer", nullable: false),
+                    exp_to_go = table.Column<int>(type: "integer", nullable: false),
+                    is_specialized = table.Column<bool>(type: "boolean", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_character_class_jobs", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_character_class_jobs_characters_character_id",
                         column: x => x.character_id,
                         principalTable: "characters",
                         principalColumn: "id",
@@ -153,6 +182,11 @@ namespace NetStone.Cache.Db.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_character_class_jobs_character_id",
+                table: "character_class_jobs",
+                column: "character_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_character_free_companies_character_id",
                 table: "character_free_companies",
                 column: "character_id",
@@ -176,6 +210,9 @@ namespace NetStone.Cache.Db.Migrations
         {
             migrationBuilder.DropTable(
                 name: "character_attributes");
+
+            migrationBuilder.DropTable(
+                name: "character_class_jobs");
 
             migrationBuilder.DropTable(
                 name: "character_free_companies");

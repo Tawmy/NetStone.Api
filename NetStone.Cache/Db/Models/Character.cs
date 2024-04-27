@@ -1,5 +1,5 @@
 using NetStone.Cache.Interfaces;
-using NetStone.StaticData;
+using NetStone.Common.Enums;
 
 namespace NetStone.Cache.Db.Models;
 
@@ -43,6 +43,10 @@ public class Character : IUpdatable
     public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 
     public CharacterAttributes Attributes { get; set; } = null!;
+
+    public ICollection<CharacterClassJob> CharacterClassJobs { get; set; } = new HashSet<CharacterClassJob>();
+
+    public DateTime? CharacterClassJobsUpdatedAt { get; set; }
 
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetStone.Cache.Db;
-using NetStone.StaticData;
+using NetStone.Common.Enums;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240426124903_Initial")]
+    [Migration("20240426151958_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -24,8 +24,8 @@ namespace NetStone.Cache.Db.Migrations
                 .HasAnnotation("ProductVersion", "8.0.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "none", "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "none", "no_affiliation", "maelstrom", "order_of_the_twin_adder", "immortal_flames" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "no_affiliation", "maelstrom", "order_of_the_twin_adder", "immortal_flames" });
             NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
 
             modelBuilder.Entity("NetStone.Cache.Db.Models.Character", b =>
@@ -62,6 +62,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasMaxLength(3000)
                         .HasColumnType("character varying(3000)")
                         .HasColumnName("bio");
+
+                    b.Property<DateTime?>("CharacterClassJobsUpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("character_class_jobs_updated_at");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone")
@@ -263,6 +267,64 @@ namespace NetStone.Cache.Db.Migrations
                     b.ToTable("character_attributes", (string)null);
                 });
 
+            modelBuilder.Entity("NetStone.Cache.Db.Models.CharacterClassJob", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CharacterId")
+                        .HasColumnType("integer")
+                        .HasColumnName("character_id");
+
+                    b.Property<ClassJob>("ClassJob")
+                        .HasColumnType("class_job")
+                        .HasColumnName("class_job");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<int>("ExpCurrent")
+                        .HasColumnType("integer")
+                        .HasColumnName("exp_current");
+
+                    b.Property<int>("ExpMax")
+                        .HasColumnType("integer")
+                        .HasColumnName("exp_max");
+
+                    b.Property<int>("ExpToGo")
+                        .HasColumnType("integer")
+                        .HasColumnName("exp_to_go");
+
+                    b.Property<bool>("IsJobUnlocked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_job_unlocked");
+
+                    b.Property<bool>("IsSpecialized")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_specialized");
+
+                    b.Property<short>("Level")
+                        .HasColumnType("smallint")
+                        .HasColumnName("level");
+
+                    b.Property<DateTime?>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("updated_at");
+
+                    b.HasKey("Id")
+                        .HasName("pk_character_class_jobs");
+
+                    b.HasIndex("CharacterId")
+                        .HasDatabaseName("ix_character_class_jobs_character_id");
+
+                    b.ToTable("character_class_jobs", (string)null);
+                });
+
             modelBuilder.Entity("NetStone.Cache.Db.Models.CharacterFreeCompany", b =>
                 {
                     b.Property<int>("Id")
@@ -418,6 +480,18 @@ namespace NetStone.Cache.Db.Migrations
                     b.Navigation("Character");
                 });
 
+            modelBuilder.Entity("NetStone.Cache.Db.Models.CharacterClassJob", b =>
+                {
+                    b.HasOne("NetStone.Cache.Db.Models.Character", "Character")
+                        .WithMany("CharacterClassJobs")
+                        .HasForeignKey("CharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_character_class_jobs_characters_character_id");
+
+                    b.Navigation("Character");
+                });
+
             modelBuilder.Entity("NetStone.Cache.Db.Models.CharacterFreeCompany", b =>
                 {
                     b.HasOne("NetStone.Cache.Db.Models.Character", "Character")
@@ -446,6 +520,8 @@ namespace NetStone.Cache.Db.Migrations
                 {
                     b.Navigation("Attributes")
                         .IsRequired();
+
+                    b.Navigation("CharacterClassJobs");
 
                     b.Navigation("FreeCompany");
 

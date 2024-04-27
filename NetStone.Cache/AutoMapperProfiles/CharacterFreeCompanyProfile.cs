@@ -5,7 +5,7 @@ using NetStone.Model.Parseables.Character;
 
 namespace NetStone.Cache.AutoMapperProfiles;
 
-public class CharacterFreeCompanyProfile : Profile
+internal class CharacterFreeCompanyProfile : Profile
 {
     public CharacterFreeCompanyProfile()
     {

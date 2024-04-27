@@ -1,9 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetStone.Api.Exceptions;
 using NetStone.Api.Interfaces;
 using NetStone.Common.DTOs;
-using NetStone.Model.Parseables.Character.ClassJob;
+using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
@@ -71,13 +70,17 @@ public class CharacterController : ControllerBase
     ///     Get a character's ClassJobs.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Character class jobs.</returns>
     [HttpGet("ClassJobs/{lodestoneId}")]
-    public async Task<ActionResult<CharacterClassJob>> GetClassJobsAsync(string lodestoneId)
+    public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _characterService.GetCharacterClassJobsAsync(lodestoneId);
+            return await _characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

@@ -1,5 +1,5 @@
-using NetStone.Api.Exceptions;
 using NetStone.Api.Interfaces;
+using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.FreeCompany;
 using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Model.Parseables.Search.FreeCompany;

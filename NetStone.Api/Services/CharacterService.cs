@@ -1,10 +1,9 @@
 using AutoMapper;
-using NetStone.Api.Exceptions;
 using NetStone.Api.Interfaces;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs;
-using NetStone.Common.Interfaces;
+using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
-using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
@@ -36,7 +35,7 @@ internal class CharacterService : ICharacterService
     {
         var cachedCharacterDto = await _cachingService.GetCharacterAsync(lodestoneId);
 
-        if (cachedCharacterDto != null &&
+        if (cachedCharacterDto is not null &&
             (DateTime.UtcNow - cachedCharacterDto.LastUpdated).TotalMinutes <= (maxAge ?? int.MaxValue))
         {
             // return cached character if possible
@@ -47,15 +46,26 @@ internal class CharacterService : ICharacterService
         if (lodestoneCharacter == null) throw new NotFoundException();
 
         // cache character and return
-        return await _cachingService.CacheCharacterAsync(lodestoneCharacter, lodestoneId);
+        return await _cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
     }
 
-    public async Task<CharacterClassJob> GetCharacterClassJobsAsync(string lodestoneId)
+    public async Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge)
     {
-        var result = await _client.GetCharacterClassJob(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        var (cachedClassJobsDtos, lastUpdated) = await _cachingService.GetCharacterClassJobsAsync(lodestoneId);
 
-        return result;
+        if (cachedClassJobsDtos.Any() &&
+            lastUpdated is not null &&
+            (DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+        {
+            return new CharacterClassJobOuterDto(cachedClassJobsDtos, lastUpdated.Value);
+        }
+
+        var lodestoneCharacterClassJobs = await _client.GetCharacterClassJob(lodestoneId);
+        if (lodestoneCharacterClassJobs == null) throw new NotFoundException();
+
+        cachedClassJobsDtos =
+            await _cachingService.CacheCharacterClassJobsAsync(lodestoneId, lodestoneCharacterClassJobs);
+        return new CharacterClassJobOuterDto(cachedClassJobsDtos, DateTime.UtcNow);
     }
 
     public async Task<CharacterAchievementPage> GetCharacterAchievements(string lodestoneId, int page)

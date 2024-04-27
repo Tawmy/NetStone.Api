@@ -2,7 +2,7 @@ using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Interfaces;
-using NetStone.StaticData;
+using NetStone.Common.Enums;
 using Npgsql;
 
 namespace NetStone.Cache.Db;
@@ -68,6 +68,7 @@ public class DatabaseContext : DbContext
 
         modelBuilder.HasPostgresEnum<ClassJob>();
         modelBuilder.HasPostgresEnum<GrandCompany>();
+        modelBuilder.HasPostgresEnum<ClassJob>();
 
         base.OnModelCreating(modelBuilder);
     }
@@ -76,6 +77,7 @@ public class DatabaseContext : DbContext
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<GrandCompany>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
     }
 
     #region DbSets
@@ -83,6 +85,8 @@ public class DatabaseContext : DbContext
     internal DbSet<Character> Characters => Set<Character>();
     internal DbSet<CharacterFreeCompany> CharacterFreeCompanies => Set<CharacterFreeCompany>();
     internal DbSet<CharacterGear> CharacterGears => Set<CharacterGear>();
+    internal DbSet<CharacterAttributes> CharacterAttributes => Set<CharacterAttributes>();
+    internal DbSet<CharacterClassJob> CharacterClassJobs => Set<CharacterClassJob>();
 
     #endregion
 }

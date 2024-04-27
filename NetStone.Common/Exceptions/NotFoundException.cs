@@ -1,4 +1,4 @@
-namespace NetStone.Api.Exceptions;
+namespace NetStone.Common.Exceptions;
 
 /// <summary>
 ///     Thrown if 404: Not Found should be returned.

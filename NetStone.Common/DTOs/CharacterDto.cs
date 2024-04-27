@@ -1,4 +1,4 @@
-using NetStone.StaticData;
+using NetStone.Common.Enums;
 
 namespace NetStone.Common.DTOs;
 

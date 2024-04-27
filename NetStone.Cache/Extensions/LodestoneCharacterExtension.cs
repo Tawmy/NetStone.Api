@@ -1,7 +1,7 @@
+using NetStone.Common.Enums;
 using NetStone.Model.Parseables.Character;
-using NetStone.StaticData;
 
-namespace NetStone.Common.Extensions;
+namespace NetStone.Cache.Extensions;
 
 public static class LodestoneCharacterExtension
 {
@@ -13,7 +13,10 @@ public static class LodestoneCharacterExtension
     /// <exception cref="ClassJob">Thrown if the URL does not belong to any job</exception>
     public static ClassJob GetActiveClassJob(this LodestoneCharacter character)
     {
-        if (string.IsNullOrWhiteSpace(character.ActiveClassJobIcon)) return ClassJob.None;
+        if (string.IsNullOrWhiteSpace(character.ActiveClassJobIcon))
+        {
+            throw new InvalidDataException(nameof(character.ActiveClassJobIcon));
+        }
 
         return character.ActiveClassJobIcon switch
         {

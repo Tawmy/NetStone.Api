@@ -1,8 +1,7 @@
 using NetStone.Api.Controllers;
-using NetStone.Api.Exceptions;
 using NetStone.Common.DTOs;
+using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Character.Achievement;
-using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Model.Parseables.Search.Character;
 using NetStone.Search.Character;
@@ -42,9 +41,13 @@ public interface ICharacterService
     ///     Get a character's ClassJobs.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Use <see cref="SearchCharacterAsync" /> first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Character class jobs.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterClassJob> GetCharacterClassJobsAsync(string lodestoneId);
+    public Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's achievements.

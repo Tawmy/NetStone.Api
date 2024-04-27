@@ -4,7 +4,7 @@ using NetStone.Model.Parseables.Character;
 
 namespace NetStone.Cache.AutoMapperProfiles;
 
-public class CharacterAttributesProfile : Profile
+internal class CharacterAttributesProfile : Profile
 {
     public CharacterAttributesProfile()
     {

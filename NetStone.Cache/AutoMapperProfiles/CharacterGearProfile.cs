@@ -5,7 +5,7 @@ using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 
 namespace NetStone.Cache.AutoMapperProfiles;
 
-public class CharacterGearProfile : Profile
+internal class CharacterGearProfile : Profile
 {
     public CharacterGearProfile()
     {

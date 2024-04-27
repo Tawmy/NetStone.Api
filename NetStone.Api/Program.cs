@@ -10,8 +10,8 @@ using NetStone.Api.Interfaces;
 using NetStone.Api.Messages;
 using NetStone.Api.Services;
 using NetStone.Cache.Db;
+using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
-using NetStone.Common.Interfaces;
 using Npgsql;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,6 +34,7 @@ builder.Services.AddTransient<ICharacterCachingService, CharacterCachingService>
 builder.Services.AddTransient<ICharacterService, CharacterService>();
 builder.Services.AddTransient<IFreeCompanyService, FreeCompanyService>();
 builder.Services.AddTransient<CharacterGearService>();
+builder.Services.AddTransient<CharacterClassJobsService>();
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
