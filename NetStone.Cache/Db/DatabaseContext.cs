@@ -56,6 +56,7 @@ public class DatabaseContext : DbContext
     internal DbSet<CharacterGear> CharacterGears => Set<CharacterGear>();
     internal DbSet<CharacterAttributes> CharacterAttributes => Set<CharacterAttributes>();
     internal DbSet<CharacterClassJob> CharacterClassJobs => Set<CharacterClassJob>();
+    internal DbSet<CharacterMinion> CharacterMinions => Set<CharacterMinion>();
 
     #endregion
 }

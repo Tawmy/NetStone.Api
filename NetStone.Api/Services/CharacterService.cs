@@ -53,11 +53,23 @@ internal class CharacterService : ICharacterService
     {
         var (cachedClassJobsDtos, lastUpdated) = await _cachingService.GetCharacterClassJobsAsync(lodestoneId);
 
-        if (cachedClassJobsDtos.Any() &&
-            lastUpdated is not null &&
-            (DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+        if (cachedClassJobsDtos.Any())
         {
-            return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, lastUpdated.Value);
+            if (lastUpdated is not null)
+            {
+                if ((DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+                {
+                    // if character was cached before, last time ClassJobs were cached can be saved.
+                    // If cache is not older than the max age submitted, return cache.
+                    return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, lastUpdated.Value);
+                }
+            }
+            else if (maxAge is null)
+            {
+                // Character was never cached, so LastUpdated value cannot be saved.
+                // If no max age given, return. If any max age value given, refresh.
+                return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, null);
+            }
         }
 
         var lodestoneCharacterClassJobs = await _client.GetCharacterClassJob(lodestoneId);
@@ -77,12 +89,35 @@ internal class CharacterService : ICharacterService
         return result;
     }
 
-    public async Task<CharacterCollectable> GetCharacterMinions(string lodestoneId)
+    public async Task<CharacterMinionOuterDto> GetCharacterMinions(string lodestoneId, int? maxAge)
     {
-        var result = await _client.GetCharacterMinion(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        var (cachedMinionsDtos, lastUpdated) = await _cachingService.GetCharacterMinionsAsync(lodestoneId);
 
-        return result;
+        if (cachedMinionsDtos.Any())
+        {
+            if (lastUpdated is not null)
+            {
+                if ((DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+                {
+                    // if character was cached before, last time minions were cached can be saved.
+                    // If cache is not older than the max age submitted, return cache.
+                    return new CharacterMinionOuterDto(cachedMinionsDtos, true, lastUpdated.Value);
+                }
+            }
+            else if (maxAge is null)
+            {
+                // Character was never cached, so LastUpdated value cannot be saved.
+                // If no max age given, return. If any max age value given, refresh.
+                return new CharacterMinionOuterDto(cachedMinionsDtos, true, null);
+            }
+        }
+
+        var lodestoneMinions = await _client.GetCharacterMinion(lodestoneId);
+        if (lodestoneMinions == null) throw new NotFoundException();
+
+        cachedMinionsDtos = await _cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
+
+        return new CharacterMinionOuterDto(cachedMinionsDtos, false, DateTime.UtcNow);
     }
 
     public async Task<CharacterCollectable> GetCharacterMounts(string lodestoneId)

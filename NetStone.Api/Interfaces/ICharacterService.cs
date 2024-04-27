@@ -62,9 +62,13 @@ public interface ICharacterService
     ///     Get a character's minions.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterCollectable> GetCharacterMinions(string lodestoneId);
+    public Task<CharacterMinionOuterDto> GetCharacterMinions(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's mounts.

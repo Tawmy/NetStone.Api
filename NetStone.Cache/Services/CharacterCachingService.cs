@@ -5,7 +5,9 @@ using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs;
+using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character;
+using NetStone.Model.Parseables.Character.Collectable;
 using CharacterClassJob = NetStone.Model.Parseables.Character.ClassJob.CharacterClassJob;
 
 namespace NetStone.Cache.Services;
@@ -36,8 +38,12 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
             var classJobs = await context.CharacterClassJobs.Where(x =>
                     x.CharacterLodestoneId == character.LodestoneId)
                 .ToListAsync();
-
             classJobs.ForEach(x => x.CharacterId = character.Id);
+
+            var minions = await context.CharacterMinions.Where(x =>
+                    x.CharacterLodestoneId == lodestoneId)
+                .ToListAsync();
+            minions.ForEach(x => x.CharacterId = character.Id);
         }
 
         character.CharacterUpdatedAt = DateTime.UtcNow;
@@ -72,9 +78,7 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<ICollection<CharacterClassJobDto>> CacheCharacterClassJobsAsync(string lodestoneId,
         CharacterClassJob lodestoneClassJobs)
     {
-        var character = await context.Characters.Where(x =>
-                x.LodestoneId == lodestoneId)
-            .FirstOrDefaultAsync();
+        var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
 
         var dbClassJobs = await context.CharacterClassJobs.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
@@ -129,18 +133,81 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterClassJobDto> classJobs, DateTime? LastUpdated)> GetCharacterClassJobsAsync(
         string lodestoneId)
     {
+        var classJobs = await context.CharacterClassJobs.Where(x =>
+                x.CharacterLodestoneId == lodestoneId)
+            .ToListAsync();
+
+        var classJobDtos = classJobs.Select(mapper.Map<CharacterClassJobDto>);
+        return (classJobDtos.ToList(), null);
+    }
+
+    public async Task<ICollection<CharacterMinionDto>> CacheCharacterMinionsAsync(string lodestoneId,
+        CharacterCollectable lodestoneMinions)
+    {
+        var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
+
+        var dbMinions = await context.CharacterMinions.Where(x => x.CharacterLodestoneId == lodestoneId).ToListAsync();
+
+        // add new Lodestone minions
+        var newLodestoneMinions =
+            lodestoneMinions.Collectables.Where(x => !dbMinions.Select(y => y.Name).Contains(x.Name));
+        var newDbMinions = new List<CharacterMinion>();
+        foreach (var newLodestoneMinion in newLodestoneMinions)
+        {
+            var newDbMinion = mapper.Map<CharacterMinion>(newLodestoneMinion);
+            newDbMinion.CharacterLodestoneId = lodestoneId;
+            newDbMinion.CharacterId = character?.Id ?? null;
+            newDbMinions.AddIfNotNull(newDbMinion);
+        }
+
+        await context.CharacterMinions.AddRangeAsync(newDbMinions);
+        dbMinions.AddRange(newDbMinions);
+
+        // set FK if necessary
+        if (character is not null)
+        {
+            var dbMinionsWithoutFk = dbMinions.Where(x => x.CharacterId is null);
+            foreach (var dbMinionWithoutFk in dbMinionsWithoutFk)
+            {
+                dbMinionWithoutFk.CharacterId = character.Id;
+            }
+        }
+
+        if (character is not null)
+        {
+            character.CharacterMinionsUpdatedAt = DateTime.UtcNow;
+        }
+
+        await context.SaveChangesAsync();
+
+        return dbMinions.Select(mapper.Map<CharacterMinionDto>).ToList();
+    }
+
+    public async Task<(ICollection<CharacterMinionDto>, DateTime? LastUpdated)> GetCharacterMinionsAsync(int id)
+    {
         var character = await context.Characters.Where(x =>
-                x.LodestoneId == lodestoneId)
+                x.Id == id)
             .Include(x =>
-                x.CharacterClassJobs)
+                x.Minions)
             .FirstOrDefaultAsync();
 
         if (character == null)
         {
-            return (new List<CharacterClassJobDto>(), null);
+            return (new List<CharacterMinionDto>(), null);
         }
 
-        var classJobs = character.CharacterClassJobs.Select(mapper.Map<CharacterClassJobDto>);
-        return (classJobs.ToList(), character.CharacterClassJobsUpdatedAt);
+        var minions = character.Minions.Select(mapper.Map<CharacterMinionDto>);
+        return (minions.ToList(), character.CharacterMinionsUpdatedAt);
+    }
+
+    public async Task<(ICollection<CharacterMinionDto>, DateTime? LastUpdated)> GetCharacterMinionsAsync(
+        string lodestoneId)
+    {
+        var minions = await context.CharacterMinions.Where(x =>
+                x.CharacterLodestoneId == lodestoneId)
+            .ToListAsync();
+
+        var minionDtos = minions.Select(mapper.Map<CharacterMinionDto>);
+        return (minionDtos.ToList(), null);
     }
 }

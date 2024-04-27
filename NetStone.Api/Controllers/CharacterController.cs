@@ -74,6 +74,12 @@ public class CharacterController : ControllerBase
     ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the
     ///     Lodestone.
     /// </param>
+    /// <remarks>
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDto.LastUpdated" />
+    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
+    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
+    ///     applies as expected.
+    /// </remarks>
     /// <returns>Character class jobs.</returns>
     [HttpGet("ClassJobs/{lodestoneId}")]
     public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge)
@@ -107,13 +113,23 @@ public class CharacterController : ControllerBase
     ///     Get a character's minions.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
+    /// <remarks>
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMinionOuterDto.LastUpdated" />
+    ///     cannot be set. Its value will be null as a result. In this case, if <see cref="maxAge" /> is set to ANY value, the
+    ///     data will be refreshed. If Character was cached at least once and the value can be saved, <see cref="maxAge" />
+    ///     applies as expected.
+    /// </remarks>
     /// <returns>Character minions.</returns>
     [HttpGet("Minions/{lodestoneId}")]
-    public async Task<ActionResult<CharacterCollectable>> GetMinionsAsync(string lodestoneId)
+    public async Task<ActionResult<CharacterMinionOuterDto>> GetMinionsAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _characterService.GetCharacterMinions(lodestoneId);
+            return await _characterService.GetCharacterMinions(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

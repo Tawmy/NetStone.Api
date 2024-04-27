@@ -45,6 +45,9 @@ public class Character
 
     public ICollection<CharacterClassJob> CharacterClassJobs { get; set; } = new HashSet<CharacterClassJob>();
 
+    public ICollection<CharacterMinion> Minions { get; set; } = new HashSet<CharacterMinion>();
+
     public DateTime CharacterUpdatedAt { get; set; }
     public DateTime? CharacterClassJobsUpdatedAt { get; set; }
+    public DateTime? CharacterMinionsUpdatedAt { get; set; }
 }

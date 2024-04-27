@@ -19,7 +19,8 @@ internal class CharacterProfile : Profile
                     Enum.TryParse<GrandCompany>(y.GrandCompanyName, true, out var result)
                         ? result
                         : GrandCompany.None))
-            .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>());
+            .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>())
+            .ForMember(x => x.Minions, x => x.Ignore()); // why is this necessary, but ignoring ClassJobs is not?
 
         CreateMap<Character, CharacterDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
