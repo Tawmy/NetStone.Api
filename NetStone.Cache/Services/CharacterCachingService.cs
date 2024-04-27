@@ -32,6 +32,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
             await context.Characters.AddAsync(character);
         }
 
+        character.CharacterUpdatedAt = DateTime.UtcNow;
+
         await context.SaveChangesAsync();
 
         return mapper.Map<CharacterDto>(character);

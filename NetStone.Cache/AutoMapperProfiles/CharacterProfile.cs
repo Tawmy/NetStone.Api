@@ -23,6 +23,6 @@ internal class CharacterProfile : Profile
 
         CreateMap<Character, CharacterDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
-            .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.UpdatedAt ?? y.CreatedAt));
+            .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.CharacterUpdatedAt));
     }
 }

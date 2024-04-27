@@ -1,9 +1,8 @@
-using NetStone.Cache.Interfaces;
 using NetStone.Common.Enums;
 
 namespace NetStone.Cache.Db.Models;
 
-public class Character : IUpdatable
+public class Character
 {
     public int Id { get; set; } //PK
 
@@ -46,8 +45,6 @@ public class Character : IUpdatable
 
     public ICollection<CharacterClassJob> CharacterClassJobs { get; set; } = new HashSet<CharacterClassJob>();
 
+    public DateTime CharacterUpdatedAt { get; set; }
     public DateTime? CharacterClassJobsUpdatedAt { get; set; }
-
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 }

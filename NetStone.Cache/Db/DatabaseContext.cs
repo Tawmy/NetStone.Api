@@ -1,7 +1,6 @@
 using EntityFramework.Exceptions.PostgreSQL;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db.Models;
-using NetStone.Cache.Interfaces;
 using NetStone.Common.Enums;
 using Npgsql;
 
@@ -17,36 +16,6 @@ public class DatabaseContext : DbContext
     public DatabaseContext(DbContextOptions<DatabaseContext> options) : base(options)
     {
         MapEnums();
-    }
-
-    /// <inheritdoc cref="DbContext.SaveChangesAsync(CancellationToken)" />
-    /// <summary>
-    ///     Saves all changes made in this context to the database.<br /><br />
-    ///     First checks whether entity implements <see cref="IUpdatable" />.
-    ///     If so, CreatedAt and UpdatedAt are set depending on whether the database entry is being created or modified.<br />
-    ///     <br />
-    ///     Overrides <see cref="DbContext.SaveChangesAsync(CancellationToken)" />.<br />
-    ///     Overridden method is called once IUpdatable check is done.
-    /// </summary>
-    /// <remarks>
-    ///     Always use this override instead of calling <see cref="DbContext.SaveChangesAsync(CancellationToken)" /> directly!
-    /// </remarks>
-    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
-        var now = DateTime.Now.ToUniversalTime();
-        var entries = ChangeTracker.Entries().Where(x => x.Entity is IUpdatable).ToList();
-
-        foreach (var createdEntry in entries.Where(x => x.State == EntityState.Added))
-        {
-            ((IUpdatable)createdEntry.Entity).CreatedAt = now;
-        }
-
-        foreach (var updatedEntry in entries.Where(x => x.State == EntityState.Modified))
-        {
-            ((IUpdatable)updatedEntry.Entity).UpdatedAt = now;
-        }
-
-        return base.SaveChangesAsync(cancellationToken);
     }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

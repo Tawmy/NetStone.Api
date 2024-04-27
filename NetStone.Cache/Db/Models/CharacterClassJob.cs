@@ -1,9 +1,8 @@
-using NetStone.Cache.Interfaces;
 using NetStone.Common.Enums;
 
 namespace NetStone.Cache.Db.Models;
 
-public class CharacterClassJob : IUpdatable
+public class CharacterClassJob
 {
     public int Id { get; set; } // PK
 
@@ -21,7 +20,4 @@ public class CharacterClassJob : IUpdatable
     public required int ExpToGo { get; init; }
 
     public required bool IsSpecialized { get; init; }
-
-    public DateTime CreatedAt { get; set; }
-    public DateTime? UpdatedAt { get; set; }
 }
