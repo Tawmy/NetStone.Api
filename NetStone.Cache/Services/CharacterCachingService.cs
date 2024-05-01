@@ -140,10 +140,11 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     {
         var classJobs = await context.CharacterClassJobs.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
+            .Include(x => x.Character)
             .ToListAsync();
 
         var classJobDtos = classJobs.Select(mapper.Map<CharacterClassJobDto>);
-        return (classJobDtos.ToList(), null);
+        return (classJobDtos.ToList(), classJobs.FirstOrDefault()?.Character?.CharacterClassJobsUpdatedAt);
     }
 
     public async Task<ICollection<CharacterMinionDto>> CacheCharacterMinionsAsync(string lodestoneId,
@@ -210,10 +211,11 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     {
         var minions = await context.CharacterMinions.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
+            .Include(x => x.Character)
             .ToListAsync();
 
         var minionDtos = minions.Select(mapper.Map<CharacterMinionDto>);
-        return (minionDtos.ToList(), null);
+        return (minionDtos.ToList(), minions.FirstOrDefault()?.Character?.CharacterMinionsUpdatedAt);
     }
 
     public async Task<ICollection<CharacterMountDto>> CacheCharacterMountsAsync(string lodestoneId,
@@ -280,9 +282,10 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     {
         var mounts = await context.CharacterMounts.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
+            .Include(x => x.Character)
             .ToListAsync();
 
         var mountDtos = mounts.Select(mapper.Map<CharacterMountDto>);
-        return (mountDtos.ToList(), null);
+        return (mountDtos.ToList(), mounts.FirstOrDefault()?.Character?.CharacterMountsUpdatedAt);
     }
 }
