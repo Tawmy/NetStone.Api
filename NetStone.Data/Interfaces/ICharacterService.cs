@@ -54,7 +54,7 @@ public interface ICharacterService
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Character achievements.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterAchievementPage> GetCharacterAchievements(string lodestoneId, int page);
+    public Task<CharacterAchievementPage> GetCharacterAchievementsAsync(string lodestoneId, int page);
 
     /// <summary>
     ///     Get a character's minions.
@@ -66,7 +66,7 @@ public interface ICharacterService
     /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterMinionOuterDto> GetCharacterMinions(string lodestoneId, int? maxAge);
+    public Task<CharacterMinionOuterDto> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's mounts.
@@ -78,5 +78,5 @@ public interface ICharacterService
     /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterMountOuterDto> GetCharacterMounts(string lodestoneId, int? maxAge);
+    public Task<CharacterMountOuterDto> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
 }

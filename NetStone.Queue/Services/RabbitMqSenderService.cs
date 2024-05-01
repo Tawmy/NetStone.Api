@@ -33,4 +33,32 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(new { lodestoneId, error });
     }
+
+    public async Task SendGetCharacterMinionsSuccessfulAsync(CharacterMinionOuterDto dto)
+    {
+        var uri = new Uri("queue:netstone-get-character-minions-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetCharacterMinionsFailedAsync(string lodestoneId, string error)
+    {
+        var uri = new Uri("queue:netstone-get-character-minions-error");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(new { lodestoneId, error });
+    }
+
+    public async Task SendGetCharacterMountsSuccessfulAsync(CharacterMountOuterDto dto)
+    {
+        var uri = new Uri("queue:netstone-get-character-mounts-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetCharacterMountsFailedAsync(string lodestoneId, string error)
+    {
+        var uri = new Uri("queue:netstone-get-character-mounts-error");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(new { lodestoneId, error });
+    }
 }

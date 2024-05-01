@@ -128,7 +128,7 @@ public class CharacterController : ControllerBase
     {
         try
         {
-            return await _characterService.GetCharacterMinions(lodestoneId, maxAge);
+            return await _characterService.GetCharacterMinionsAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {
@@ -156,7 +156,7 @@ public class CharacterController : ControllerBase
     {
         try
         {
-            return await _characterService.GetCharacterMounts(lodestoneId, maxAge);
+            return await _characterService.GetCharacterMountsAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

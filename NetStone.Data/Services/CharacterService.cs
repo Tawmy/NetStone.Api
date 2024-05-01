@@ -76,7 +76,7 @@ internal class CharacterService : ICharacterService
         return new CharacterClassJobOuterDto(cachedClassJobsDtos, false, DateTime.UtcNow);
     }
 
-    public async Task<CharacterAchievementPage> GetCharacterAchievements(string lodestoneId, int page)
+    public async Task<CharacterAchievementPage> GetCharacterAchievementsAsync(string lodestoneId, int page)
     {
         var client = await LodestoneClient.GetClientAsync();
         var result = await client.GetCharacterAchievement(lodestoneId, page);
@@ -85,7 +85,7 @@ internal class CharacterService : ICharacterService
         return result;
     }
 
-    public async Task<CharacterMinionOuterDto> GetCharacterMinions(string lodestoneId, int? maxAge)
+    public async Task<CharacterMinionOuterDto> GetCharacterMinionsAsync(string lodestoneId, int? maxAge)
     {
         var (cachedMinionsDtos, lastUpdated) = await _cachingService.GetCharacterMinionsAsync(lodestoneId);
 
@@ -116,7 +116,7 @@ internal class CharacterService : ICharacterService
         return new CharacterMinionOuterDto(cachedMinionsDtos, false, DateTime.UtcNow);
     }
 
-    public async Task<CharacterMountOuterDto> GetCharacterMounts(string lodestoneId, int? maxAge)
+    public async Task<CharacterMountOuterDto> GetCharacterMountsAsync(string lodestoneId, int? maxAge)
     {
         var (cachedMountsDtos, lastUpdated) = await _cachingService.GetCharacterMountsAsync(lodestoneId);
 

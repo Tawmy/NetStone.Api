@@ -23,6 +23,8 @@ public static class DependencyInjection
         {
             x.AddConsumer<GetCharacterConsumer>();
             x.AddConsumer<GetCharacterClassJobsConsumer>();
+            x.AddConsumer<GetCharacterMinionsConsumer>();
+            x.AddConsumer<GetCharacterMountsConsumer>();
 
             x.UsingRabbitMq((context, configurator) =>
             {
@@ -37,6 +39,12 @@ public static class DependencyInjection
                 configurator.ReceiveEndpoint("netstone-get-character-class-jobs",
                     z => z.ConfigureReceiveEndpoint<GetCharacterClassJobsConsumer>(context, "netstone",
                         "get-character-class-jobs"));
+                configurator.ReceiveEndpoint("netstone-get-character-minions",
+                    z => z.ConfigureReceiveEndpoint<GetCharacterMinionsConsumer>(context, "netstone",
+                        "get-character-minions"));
+                configurator.ReceiveEndpoint("netstone-get-character-mounts",
+                    z => z.ConfigureReceiveEndpoint<GetCharacterMountsConsumer>(context, "netstone",
+                        "get-character-mounts"));
             });
         });
 
