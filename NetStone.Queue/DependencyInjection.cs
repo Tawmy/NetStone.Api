@@ -22,6 +22,7 @@ public static class DependencyInjection
         services.AddMassTransit(x =>
         {
             x.AddConsumer<GetCharacterConsumer>();
+            x.AddConsumer<GetCharacterClassJobsConsumer>();
 
             x.UsingRabbitMq((context, configurator) =>
             {
@@ -33,6 +34,9 @@ public static class DependencyInjection
 
                 configurator.ReceiveEndpoint("netstone-get-character",
                     z => z.ConfigureReceiveEndpoint<GetCharacterConsumer>(context, "netstone", "get-character"));
+                configurator.ReceiveEndpoint("netstone-get-character-class-jobs",
+                    z => z.ConfigureReceiveEndpoint<GetCharacterClassJobsConsumer>(context, "netstone",
+                        "get-character-class-jobs"));
             });
         });
 
