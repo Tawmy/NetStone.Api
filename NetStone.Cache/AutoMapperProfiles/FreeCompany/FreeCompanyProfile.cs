@@ -1,4 +1,5 @@
 using AutoMapper;
+using NetStone.Cache.Db.Resolvers;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
@@ -21,7 +22,8 @@ public class FreeCompanyProfile : Profile
                     : GrandCompany.NoAffiliation))
             .ForMember(x => x.EstateName, x => x.MapFrom(y => y.Estate != null ? y.Estate.Name : null))
             .ForMember(x => x.EstateGreeting, x => x.MapFrom(y => y.Estate != null ? y.Estate.Greeting : null))
-            .ForMember(x => x.EstatePlot, x => x.MapFrom(y => y.Estate != null ? y.Estate.Plot : null));
+            .ForMember(x => x.EstatePlot, x => x.MapFrom(y => y.Estate != null ? y.Estate.Plot : null))
+            .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusResolver>());
 
         CreateMap<Db.Models.FreeCompany, FreeCompanyDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
@@ -32,6 +34,7 @@ public class FreeCompanyProfile : Profile
                     string.IsNullOrEmpty(y.EstateName) || string.IsNullOrEmpty(y.EstateGreeting)
                         ? null
                         : new FreeCompanyEstateDto(y.EstateName, y.EstateGreeting, y.EstatePlot)))
+            .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusDtoResolver>())
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.FreeCompanyUpdatedAt));
     }
 }

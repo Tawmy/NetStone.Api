@@ -33,7 +33,7 @@ public class FreeCompany
 
     public DateTime FreeCompanyUpdatedAt { get; set; }
 
-    // TODO focus
+    public FreeCompanyFocus Focus { get; set; }
 
     // TODO reputation
 }

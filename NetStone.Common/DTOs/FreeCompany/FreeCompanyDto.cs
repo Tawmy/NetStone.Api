@@ -23,10 +23,10 @@ public record FreeCompanyDto
 
     public FreeCompanyEstateDto? Estate { get; init; }
 
-    public bool Cached { get; init; }
-    public DateTime LastUpdated { get; init; }
+    public required bool Cached { get; init; }
+    public required DateTime LastUpdated { get; init; }
 
-    // TODO focus
+    public required IEnumerable<FreeCompanyFocusDto> Focus { get; init; }
 
     // TODO reputation
 }
