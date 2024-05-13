@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Api.Interfaces;
+using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.FreeCompany;
 using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using NetStone.Search.FreeCompany;
@@ -48,13 +48,17 @@ public class FreeCompanyController : ControllerBase
     ///     Get free company with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Parsed free company data.</returns>
     [HttpGet("{lodestoneId}")]
-    public async Task<ActionResult<LodestoneFreeCompany>> GetAsync(string lodestoneId)
+    public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _freeCompanyService.GetFreeCompanyAsync(lodestoneId);
+            return await _freeCompanyService.GetFreeCompanyAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

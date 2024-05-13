@@ -1,6 +1,7 @@
 using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Model.Parseables.Character;
 
 namespace NetStone.Cache.AutoMapperProfiles.Character;
@@ -19,7 +20,6 @@ internal class CharacterFreeCompanyProfile : Profile
         CreateMap<CharacterFreeCompany, CharacterFreeCompanyDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.IconLayers,
-                x => x.MapFrom(y => new FreeCompanyCrestDto
-                    { TopLayer = y.TopLayer, MiddleLayer = y.MiddleLayer, BottomLayer = y.BottomLayer }));
+                x => x.MapFrom(y => new FreeCompanyCrestDto(y.TopLayer, y.MiddleLayer, y.BottomLayer)));
     }
 }

@@ -59,5 +59,7 @@ public class DatabaseContext : DbContext
     internal DbSet<CharacterMinion> CharacterMinions => Set<CharacterMinion>();
     internal DbSet<CharacterMount> CharacterMounts => Set<CharacterMount>();
 
+    internal DbSet<FreeCompany> FreeCompanies => Set<FreeCompany>();
+
     #endregion
 }

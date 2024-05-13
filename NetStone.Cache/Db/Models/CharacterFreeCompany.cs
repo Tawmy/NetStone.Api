@@ -12,7 +12,7 @@ public class CharacterFreeCompany
     public required string Name { get; set; }
     public required string Link { get; set; }
 
-    public string? TopLayer { get; set; }
-    public string? MiddleLayer { get; set; }
-    public string? BottomLayer { get; set; }
+    public required string TopLayer { get; set; }
+    public required string MiddleLayer { get; set; }
+    public required string BottomLayer { get; set; }
 }

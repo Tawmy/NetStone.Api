@@ -2,8 +2,8 @@ using AutoMapper;
 using NetStone.Cache.Db.Resolvers;
 using NetStone.Cache.Extensions;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Enums;
 using NetStone.Model.Parseables.Character;
-using NetStone.StaticData;
 
 namespace NetStone.Cache.AutoMapperProfiles.Character;
 
@@ -17,7 +17,7 @@ internal class CharacterProfile : Profile
                 x => x.MapFrom((y, _) =>
                     Enum.TryParse<GrandCompany>(y.GrandCompanyName, true, out var result)
                         ? result
-                        : GrandCompany.None))
+                        : GrandCompany.NoAffiliation))
             .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>())
             .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
             .ForMember(x => x.Mounts, x => x.Ignore()); // same here

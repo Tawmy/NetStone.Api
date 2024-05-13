@@ -1,3 +1,5 @@
+using NetStone.Common.DTOs.FreeCompany;
+
 namespace NetStone.Common.DTOs.Character;
 
 public record CharacterFreeCompanyDto

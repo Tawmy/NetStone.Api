@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetStone.Cache.Db;
 using NetStone.Common.Enums;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240511120309_FreeCompany")]
+    partial class FreeCompany
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -603,10 +606,6 @@ namespace NetStone.Cache.Db.Migrations
                     b.Property<DateTime>("Formed")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("formed");
-
-                    b.Property<DateTime>("FreeCompanyUpdatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("free_company_updated_at");
 
                     b.Property<GrandCompany>("GrandCompany")
                         .HasColumnType("grand_company")

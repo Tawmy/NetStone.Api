@@ -1,6 +1,6 @@
 using NetStone.Api.Controllers;
+using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.FreeCompany;
 using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using NetStone.Search.FreeCompany;
@@ -28,9 +28,13 @@ public interface IFreeCompanyService
     ///     Get character with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<LodestoneFreeCompany> GetFreeCompanyAsync(string lodestoneId);
+    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a free company's members.
