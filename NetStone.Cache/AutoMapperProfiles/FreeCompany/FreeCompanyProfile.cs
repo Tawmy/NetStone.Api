@@ -23,7 +23,13 @@ public class FreeCompanyProfile : Profile
             .ForMember(x => x.EstateName, x => x.MapFrom(y => y.Estate != null ? y.Estate.Name : null))
             .ForMember(x => x.EstateGreeting, x => x.MapFrom(y => y.Estate != null ? y.Estate.Greeting : null))
             .ForMember(x => x.EstatePlot, x => x.MapFrom(y => y.Estate != null ? y.Estate.Plot : null))
-            .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusResolver>());
+            .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusResolver>())
+            .ForMember(x => x.MaelstromRank, x => x.MapFrom(y => y.Reputation.Maelstrom.Rank))
+            .ForMember(x => x.MaelstromProgress, x => x.MapFrom(y => y.Reputation.Maelstrom.Progress))
+            .ForMember(x => x.TwinAdderRank, x => x.MapFrom(y => y.Reputation.Adders.Rank))
+            .ForMember(x => x.TwinAdderProgress, x => x.MapFrom(y => y.Reputation.Adders.Progress))
+            .ForMember(x => x.ImmortalFlamesRank, x => x.MapFrom(y => y.Reputation.Flames.Rank))
+            .ForMember(x => x.ImmortalFlamesProgress, x => x.MapFrom(y => y.Reputation.Flames.Progress));
 
         CreateMap<Db.Models.FreeCompany, FreeCompanyDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
@@ -35,6 +41,7 @@ public class FreeCompanyProfile : Profile
                         ? null
                         : new FreeCompanyEstateDto(y.EstateName, y.EstateGreeting, y.EstatePlot)))
             .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusDtoResolver>())
-            .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.FreeCompanyUpdatedAt));
+            .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.FreeCompanyUpdatedAt))
+            .ForMember(x => x.Reputation, x => x.MapFrom<FreeCompanyReputationResolver>());
     }
 }

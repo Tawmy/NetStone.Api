@@ -28,5 +28,5 @@ public record FreeCompanyDto
 
     public required IEnumerable<FreeCompanyFocusDto> Focus { get; init; }
 
-    // TODO reputation
+    public required IEnumerable<FreeCompanyReputationDto> Reputation { get; init; }
 }

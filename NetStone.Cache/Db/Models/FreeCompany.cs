@@ -33,7 +33,12 @@ public class FreeCompany
 
     public DateTime FreeCompanyUpdatedAt { get; set; }
 
-    public FreeCompanyFocus Focus { get; set; }
+    public required FreeCompanyFocus Focus { get; set; }
 
-    // TODO reputation
+    public required short MaelstromProgress { get; set; }
+    public required string MaelstromRank { get; set; }
+    public required short TwinAdderProgress { get; set; }
+    public required string TwinAdderRank { get; set; }
+    public required short ImmortalFlamesProgress { get; set; }
+    public required string ImmortalFlamesRank { get; set; }
 }

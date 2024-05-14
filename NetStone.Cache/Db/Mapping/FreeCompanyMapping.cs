@@ -29,5 +29,9 @@ public class FreeCompanyMapping : IEntityTypeConfiguration<FreeCompany>
         builder.Property(x => x.EstateName).HasMaxLength(31);
         builder.Property(x => x.EstateGreeting).HasMaxLength(255);
         builder.Property(x => x.EstatePlot).HasMaxLength(63);
+
+        builder.Property(x => x.MaelstromRank).HasMaxLength(15);
+        builder.Property(x => x.TwinAdderRank).HasMaxLength(15);
+        builder.Property(x => x.ImmortalFlamesRank).HasMaxLength(15);
     }
 }
