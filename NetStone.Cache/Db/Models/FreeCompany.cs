@@ -45,4 +45,5 @@ public class FreeCompany
     public required string ImmortalFlamesRank { get; set; }
 
     public ICollection<FreeCompanyMember> Members { get; set; } = new HashSet<FreeCompanyMember>();
+    public ICollection<Character> MembersCachedCharacters { get; set; } = new HashSet<Character>();
 }

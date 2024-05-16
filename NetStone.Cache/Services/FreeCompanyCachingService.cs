@@ -27,8 +27,18 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
         {
             freeCompany = mapper.Map<FreeCompany>(lodestoneFreeCompany);
             await context.FreeCompanies.AddAsync(freeCompany);
+            await context.SaveChangesAsync();
 
-            // TODO save related entities
+            var members = await context.FreeCompanyMembers.Where(x =>
+                    x.FreeCompanyLodestoneId == lodestoneFreeCompany.Id)
+                .ToListAsync();
+            members.ForEach(x => x.FreeCompanyId = freeCompany.Id);
+
+            var characters = await context.Characters.Where(x =>
+                    x.FreeCompany != null &&
+                    x.FreeCompany.LodestoneId == lodestoneFreeCompany.Id)
+                .ToListAsync();
+            characters.ForEach(x => x.FullFreeCompanyId = freeCompany.Id);
         }
 
         freeCompany.FreeCompanyUpdatedAt = DateTime.UtcNow;

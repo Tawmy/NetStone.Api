@@ -39,5 +39,10 @@ public class CharacterMapping : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.TownName).HasMaxLength(31);
         builder.Property(x => x.TownIcon).HasMaxLength(255);
+
+        builder.HasOne(x => x.FullFreeCompany)
+            .WithMany(y => y.MembersCachedCharacters)
+            .HasForeignKey(x => x.FullFreeCompanyId)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

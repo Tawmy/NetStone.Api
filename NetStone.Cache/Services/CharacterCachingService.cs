@@ -49,6 +49,11 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
                     x.CharacterLodestoneId == lodestoneId)
                 .ToListAsync();
             mounts.ForEach(x => x.CharacterId = character.Id);
+
+            var freeCompanyMembers = await context.FreeCompanyMembers.Where(x =>
+                    x.CharacterLodestoneId == lodestoneId)
+                .ToListAsync();
+            freeCompanyMembers.ForEach(x => x.FullCharacterId = character.Id);
         }
 
         character.CharacterUpdatedAt = DateTime.UtcNow;
