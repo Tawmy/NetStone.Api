@@ -75,13 +75,15 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
     public async Task<CharacterDto?> GetCharacterAsync(int id)
     {
-        var character = await context.Characters.IncludeBasic().SingleOrDefaultAsync(x => x.Id == id);
+        var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
+            .SingleOrDefaultAsync(x => x.Id == id);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
     }
 
     public async Task<CharacterDto?> GetCharacterAsync(string lodestoneId)
     {
-        var character = await context.Characters.IncludeBasic().SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
+        var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
+            .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
     }
 

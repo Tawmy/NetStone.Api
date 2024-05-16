@@ -29,7 +29,8 @@ public class FreeCompanyProfile : Profile
             .ForMember(x => x.TwinAdderRank, x => x.MapFrom(y => y.Reputation.Adders.Rank))
             .ForMember(x => x.TwinAdderProgress, x => x.MapFrom(y => y.Reputation.Adders.Progress))
             .ForMember(x => x.ImmortalFlamesRank, x => x.MapFrom(y => y.Reputation.Flames.Rank))
-            .ForMember(x => x.ImmortalFlamesProgress, x => x.MapFrom(y => y.Reputation.Flames.Progress));
+            .ForMember(x => x.ImmortalFlamesProgress, x => x.MapFrom(y => y.Reputation.Flames.Progress))
+            .ForMember(x => x.Members, x => x.Ignore());
 
         CreateMap<Db.Models.FreeCompany, FreeCompanyDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))

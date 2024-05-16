@@ -16,7 +16,7 @@ public class Character
     public required string Bio { get; set; }
 
     public CharacterFreeCompany? FreeCompany { get; set; }
-    
+
     public int? FullFreeCompanyId { get; set; }
     public FreeCompany? FullFreeCompany { get; set; }
 
