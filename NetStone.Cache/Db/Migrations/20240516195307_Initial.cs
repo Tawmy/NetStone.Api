@@ -18,6 +18,46 @@ namespace NetStone.Cache.Db.Migrations
                 .Annotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames");
 
             migrationBuilder.CreateTable(
+                name: "free_companies",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    lodestone_id = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    name = table.Column<string>(type: "character varying(20)", maxLength: 20, nullable: false),
+                    slogan = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    tag = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: false),
+                    world = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    crest_top = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    crest_middle = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    crest_bottom = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    formed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    grand_company = table.Column<GrandCompany>(type: "grand_company", nullable: false),
+                    rank = table.Column<short>(type: "smallint", nullable: false),
+                    ranking_monthly = table.Column<short>(type: "smallint", nullable: true),
+                    ranking_weekly = table.Column<short>(type: "smallint", nullable: true),
+                    recruitment = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    active_member_count = table.Column<short>(type: "smallint", nullable: false),
+                    active_state = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    estate_name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
+                    estate_greeting = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    estate_plot = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
+                    free_company_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    free_company_members_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    focus = table.Column<int>(type: "integer", nullable: false),
+                    maelstrom_progress = table.Column<short>(type: "smallint", nullable: false),
+                    maelstrom_rank = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    twin_adder_progress = table.Column<short>(type: "smallint", nullable: false),
+                    twin_adder_rank = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
+                    immortal_flames_progress = table.Column<short>(type: "smallint", nullable: false),
+                    immortal_flames_rank = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_free_companies", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "characters",
                 columns: table => new
                 {
@@ -29,6 +69,7 @@ namespace NetStone.Cache.Db.Migrations
                     active_class_job_icon = table.Column<string>(type: "character varying(127)", maxLength: 127, nullable: false),
                     avatar = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     bio = table.Column<string>(type: "character varying(3000)", maxLength: 3000, nullable: false),
+                    full_free_company_id = table.Column<int>(type: "integer", nullable: true),
                     grand_company = table.Column<GrandCompany>(type: "grand_company", nullable: false),
                     grand_company_rank = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     guardian_deity_name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false),
@@ -42,13 +83,20 @@ namespace NetStone.Cache.Db.Migrations
                     title = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     town_name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
                     town_icon = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    character_class_jobs_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    character_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    character_class_jobs_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    character_minions_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    character_mounts_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_characters", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_characters_free_companies_full_free_company_id",
+                        column: x => x.full_free_company_id,
+                        principalTable: "free_companies",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -96,16 +144,15 @@ namespace NetStone.Cache.Db.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    character_id = table.Column<int>(type: "integer", nullable: false),
+                    character_lodestone_id = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    character_id = table.Column<int>(type: "integer", nullable: true),
                     class_job = table.Column<ClassJob>(type: "class_job", nullable: false),
                     is_job_unlocked = table.Column<bool>(type: "boolean", nullable: false),
                     level = table.Column<short>(type: "smallint", nullable: false),
                     exp_current = table.Column<int>(type: "integer", nullable: false),
                     exp_max = table.Column<int>(type: "integer", nullable: false),
                     exp_to_go = table.Column<int>(type: "integer", nullable: false),
-                    is_specialized = table.Column<bool>(type: "boolean", nullable: false),
-                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    is_specialized = table.Column<bool>(type: "boolean", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -128,9 +175,9 @@ namespace NetStone.Cache.Db.Migrations
                     lodestone_id = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
                     name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
                     link = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    top_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    middle_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
-                    bottom_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
+                    top_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    middle_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    bottom_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -175,6 +222,82 @@ namespace NetStone.Cache.Db.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "character_minions",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    character_lodestone_id = table.Column<string>(type: "text", nullable: false),
+                    character_id = table.Column<int>(type: "integer", nullable: true),
+                    name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_character_minions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_character_minions_characters_character_id",
+                        column: x => x.character_id,
+                        principalTable: "characters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "character_mounts",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    character_lodestone_id = table.Column<string>(type: "text", nullable: false),
+                    character_id = table.Column<int>(type: "integer", nullable: true),
+                    name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_character_mounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_character_mounts_characters_character_id",
+                        column: x => x.character_id,
+                        principalTable: "characters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "free_company_members",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    character_lodestone_id = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    full_character_id = table.Column<int>(type: "integer", nullable: true),
+                    free_company_lodestone_id = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    free_company_id = table.Column<int>(type: "integer", nullable: true),
+                    name = table.Column<string>(type: "character varying(21)", maxLength: 21, nullable: false),
+                    rank = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
+                    rank_icon = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    server = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    data_center = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    avatar = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_free_company_members", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_free_company_members_characters_full_character_id",
+                        column: x => x.full_character_id,
+                        principalTable: "characters",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "fk_free_company_members_free_companies_free_company_id",
+                        column: x => x.free_company_id,
+                        principalTable: "free_companies",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_character_attributes_character_id",
                 table: "character_attributes",
@@ -185,6 +308,12 @@ namespace NetStone.Cache.Db.Migrations
                 name: "ix_character_class_jobs_character_id",
                 table: "character_class_jobs",
                 column: "character_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_character_class_jobs_character_lodestone_id_class_job",
+                table: "character_class_jobs",
+                columns: new[] { "character_lodestone_id", "class_job" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_character_free_companies_character_id",
@@ -199,9 +328,59 @@ namespace NetStone.Cache.Db.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_character_minions_character_id",
+                table: "character_minions",
+                column: "character_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_character_minions_character_lodestone_id_name",
+                table: "character_minions",
+                columns: new[] { "character_lodestone_id", "name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_character_mounts_character_id",
+                table: "character_mounts",
+                column: "character_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_character_mounts_character_lodestone_id_name",
+                table: "character_mounts",
+                columns: new[] { "character_lodestone_id", "name" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_characters_full_free_company_id",
+                table: "characters",
+                column: "full_free_company_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_characters_lodestone_id",
                 table: "characters",
                 column: "lodestone_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_free_companies_lodestone_id",
+                table: "free_companies",
+                column: "lodestone_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_free_company_members_character_lodestone_id_free_company_lo",
+                table: "free_company_members",
+                columns: new[] { "character_lodestone_id", "free_company_lodestone_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "ix_free_company_members_free_company_id",
+                table: "free_company_members",
+                column: "free_company_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_free_company_members_full_character_id",
+                table: "free_company_members",
+                column: "full_character_id",
                 unique: true);
         }
 
@@ -221,7 +400,19 @@ namespace NetStone.Cache.Db.Migrations
                 name: "character_gears");
 
             migrationBuilder.DropTable(
+                name: "character_minions");
+
+            migrationBuilder.DropTable(
+                name: "character_mounts");
+
+            migrationBuilder.DropTable(
+                name: "free_company_members");
+
+            migrationBuilder.DropTable(
                 name: "characters");
+
+            migrationBuilder.DropTable(
+                name: "free_companies");
         }
     }
 }

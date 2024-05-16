@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240427140130_AddCharacterMounts")]
-    partial class AddCharacterMounts
+    [Migration("20240516195307_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -78,6 +78,10 @@ namespace NetStone.Cache.Db.Migrations
                     b.Property<DateTime>("CharacterUpdatedAt")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("character_updated_at");
+
+                    b.Property<int?>("FullFreeCompanyId")
+                        .HasColumnType("integer")
+                        .HasColumnName("full_free_company_id");
 
                     b.Property<GrandCompany>("GrandCompany")
                         .HasColumnType("grand_company")
@@ -158,6 +162,9 @@ namespace NetStone.Cache.Db.Migrations
 
                     b.HasKey("Id")
                         .HasName("pk_characters");
+
+                    b.HasIndex("FullFreeCompanyId")
+                        .HasDatabaseName("ix_characters_full_free_company_id");
 
                     b.HasIndex("LodestoneId")
                         .IsUnique()
@@ -341,6 +348,7 @@ namespace NetStone.Cache.Db.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BottomLayer")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("bottom_layer");
@@ -362,6 +370,7 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("lodestone_id");
 
                     b.Property<string>("MiddleLayer")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("middle_layer");
@@ -373,6 +382,7 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("name");
 
                     b.Property<string>("TopLayer")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("top_layer");
@@ -548,6 +558,257 @@ namespace NetStone.Cache.Db.Migrations
                     b.ToTable("character_mounts", (string)null);
                 });
 
+            modelBuilder.Entity("NetStone.Cache.Db.Models.FreeCompany", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<short>("ActiveMemberCount")
+                        .HasColumnType("smallint")
+                        .HasColumnName("active_member_count");
+
+                    b.Property<string>("ActiveState")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("active_state");
+
+                    b.Property<string>("CrestBottom")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("crest_bottom");
+
+                    b.Property<string>("CrestMiddle")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("crest_middle");
+
+                    b.Property<string>("CrestTop")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("crest_top");
+
+                    b.Property<string>("EstateGreeting")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("estate_greeting");
+
+                    b.Property<string>("EstateName")
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("estate_name");
+
+                    b.Property<string>("EstatePlot")
+                        .HasMaxLength(63)
+                        .HasColumnType("character varying(63)")
+                        .HasColumnName("estate_plot");
+
+                    b.Property<int>("Focus")
+                        .HasColumnType("integer")
+                        .HasColumnName("focus");
+
+                    b.Property<DateTime>("Formed")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("formed");
+
+                    b.Property<DateTime?>("FreeCompanyMembersUpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("free_company_members_updated_at");
+
+                    b.Property<DateTime>("FreeCompanyUpdatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("free_company_updated_at");
+
+                    b.Property<GrandCompany>("GrandCompany")
+                        .HasColumnType("grand_company")
+                        .HasColumnName("grand_company");
+
+                    b.Property<short>("ImmortalFlamesProgress")
+                        .HasColumnType("smallint")
+                        .HasColumnName("immortal_flames_progress");
+
+                    b.Property<string>("ImmortalFlamesRank")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("immortal_flames_rank");
+
+                    b.Property<string>("LodestoneId")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("lodestone_id");
+
+                    b.Property<short>("MaelstromProgress")
+                        .HasColumnType("smallint")
+                        .HasColumnName("maelstrom_progress");
+
+                    b.Property<string>("MaelstromRank")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("maelstrom_rank");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasColumnName("name");
+
+                    b.Property<short>("Rank")
+                        .HasColumnType("smallint")
+                        .HasColumnName("rank");
+
+                    b.Property<short?>("RankingMonthly")
+                        .HasColumnType("smallint")
+                        .HasColumnName("ranking_monthly");
+
+                    b.Property<short?>("RankingWeekly")
+                        .HasColumnType("smallint")
+                        .HasColumnName("ranking_weekly");
+
+                    b.Property<string>("Recruitment")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("recruitment");
+
+                    b.Property<string>("Slogan")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("slogan");
+
+                    b.Property<string>("Tag")
+                        .IsRequired()
+                        .HasMaxLength(7)
+                        .HasColumnType("character varying(7)")
+                        .HasColumnName("tag");
+
+                    b.Property<short>("TwinAdderProgress")
+                        .HasColumnType("smallint")
+                        .HasColumnName("twin_adder_progress");
+
+                    b.Property<string>("TwinAdderRank")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)")
+                        .HasColumnName("twin_adder_rank");
+
+                    b.Property<string>("World")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("world");
+
+                    b.HasKey("Id")
+                        .HasName("pk_free_companies");
+
+                    b.HasIndex("LodestoneId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_free_companies_lodestone_id");
+
+                    b.ToTable("free_companies", (string)null);
+                });
+
+            modelBuilder.Entity("NetStone.Cache.Db.Models.FreeCompanyMember", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Avatar")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("avatar");
+
+                    b.Property<string>("CharacterLodestoneId")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
+                        .HasColumnName("character_lodestone_id");
+
+                    b.Property<string>("DataCenter")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("data_center");
+
+                    b.Property<int?>("FreeCompanyId")
+                        .HasColumnType("integer")
+                        .HasColumnName("free_company_id");
+
+                    b.Property<string>("FreeCompanyLodestoneId")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("free_company_lodestone_id");
+
+                    b.Property<int?>("FullCharacterId")
+                        .HasColumnType("integer")
+                        .HasColumnName("full_character_id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(21)
+                        .HasColumnType("character varying(21)")
+                        .HasColumnName("name");
+
+                    b.Property<string>("Rank")
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("rank");
+
+                    b.Property<string>("RankIcon")
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)")
+                        .HasColumnName("rank_icon");
+
+                    b.Property<string>("Server")
+                        .IsRequired()
+                        .HasMaxLength(31)
+                        .HasColumnType("character varying(31)")
+                        .HasColumnName("server");
+
+                    b.HasKey("Id")
+                        .HasName("pk_free_company_members");
+
+                    b.HasIndex("FreeCompanyId")
+                        .HasDatabaseName("ix_free_company_members_free_company_id");
+
+                    b.HasIndex("FullCharacterId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_free_company_members_full_character_id");
+
+                    b.HasIndex("CharacterLodestoneId", "FreeCompanyLodestoneId")
+                        .IsUnique()
+                        .HasDatabaseName("ix_free_company_members_character_lodestone_id_free_company_lo");
+
+                    b.ToTable("free_company_members", (string)null);
+                });
+
+            modelBuilder.Entity("NetStone.Cache.Db.Models.Character", b =>
+                {
+                    b.HasOne("NetStone.Cache.Db.Models.FreeCompany", "FullFreeCompany")
+                        .WithMany("MembersCachedCharacters")
+                        .HasForeignKey("FullFreeCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_characters_free_companies_full_free_company_id");
+
+                    b.Navigation("FullFreeCompany");
+                });
+
             modelBuilder.Entity("NetStone.Cache.Db.Models.CharacterAttributes", b =>
                 {
                     b.HasOne("NetStone.Cache.Db.Models.Character", "Character")
@@ -617,6 +878,25 @@ namespace NetStone.Cache.Db.Migrations
                     b.Navigation("Character");
                 });
 
+            modelBuilder.Entity("NetStone.Cache.Db.Models.FreeCompanyMember", b =>
+                {
+                    b.HasOne("NetStone.Cache.Db.Models.FreeCompany", "FreeCompany")
+                        .WithMany("Members")
+                        .HasForeignKey("FreeCompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_free_company_members_free_companies_free_company_id");
+
+                    b.HasOne("NetStone.Cache.Db.Models.Character", "FullCharacter")
+                        .WithOne("FreeCompanyMembership")
+                        .HasForeignKey("NetStone.Cache.Db.Models.FreeCompanyMember", "FullCharacterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .HasConstraintName("fk_free_company_members_characters_full_character_id");
+
+                    b.Navigation("FreeCompany");
+
+                    b.Navigation("FullCharacter");
+                });
+
             modelBuilder.Entity("NetStone.Cache.Db.Models.Character", b =>
                 {
                     b.Navigation("Attributes")
@@ -626,11 +906,20 @@ namespace NetStone.Cache.Db.Migrations
 
                     b.Navigation("FreeCompany");
 
+                    b.Navigation("FreeCompanyMembership");
+
                     b.Navigation("Gear");
 
                     b.Navigation("Minions");
 
                     b.Navigation("Mounts");
+                });
+
+            modelBuilder.Entity("NetStone.Cache.Db.Models.FreeCompany", b =>
+                {
+                    b.Navigation("Members");
+
+                    b.Navigation("MembersCachedCharacters");
                 });
 #pragma warning restore 612, 618
         }
