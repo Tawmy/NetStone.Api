@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetStone.Cache.Db;
 using NetStone.Common.Enums;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20240516190807_FcMembers")]
+    partial class FcMembers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -756,11 +759,13 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("name");
 
                     b.Property<string>("Rank")
+                        .IsRequired()
                         .HasMaxLength(31)
                         .HasColumnType("character varying(31)")
                         .HasColumnName("rank");
 
                     b.Property<string>("RankIcon")
+                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("rank_icon");

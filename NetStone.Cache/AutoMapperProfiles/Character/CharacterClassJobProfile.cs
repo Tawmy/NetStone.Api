@@ -13,6 +13,7 @@ internal class CharacterClassJobProfile : Profile
 
         CreateMap<CharacterClassJob, CharacterClassJobDto>();
 
+        // TODO what
         CreateMap<CharacterClassJob, CharacterClassJob>()
             .ForMember(x => x.Id, x => x.Ignore())
             .ForMember(x => x.CharacterId, x => x.Ignore())

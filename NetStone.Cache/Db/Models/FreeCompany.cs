@@ -33,6 +33,8 @@ public class FreeCompany
 
     public DateTime FreeCompanyUpdatedAt { get; set; }
 
+    public DateTime? FreeCompanyMembersUpdatedAt { get; set; }
+
     public required FreeCompanyFocus Focus { get; set; }
 
     public required short MaelstromProgress { get; set; }
@@ -41,4 +43,6 @@ public class FreeCompany
     public required string TwinAdderRank { get; set; }
     public required short ImmortalFlamesProgress { get; set; }
     public required string ImmortalFlamesRank { get; set; }
+
+    public ICollection<FreeCompanyMember> Members { get; set; } = new HashSet<FreeCompanyMember>();
 }

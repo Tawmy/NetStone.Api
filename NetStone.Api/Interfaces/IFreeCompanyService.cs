@@ -1,7 +1,6 @@
 using NetStone.Api.Controllers;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using NetStone.Search.FreeCompany;
 
@@ -40,8 +39,11 @@ public interface IFreeCompanyService
     ///     Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
-    /// <param name="page"></param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
     /// <returns>Free company members.</returns>
-    /// <exception cref="NotFoundException">Which page of the paginated results to return.</exception>
-    Task<FreeCompanyMembers> GetFreeCompanyMembersAsync(string lodestoneId, int page);
+    /// <exception cref="NotFoundException"></exception>
+    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using NetStone.Api.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using NetStone.Search.FreeCompany;
 
@@ -70,14 +69,23 @@ public class FreeCompanyController : ControllerBase
     ///     Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>
-    /// <param name="page">Which page of the paginated results to return.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached free company members, in minutes. If older, it will be refreshed from the
+    ///     Lodestone.
+    /// </param>
+    /// <remarks>
+    ///     If free company was never cached using <see cref="GetAsync" />,
+    ///     <see cref="FreeCompanyMembersOuterDto.LastUpdated" />cannot be set. Its value will be null as a result. In this
+    ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
+    ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
+    /// </remarks>
     /// <returns>Free company members.</returns>
     [HttpGet("Members/{lodestoneId}")]
-    public async Task<ActionResult<FreeCompanyMembers>> GetMembersAsync(string lodestoneId, int page = 1)
+    public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge)
     {
         try
         {
-            return await _freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, page);
+            return await _freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

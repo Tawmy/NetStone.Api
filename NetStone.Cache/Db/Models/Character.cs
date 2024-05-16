@@ -49,6 +49,8 @@ public class Character
 
     public ICollection<CharacterMount> Mounts { get; set; } = new HashSet<CharacterMount>();
 
+    public FreeCompanyMember? FreeCompanyMembership { get; set; }
+
     public DateTime CharacterUpdatedAt { get; set; }
     public DateTime? CharacterClassJobsUpdatedAt { get; set; }
     public DateTime? CharacterMinionsUpdatedAt { get; set; }

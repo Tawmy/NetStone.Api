@@ -60,6 +60,7 @@ public class DatabaseContext : DbContext
     internal DbSet<CharacterMount> CharacterMounts => Set<CharacterMount>();
 
     internal DbSet<FreeCompany> FreeCompanies => Set<FreeCompany>();
+    internal DbSet<FreeCompanyMember> FreeCompanyMembers => Set<FreeCompanyMember>();
 
     #endregion
 }
