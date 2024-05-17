@@ -25,6 +25,8 @@ public static class DependencyInjection
             x.AddConsumer<GetCharacterClassJobsConsumer>();
             x.AddConsumer<GetCharacterMinionsConsumer>();
             x.AddConsumer<GetCharacterMountsConsumer>();
+            x.AddConsumer<GetFreeCompanyConsumer>();
+            x.AddConsumer<GetFreeCompanyMembersConsumer>();
 
             x.UsingRabbitMq((context, configurator) =>
             {
@@ -45,6 +47,12 @@ public static class DependencyInjection
                 configurator.ReceiveEndpoint("netstone-get-character-mounts",
                     z => z.ConfigureReceiveEndpoint<GetCharacterMountsConsumer>(context, "netstone",
                         "get-character-mounts"));
+                configurator.ReceiveEndpoint("netstone-get-free-company",
+                    z => z.ConfigureReceiveEndpoint<GetFreeCompanyConsumer>(context, "netstone",
+                        "get-free-company"));
+                configurator.ReceiveEndpoint("netstone-get-free-company-members",
+                    z => z.ConfigureReceiveEndpoint<GetFreeCompanyMembersConsumer>(context, "netstone",
+                        "get-free-company-members"));
             });
         });
 

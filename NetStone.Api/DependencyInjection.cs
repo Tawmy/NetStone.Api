@@ -1,5 +1,5 @@
-using NetStone.Api.Interfaces;
 using NetStone.Api.Services;
+using NetStone.Queue.Interfaces;
 
 namespace NetStone.Api;
 

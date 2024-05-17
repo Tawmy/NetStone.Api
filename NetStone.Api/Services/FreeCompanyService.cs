@@ -1,8 +1,8 @@
-using NetStone.Api.Interfaces;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Search.FreeCompany;
+using NetStone.Queue.Interfaces;
 using NetStone.Search.FreeCompany;
 
 namespace NetStone.Api.Services;

@@ -1,13 +1,12 @@
-using NetStone.Api.Controllers;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using NetStone.Search.FreeCompany;
 
-namespace NetStone.Api.Interfaces;
+namespace NetStone.Queue.Interfaces;
 
 /// <summary>
-///     Controller service for <see cref="FreeCompanyController" />.
+///     Data service for free company data.
 /// </summary>
 public interface IFreeCompanyService
 {

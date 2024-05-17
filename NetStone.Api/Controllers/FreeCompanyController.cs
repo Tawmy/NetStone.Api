@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using NetStone.Api.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
 using NetStone.Model.Parseables.Search.FreeCompany;
+using NetStone.Queue.Interfaces;
 using NetStone.Search.FreeCompany;
 
 namespace NetStone.Api.Controllers;
