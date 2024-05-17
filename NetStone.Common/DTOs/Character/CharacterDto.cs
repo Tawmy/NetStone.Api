@@ -1,4 +1,3 @@
-using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
 
 namespace NetStone.Common.DTOs.Character;
@@ -22,8 +21,6 @@ public record CharacterDto
     public string? GrandCompanyRank { get; init; }
 
     public CharacterFreeCompanyDto? FreeCompany { get; init; }
-
-    public FreeCompanyDto? CachedFreeCompany { get; init; }
 
     public required string GuardianDeityName { get; init; }
     public required string GuardianDeityIcon { get; init; }

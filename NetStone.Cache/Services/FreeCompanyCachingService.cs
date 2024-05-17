@@ -171,11 +171,15 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
     {
         var members = await context.FreeCompanyMembers.Where(x =>
                 x.FreeCompanyLodestoneId == lodestoneId)
-            .Include(x => x.FreeCompany)
             .Include(x => x.FullCharacter)
             .ToListAsync();
 
+        var freeCompanyUpdatedAt = await context.FreeCompanies.Where(x =>
+                x.LodestoneId == lodestoneId)
+            .Select(x => x.FreeCompanyMembersUpdatedAt)
+            .FirstOrDefaultAsync();
+
         var memberDtos = members.Select(mapper.Map<FreeCompanyMemberDto>);
-        return (memberDtos.ToList(), members.FirstOrDefault()?.FreeCompany?.FreeCompanyMembersUpdatedAt);
+        return (memberDtos.ToList(), freeCompanyUpdatedAt);
     }
 }
