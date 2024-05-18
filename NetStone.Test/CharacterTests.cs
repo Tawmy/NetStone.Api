@@ -65,6 +65,56 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
     #endregion
 
+    #region CharacterMinions
+
+    [Theory]
+    [InlineData("28812634")] // Alyx Bergen, Phoenix
+    [InlineData("28915387")] // Halvar Ragnar, Phoenix
+    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    public async Task ApiCharacterMinionsMatchDto(string lodestoneId)
+    {
+        var minionsLodestone = await _client.GetCharacterMinion(lodestoneId);
+        Assert.NotNull(minionsLodestone);
+
+        foreach (var minionLodestone in minionsLodestone.Collectables)
+        {
+            var minionDb = _mapper.Map<CharacterMinion>(minionLodestone);
+            Assert.NotNull(minionDb);
+
+            var minionDto = _mapper.Map<CharacterMinionDto>(minionDb);
+            Assert.NotNull(minionDb);
+
+            Assert.Equal(minionLodestone.Name, minionDto.Name);
+        }
+    }
+
+    #endregion
+
+    #region CharacterMounts
+
+    [Theory]
+    [InlineData("28812634")] // Alyx Bergen, Phoenix
+    [InlineData("28915387")] // Halvar Ragnar, Phoenix
+    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    public async Task ApiCharacterMountsMatchDto(string lodestoneId)
+    {
+        var mountsLodestone = await _client.GetCharacterMount(lodestoneId);
+        Assert.NotNull(mountsLodestone);
+
+        foreach (var mountLodestone in mountsLodestone.Collectables)
+        {
+            var mountDb = _mapper.Map<CharacterMinion>(mountLodestone);
+            Assert.NotNull(mountDb);
+
+            var mountDto = _mapper.Map<CharacterMinionDto>(mountDb);
+            Assert.NotNull(mountDb);
+
+            Assert.Equal(mountLodestone.Name, mountDto.Name);
+        }
+    }
+
+    #endregion
+
     #region Character
 
     [Theory]
