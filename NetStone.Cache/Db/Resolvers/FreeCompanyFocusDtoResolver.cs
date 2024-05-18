@@ -15,7 +15,7 @@ public class FreeCompanyFocusDtoResolver : IValueResolver<FreeCompany, FreeCompa
                 !Equals((int)(object)z, 0) && // filter out empty value
                 source.Focus.HasFlag(z))
             .Select(x =>
-                new FreeCompanyFocusDto(x.TryGetDisplayName(out var value) ? value! : x.ToString(),
+                new FreeCompanyFocusDto((FreeCompanyFocus)x, x.TryGetDisplayName(out var value) ? value! : x.ToString(),
                     ((FreeCompanyFocus)x).GetFocusIcon()));
     }
 }

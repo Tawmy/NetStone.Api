@@ -9,7 +9,7 @@ public static class FreeCompanyFocusExtension
         return focus switch
         {
             FreeCompanyFocus.None => string.Empty,
-            FreeCompanyFocus.RolePlaying => "https://lds-img.finalfantasyxiv.com/h/9/2RIcg3Swu7asLE9w5hF11Gm1Sg.png",
+            FreeCompanyFocus.RolePlay => "https://lds-img.finalfantasyxiv.com/h/9/2RIcg3Swu7asLE9w5hF11Gm1Sg.png",
             FreeCompanyFocus.Leveling => "https://lds-img.finalfantasyxiv.com/h/n/5Y0D3iH7ngHlRpv9-KJKalt3_o.png",
             FreeCompanyFocus.Casual => "https://lds-img.finalfantasyxiv.com/h/t/Se_50UHNcTNjytzG8olOSGq3MI.png",
             FreeCompanyFocus.Hardcore => "https://lds-img.finalfantasyxiv.com/h/i/1ZVA5nBRhczPW2kJWBJk5Jkz6o.png",

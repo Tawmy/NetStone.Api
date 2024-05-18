@@ -12,11 +12,6 @@ public class FreeCompanyFocusResolver : IValueResolver<LodestoneFreeCompany, Fre
     {
         var focus = FreeCompanyFocus.None;
 
-        if (source.Focus is null)
-        {
-            return focus;
-        }
-
         if (source.Focus?.HasFocus is not true)
         {
             return focus;
@@ -24,7 +19,7 @@ public class FreeCompanyFocusResolver : IValueResolver<LodestoneFreeCompany, Fre
 
         if (source.Focus.RolePlay.IsEnabled)
         {
-            focus |= FreeCompanyFocus.RolePlaying;
+            focus |= FreeCompanyFocus.RolePlay;
         }
 
         if (source.Focus.Leveling.IsEnabled)

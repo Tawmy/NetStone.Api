@@ -6,7 +6,7 @@ namespace NetStone.Common.Enums;
 public enum FreeCompanyFocus
 {
     None = 0,
-    [Display(Name = "Role Playing")] RolePlaying = 1,
+    [Display(Name = "Role Playing")] RolePlay = 1,
     Leveling = 1 << 1,
     Casual = 1 << 2,
     Hardcore = 1 << 3,

@@ -119,9 +119,12 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.NotNull(characterLodestone);
 
         var characterDb = _mapper.Map<Character>(characterLodestone);
+        Assert.NotNull(characterDb);
+
         characterDb.LodestoneId = lodestoneId; // also set manually in code
 
         var characterDto = _mapper.Map<CharacterDto>(characterDb);
+        Assert.NotNull(characterDto);
 
         Assert.Equal(lodestoneId, characterDto.Id);
         Assert.Equal(characterLodestone.Name, characterDto.Name);
