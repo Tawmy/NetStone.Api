@@ -20,6 +20,7 @@ public class CharacterTestsFixture : TestBedFixture
             return clientTask.Result;
         });
         services.AddScoped<CharacterGearService>();
+        services.AddScoped<CharacterClassJobsService>();
     }
 
     protected override IEnumerable<TestAppSettings> GetTestAppSettings()

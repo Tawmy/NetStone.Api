@@ -1,7 +1,7 @@
 using AutoMapper;
-using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.ClassJob;
+using NetStone.StaticData;
 using CharacterClassJob = NetStone.Cache.Db.Models.CharacterClassJob;
 
 namespace NetStone.Cache.Services;
@@ -9,10 +9,10 @@ namespace NetStone.Cache.Services;
 public class CharacterClassJobsService(IMapper mapper)
 {
     public ICollection<CharacterClassJob> GetCharacterClassJobs(
-        Model.Parseables.Character.ClassJob.CharacterClassJob lodestoneClassJobs,
+        IReadOnlyDictionary<ClassJob, ClassJobEntry?> lodestoneClassJobs,
         ICollection<CharacterClassJob> dbClassJobs)
     {
-        foreach (var lodestoneClassJob in lodestoneClassJobs.ClassJobDict)
+        foreach (var lodestoneClassJob in lodestoneClassJobs)
         {
             // iterate all class jobs returned from Lodestone
 
@@ -40,91 +40,91 @@ public class CharacterClassJobsService(IMapper mapper)
         return dbClassJobs;
     }
 
-    private ClassJob ParseClassJob(KeyValuePair<StaticData.ClassJob, ClassJobEntry> classJobEntry)
+    private Common.Enums.ClassJob ParseClassJob(KeyValuePair<ClassJob, ClassJobEntry> classJobEntry)
     {
         // TODO remove!!!
 
         // try to parse name first since in some cases ClassJob is wrong!
-        return Enum.TryParse<ClassJob>(classJobEntry.Value.Name, true, out var resultName)
+        return Enum.TryParse<Common.Enums.ClassJob>(classJobEntry.Value.Name, true, out var resultName)
             ? resultName
-            : Enum.Parse<ClassJob>(classJobEntry.Key.ToString());
+            : Enum.Parse<Common.Enums.ClassJob>(classJobEntry.Key.ToString());
     }
 
     private IEnumerable<CharacterClassJob?> MapToDbEntry(
-        KeyValuePair<StaticData.ClassJob, ClassJobEntry?> lodestoneClassJob, ICollection<CharacterClassJob> dbClassJobs)
+        KeyValuePair<ClassJob, ClassJobEntry?> lodestoneClassJob, ICollection<CharacterClassJob> dbClassJobs)
     {
         return lodestoneClassJob.Key switch
         {
-            StaticData.ClassJob.Carpenter or StaticData.ClassJob.Blacksmith or StaticData.ClassJob.Armorer
-                or StaticData.ClassJob.Goldsmith or StaticData.ClassJob.Leatherworker or StaticData.ClassJob.Weaver
-                or StaticData.ClassJob.Alchemist or StaticData.ClassJob.Culinarian or StaticData.ClassJob.Miner
-                or StaticData.ClassJob.Botanist or StaticData.ClassJob.Fisher or StaticData.ClassJob.Machinist
-                or StaticData.ClassJob.DarkKnight or StaticData.ClassJob.Astrologian or StaticData.ClassJob.Samurai
-                or StaticData.ClassJob.RedMage or StaticData.ClassJob.BlueMage or StaticData.ClassJob.Gunbreaker
-                or StaticData.ClassJob.Dancer or StaticData.ClassJob.Reaper or StaticData.ClassJob.Sage
-                or StaticData.ClassJob.Gladiator or StaticData.ClassJob.Pugilist or StaticData.ClassJob.Marauder
-                or StaticData.ClassJob.Lancer or StaticData.ClassJob.Archer or StaticData.ClassJob.Conjurer
-                or StaticData.ClassJob.Thaumaturge or StaticData.ClassJob.Arcanist
-                or StaticData.ClassJob.Rogue => [ToClassJob(lodestoneClassJob, dbClassJobs)],
-            StaticData.ClassJob.Paladin =>
+            ClassJob.Carpenter or ClassJob.Blacksmith or ClassJob.Armorer
+                or ClassJob.Goldsmith or ClassJob.Leatherworker or ClassJob.Weaver
+                or ClassJob.Alchemist or ClassJob.Culinarian or ClassJob.Miner
+                or ClassJob.Botanist or ClassJob.Fisher or ClassJob.Machinist
+                or ClassJob.DarkKnight or ClassJob.Astrologian or ClassJob.Samurai
+                or ClassJob.RedMage or ClassJob.BlueMage or ClassJob.Gunbreaker
+                or ClassJob.Dancer or ClassJob.Reaper or ClassJob.Sage
+                or ClassJob.Gladiator or ClassJob.Pugilist or ClassJob.Marauder
+                or ClassJob.Lancer or ClassJob.Archer or ClassJob.Conjurer
+                or ClassJob.Thaumaturge or ClassJob.Arcanist
+                or ClassJob.Rogue => [ToClassJob(lodestoneClassJob, dbClassJobs)],
+            ClassJob.Paladin =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Gladiator)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Gladiator)
             ],
-            StaticData.ClassJob.Monk =>
+            ClassJob.Monk =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Pugilist)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Pugilist)
             ],
-            StaticData.ClassJob.Warrior =>
+            ClassJob.Warrior =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Marauder)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Marauder)
             ],
-            StaticData.ClassJob.Dragoon =>
+            ClassJob.Dragoon =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Lancer)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Lancer)
             ],
-            StaticData.ClassJob.Bard =>
+            ClassJob.Bard =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Archer)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Archer)
             ],
-            StaticData.ClassJob.WhiteMage =>
+            ClassJob.WhiteMage =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Conjurer)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Conjurer)
             ],
-            StaticData.ClassJob.BlackMage =>
+            ClassJob.BlackMage =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.BlackMage)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.BlackMage)
             ],
-            StaticData.ClassJob.Summoner =>
+            ClassJob.Summoner =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Scholar),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Arcanist)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Scholar),
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Arcanist)
             ],
-            StaticData.ClassJob.Scholar =>
+            ClassJob.Scholar =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Summoner),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Arcanist)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Summoner),
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Arcanist)
             ],
-            StaticData.ClassJob.Ninja =>
+            ClassJob.Ninja =>
             [
                 ToClassJob(lodestoneClassJob, dbClassJobs),
-                ToClassJob(lodestoneClassJob, dbClassJobs, ClassJob.Rogue)
+                ToClassJob(lodestoneClassJob, dbClassJobs, Common.Enums.ClassJob.Rogue)
             ],
             _ => throw new ArgumentOutOfRangeException(nameof(lodestoneClassJob),
                 $"ClassJob {lodestoneClassJob.Key} does not exist.")
         };
     }
 
-    private CharacterClassJob? ToClassJob(KeyValuePair<StaticData.ClassJob, ClassJobEntry?> lodestoneClassJob,
-        IEnumerable<CharacterClassJob> dbClassJobs, ClassJob? classJobOverride = null)
+    private CharacterClassJob? ToClassJob(KeyValuePair<ClassJob, ClassJobEntry?> lodestoneClassJob,
+        IEnumerable<CharacterClassJob> dbClassJobs, Common.Enums.ClassJob? classJobOverride = null)
     {
         if (lodestoneClassJob.Value is null)
         {

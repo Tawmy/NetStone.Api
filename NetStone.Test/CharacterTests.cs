@@ -1,15 +1,18 @@
 using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
+using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
+using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 using CharacterAttributes = NetStone.Model.Parseables.Character.CharacterAttributes;
 using CharacterGear = NetStone.Model.Parseables.Character.Gear.CharacterGear;
+using ClassJob = NetStone.StaticData.ClassJob;
 
 namespace NetStone.Test;
 
@@ -17,7 +20,52 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     : TestBed<CharacterTestsFixture>(testOutputHelper, fixture)
 {
     private readonly LodestoneClient _client = fixture.GetService<LodestoneClient>(testOutputHelper)!;
+
+    private readonly CharacterClassJobsService _jobService =
+        fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
+
     private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+
+    #region CharacterClassJobs
+
+    [Theory]
+    [InlineData("28812634")] // Alyx Bergen, Phoenix
+    [InlineData("28915387")] // Halvar Ragnar, Phoenix
+    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    // TODO move IDs into central place
+    public async Task ApiCharacterClassJobsMatchDto(string lodestoneId)
+    {
+        var classJobsLodestone = await _client.GetCharacterClassJob(lodestoneId);
+        Assert.NotNull(classJobsLodestone);
+
+        foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value is not null))
+        {
+            var classJobDb = _jobService
+                .GetCharacterClassJobs(new Dictionary<ClassJob, ClassJobEntry?> { { key, classJobLodestone } }, [])
+                .FirstOrDefault();
+
+            if (classJobDb is null)
+            {
+                continue;
+                // TODO base classes are filtered out once job unlocked. Potentially add integration test for this later.
+                // actually, most definitely add test for this. it seems to falsely return conjurer for Sigyn.
+            }
+
+            var classJobDto = _mapper.Map<CharacterClassJobDto>(classJobDb);
+            Assert.NotNull(classJobDto);
+
+            Assert.Equal(classJobLodestone?.IsJobUnlocked, classJobDto.IsJobUnlocked);
+            Assert.Equal(classJobLodestone?.Level, classJobDto.Level);
+            Assert.Equal(classJobLodestone?.ExpCurrent, classJobDto.ExpCurrent);
+            Assert.Equal(classJobLodestone?.ExpMax, classJobDto.ExpMax);
+            Assert.Equal(classJobLodestone?.ExpToGo, classJobDto.ExpToGo);
+            Assert.Equal(classJobLodestone?.IsSpecialized, classJobDto.IsSpecialized);
+        }
+    }
+
+    #endregion
+
+    #region Character
 
     [Theory]
     [InlineData("28812634")] // Alyx Bergen, Phoenix
@@ -142,4 +190,6 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(attributes.MpGpCp, characterDto.Attributes.MpGpCp);
         Assert.Equal(attributes.MpGpCpParameterName, characterDto.Attributes.MpGpCpParameterName);
     }
+
+    #endregion
 }

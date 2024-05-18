@@ -96,7 +96,7 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
                 x.CharacterLodestoneId == lodestoneId)
             .ToListAsync();
 
-        dbClassJobs = jobsService.GetCharacterClassJobs(lodestoneClassJobs, dbClassJobs).ToList();
+        dbClassJobs = jobsService.GetCharacterClassJobs(lodestoneClassJobs.ClassJobDict, dbClassJobs).ToList();
 
         if (character is not null)
         {
