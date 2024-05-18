@@ -7,6 +7,7 @@ using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
+using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
@@ -14,7 +15,7 @@ using CharacterAttributes = NetStone.Model.Parseables.Character.CharacterAttribu
 using CharacterGear = NetStone.Model.Parseables.Character.Gear.CharacterGear;
 using ClassJob = NetStone.StaticData.ClassJob;
 
-namespace NetStone.Test;
+namespace NetStone.Test.Tests;
 
 public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFixture fixture)
     : TestBed<CharacterTestsFixture>(testOutputHelper, fixture)
@@ -29,10 +30,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     #region CharacterClassJobs
 
     [Theory]
-    [InlineData("28812634")] // Alyx Bergen, Phoenix
-    [InlineData("28915387")] // Halvar Ragnar, Phoenix
-    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
-    // TODO move IDs into central place
+    [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterClassJobsMatchDto(string lodestoneId)
     {
         var classJobsLodestone = await _client.GetCharacterClassJob(lodestoneId);
@@ -68,9 +66,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     #region CharacterMinions
 
     [Theory]
-    [InlineData("28812634")] // Alyx Bergen, Phoenix
-    [InlineData("28915387")] // Halvar Ragnar, Phoenix
-    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMinionsMatchDto(string lodestoneId)
     {
         var minionsLodestone = await _client.GetCharacterMinion(lodestoneId);
@@ -93,9 +89,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     #region CharacterMounts
 
     [Theory]
-    [InlineData("28812634")] // Alyx Bergen, Phoenix
-    [InlineData("28915387")] // Halvar Ragnar, Phoenix
-    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMountsMatchDto(string lodestoneId)
     {
         var mountsLodestone = await _client.GetCharacterMount(lodestoneId);
@@ -118,9 +112,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     #region Character
 
     [Theory]
-    [InlineData("28812634")] // Alyx Bergen, Phoenix
-    [InlineData("28915387")] // Halvar Ragnar, Phoenix
-    [InlineData("44675801")] // Sigyn Leigheas, Phoenix
+    [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMatchesDto(string lodestoneId)
     {
         var characterLodestone = await _client.GetCharacter(lodestoneId);
