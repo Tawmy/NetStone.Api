@@ -21,7 +21,6 @@ ConfigureSwagger(builder.Services);
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly);
 builder.Services.AddSingleton<LodestoneClient>(_ =>
 {
-    // Assuming that GetClientAsync returns a Task<LodestoneClient>
     var clientTask = LodestoneClient.GetClientAsync();
     clientTask.Wait();
     return clientTask.Result;

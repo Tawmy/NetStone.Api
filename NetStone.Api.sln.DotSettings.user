@@ -1,0 +1,11 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2ba10175_002D4a1a_002D43a7_002Dabcd_002Dd0a0d38f7b76/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="ApiCharacterMatchesDto #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::683C2BB3-3E44-45CD-8905-4DAFC5A95BAD::net8.0::NetStone.Test.CharacterTests.ApiCharacterMatchesDto&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e2c07506_002D6000_002D47ad_002Da725_002D07cfd13d6f1c/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ApiCharacterMatchesDto" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;
+  &lt;TestAncestor&gt;
+    &lt;TestId&gt;xUnit::683C2BB3-3E44-45CD-8905-4DAFC5A95BAD::net8.0::NetStone.Test.CharacterTests.ApiCharacterMatchesDto&lt;/TestId&gt;
+  &lt;/TestAncestor&gt;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

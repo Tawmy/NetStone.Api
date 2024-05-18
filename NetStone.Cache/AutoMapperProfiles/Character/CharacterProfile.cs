@@ -18,6 +18,7 @@ internal class CharacterProfile : Profile
                     Enum.TryParse<GrandCompany>(y.GrandCompanyName, true, out var result)
                         ? result
                         : GrandCompany.NoAffiliation))
+            .ForMember(x => x.PvpTeam, x => x.MapFrom(y => y.PvPTeam != null ? y.PvPTeam.Name : null))
             .ForMember(x => x.Gear, x => x.MapFrom<CharacterGearResolver>())
             .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
             .ForMember(x => x.Mounts, x => x.Ignore()); // same here

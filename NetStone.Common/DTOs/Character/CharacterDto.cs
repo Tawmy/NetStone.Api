@@ -25,6 +25,7 @@ public record CharacterDto
     public required string GuardianDeityName { get; init; }
     public required string GuardianDeityIcon { get; init; }
 
+    // TODO expand PVP Team to be full entity?
     public string? PvpTeam { get; init; }
     public required string RaceClanGender { get; init; }
 

@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Queue", "NetStone.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Data", "NetStone.Data\NetStone.Data.csproj", "{214422CD-C250-4778-AC3B-9FF454760E80}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Test", "NetStone.Test\NetStone.Test.csproj", "{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{214422CD-C250-4778-AC3B-9FF454760E80}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{214422CD-C250-4778-AC3B-9FF454760E80}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{214422CD-C250-4778-AC3B-9FF454760E80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
