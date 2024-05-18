@@ -17,6 +17,53 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
 
     private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
 
+    #region Free Company Members
+
+    [Theory]
+    [ClassData(typeof(FreeCompanyTestsDataGenerator))]
+    public async Task ApiFreeCompanyMembersMatchDto(string lodestoneId)
+    {
+        var membersLodestoneOuter = await _client.GetFreeCompanyMembers(lodestoneId);
+        Assert.NotNull(membersLodestoneOuter);
+        Assert.True(membersLodestoneOuter.HasResults);
+
+        var membersLodestone = membersLodestoneOuter.Members.ToList();
+
+        if (membersLodestoneOuter.NumPages > 1)
+        {
+            for (var i = 2; i <= membersLodestoneOuter.NumPages; i++)
+            {
+                var lodestoneMembersOuter2 = await _client.GetFreeCompanyMembers(lodestoneId, i);
+                Assert.NotNull(lodestoneMembersOuter2);
+                Assert.True(lodestoneMembersOuter2.HasResults);
+
+                membersLodestone.AddRange(lodestoneMembersOuter2.Members);
+            }
+        }
+
+        foreach (var memberLodestone in membersLodestone)
+        {
+            var memberDb = _mapper.Map<FreeCompanyMember>(memberLodestone);
+            Assert.NotNull(memberDb);
+
+            memberDb.FreeCompanyLodestoneId = lodestoneId; // also set manually in code
+
+            var memberDto = _mapper.Map<FreeCompanyMemberDto>(memberDb);
+            Assert.NotNull(memberDto);
+
+            Assert.Equal(memberLodestone.Id, memberDto.LodestoneId);
+            Assert.Equal(lodestoneId, memberDto.FreeCompanyLodestoneId);
+            Assert.Equal(memberLodestone.Name, memberDto.Name);
+            Assert.Equal(memberLodestone.Rank, memberDto.Rank);
+            Assert.Equal(memberLodestone.RankIcon?.ToString(), memberDto.RankIcon);
+            Assert.Equal(memberLodestone.Server, memberDto.Server);
+            Assert.Equal(memberLodestone.Datacenter, memberDto.DataCenter);
+            Assert.Equal(memberLodestone.Avatar?.ToString(), memberDto.Avatar);
+        }
+    }
+
+    #endregion
+
     #region Free Company
 
     [Theory]
