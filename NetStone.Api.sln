@@ -6,13 +6,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone", "NetStone\NetSto
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Cache", "NetStone.Cache\NetStone.Cache.csproj", "{D7C602A0-860A-41B2-B49E-0CD12DF50094}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Common", "NetStone.Common\NetStone.Common.csproj", "{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Queue", "NetStone.Queue\NetStone.Queue.csproj", "{83D39600-0C03-45D2-A54B-66B7E4329A0C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Data", "NetStone.Data\NetStone.Data.csproj", "{214422CD-C250-4778-AC3B-9FF454760E80}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Test", "NetStone.Test\NetStone.Test.csproj", "{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone.Common", "NetStone.Common\NetStone.Common\NetStone.Common.csproj", "{78BB1011-6342-44E5-A20C-0C583E8B69D8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,10 +32,6 @@ Global
 		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D7C602A0-860A-41B2-B49E-0CD12DF50094}.Release|Any CPU.Build.0 = Release|Any CPU
-		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{66EE2D1D-BB09-4EA5-AB6B-1087373FCD52}.Release|Any CPU.Build.0 = Release|Any CPU
 		{83D39600-0C03-45D2-A54B-66B7E4329A0C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{83D39600-0C03-45D2-A54B-66B7E4329A0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83D39600-0C03-45D2-A54B-66B7E4329A0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -48,5 +44,9 @@ Global
 		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{683C2BB3-3E44-45CD-8905-4DAFC5A95BAD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

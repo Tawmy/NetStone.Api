@@ -26,7 +26,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\NetStone.Cache\NetStone.Cache.csproj"/>
-        <ProjectReference Include="..\NetStone.Common\NetStone.Common.csproj"/>
         <ProjectReference Include="..\NetStone.Data\NetStone.Data.csproj"/>
         <ProjectReference Include="..\NetStone.Queue\NetStone.Queue.csproj"/>
         <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
