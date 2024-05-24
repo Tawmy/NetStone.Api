@@ -138,7 +138,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             if (!focusLodestoneEntry.IsEnabled) continue;
 
             // enum values match property names from NetStone, so we can retrieve values by property name
-            var focusDto = freeCompanyDto.Focus.FirstOrDefault(x => x.Name == fcLodestonePropInfo.Name);
+            var focusDto = freeCompanyDto.Focus.FirstOrDefault(x => x.Type.ToString() == fcLodestonePropInfo.Name);
             Assert.NotNull(focusDto);
 
             // name already got implicitly compared in FirstOrDefault call, only compare icon
