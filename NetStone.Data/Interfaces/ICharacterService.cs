@@ -1,8 +1,8 @@
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
+using NetStone.Common.Queries;
 using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Search.Character;
-using NetStone.Search.Character;
 
 namespace NetStone.Data.Interfaces;
 
@@ -21,7 +21,7 @@ public interface ICharacterService
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Instance of <see cref="CharacterSearchPage" /> with the results returned from the Lodestone.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterSearchPage> SearchCharacterAsync(CharacterSearchQuery query, int page);
+    public Task<CharacterSearchPageDto> SearchCharacterAsync(CharacterSearchQuery query, int page);
 
     /// <summary>
     ///     Get character with the given ID from the Lodestone.

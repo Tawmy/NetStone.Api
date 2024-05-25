@@ -11,6 +11,7 @@ using NetStone.Common.Extensions;
 using NetStone.Data;
 using NetStone.Queue;
 using Npgsql;
+using DependencyInjection = NetStone.Data.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 ConfigureSwagger(builder.Services);
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly);
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
+    typeof(DependencyInjection).Assembly);
 builder.Services.AddSingleton<LodestoneClient>(_ =>
 {
     var clientTask = LodestoneClient.GetClientAsync();

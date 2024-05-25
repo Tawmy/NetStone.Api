@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
+using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
-using NetStone.Model.Parseables.Search.Character;
-using NetStone.Search.Character;
 
 namespace NetStone.Api.Controllers;
 
@@ -31,7 +30,7 @@ public class CharacterController : ControllerBase
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Results returned from Lodestone.</returns>
     [HttpPost("Search")]
-    public async Task<ActionResult<CharacterSearchPage>> SearchAsync(CharacterSearchQuery query, int page = 1)
+    public async Task<ActionResult<CharacterSearchPageDto>> SearchAsync(CharacterSearchQuery query, int page = 1)
     {
         try
         {

@@ -1,10 +1,10 @@
+using AutoMapper;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
+using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
 using NetStone.Model.Parseables.Character.Achievement;
-using NetStone.Model.Parseables.Search.Character;
-using NetStone.Search.Character;
 
 namespace NetStone.Data.Services;
 
@@ -12,19 +12,22 @@ internal class CharacterService : ICharacterService
 {
     private readonly ICharacterCachingService _cachingService;
     private readonly LodestoneClient _client;
+    private readonly IMapper _mapper;
 
-    public CharacterService(LodestoneClient client, ICharacterCachingService cachingService)
+    public CharacterService(LodestoneClient client, ICharacterCachingService cachingService, IMapper mapper)
     {
         _client = client;
         _cachingService = cachingService;
+        _mapper = mapper;
     }
 
-    public async Task<CharacterSearchPage> SearchCharacterAsync(CharacterSearchQuery query, int page)
+    public async Task<CharacterSearchPageDto> SearchCharacterAsync(CharacterSearchQuery query, int page)
     {
-        var result = await _client.SearchCharacter(query, page);
+        var netStoneQuery = _mapper.Map<Search.Character.CharacterSearchQuery>(query);
+        var result = await _client.SearchCharacter(netStoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
-        return result;
+        return _mapper.Map<CharacterSearchPageDto>(result);
     }
 
     public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge)
