@@ -4,7 +4,6 @@ using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
-using NetStone.Model.Parseables.Character.Achievement;
 
 namespace NetStone.Data.Services;
 
@@ -77,15 +76,6 @@ internal class CharacterService : ICharacterService
         cachedClassJobsDtos =
             await _cachingService.CacheCharacterClassJobsAsync(lodestoneId, lodestoneCharacterClassJobs);
         return new CharacterClassJobOuterDto(cachedClassJobsDtos, false, DateTime.UtcNow);
-    }
-
-    public async Task<CharacterAchievementPage> GetCharacterAchievementsAsync(string lodestoneId, int page)
-    {
-        var client = await LodestoneClient.GetClientAsync();
-        var result = await client.GetCharacterAchievement(lodestoneId, page);
-        if (result == null) throw new NotFoundException();
-
-        return result;
     }
 
     public async Task<CharacterMinionOuterDto> GetCharacterMinionsAsync(string lodestoneId, int? maxAge)

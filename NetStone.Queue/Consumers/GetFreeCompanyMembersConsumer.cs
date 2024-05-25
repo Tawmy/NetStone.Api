@@ -1,5 +1,6 @@
 using MassTransit;
 using NetStone.Common.Exceptions;
+using NetStone.Data.Interfaces;
 using NetStone.Queue.Interfaces;
 using NetStone.Queue.Messages;
 

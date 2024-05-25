@@ -92,21 +92,6 @@ public class CharacterController : ControllerBase
         }
     }
 
-    /*
-    [HttpGet("Achievements/{lodestoneId}")]
-    public async Task<ActionResult<CharacterAchievementPage>> GetAchievementsAsync(string lodestoneId, int page = 1)
-    {
-        try
-        {
-            return await _characterService.GetCharacterAchievements(lodestoneId, page);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
-    }
-    */
-
     /// <summary>
     ///     Get a character's minions.
     /// </summary>

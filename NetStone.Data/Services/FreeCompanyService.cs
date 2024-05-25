@@ -1,29 +1,32 @@
+using AutoMapper;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.Search.FreeCompany;
-using NetStone.Queue.Interfaces;
-using NetStone.Search.FreeCompany;
+using NetStone.Common.Queries;
+using NetStone.Data.Interfaces;
 
-namespace NetStone.Api.Services;
+namespace NetStone.Data.Services;
 
 internal class FreeCompanyService : IFreeCompanyService
 {
     private readonly IFreeCompanyCachingService _cachingService;
     private readonly LodestoneClient _client;
+    private readonly IMapper _mapper;
 
-    public FreeCompanyService(LodestoneClient client, IFreeCompanyCachingService cachingService)
+    public FreeCompanyService(LodestoneClient client, IFreeCompanyCachingService cachingService, IMapper mapper)
     {
         _client = client;
         _cachingService = cachingService;
+        _mapper = mapper;
     }
 
-    public async Task<FreeCompanySearchPage> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
+    public async Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
     {
-        var result = await _client.SearchFreeCompany(query, page);
+        var lodestoneQuery = _mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
+        var result = await _client.SearchFreeCompany(lodestoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
-        return result;
+        return _mapper.Map<FreeCompanySearchPageDto>(result);
     }
 
     public async Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge)

@@ -1,9 +1,8 @@
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.Search.FreeCompany;
-using NetStone.Search.FreeCompany;
+using NetStone.Common.Queries;
 
-namespace NetStone.Queue.Interfaces;
+namespace NetStone.Data.Interfaces;
 
 /// <summary>
 ///     Data service for free company data.
@@ -18,9 +17,9 @@ public interface IFreeCompanyService
     ///     <see cref="FreeCompanySearchQuery.World" /> are needed.
     /// </param>
     /// <param name="page">Which page of the paginated results to return.</param>
-    /// <returns>Instance of <see cref="FreeCompanySearchPage" /> with the results returned from the Lodestone.</returns>
+    /// <returns>Instance of <see cref="FreeCompanySearchPageDto" /> with the results returned from the Lodestone.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanySearchPage> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page);
+    Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page);
 
     /// <summary>
     ///     Get character with the given ID from the Lodestone.

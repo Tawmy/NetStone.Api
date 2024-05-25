@@ -2,9 +2,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
-using NetStone.Model.Parseables.Search.FreeCompany;
-using NetStone.Queue.Interfaces;
-using NetStone.Search.FreeCompany;
+using NetStone.Common.Queries;
+using NetStone.Data.Interfaces;
 
 namespace NetStone.Api.Controllers;
 
@@ -31,7 +30,7 @@ public class FreeCompanyController : ControllerBase
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Results returned from Lodestone.</returns>
     [HttpPost("Search")]
-    public async Task<ActionResult<FreeCompanySearchPage>> SearchAsync(FreeCompanySearchQuery query, int page = 1)
+    public async Task<ActionResult<FreeCompanySearchPageDto>> SearchAsync(FreeCompanySearchQuery query, int page = 1)
     {
         try
         {
