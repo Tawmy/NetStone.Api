@@ -11,6 +11,7 @@ public class CharacterMinionMapping : IEntityTypeConfiguration<CharacterMinion>
         builder.HasKey(x => x.Id);
 
         builder.HasIndex(x => new { x.CharacterLodestoneId, x.Name }).IsUnique();
+        builder.Property(x => x.CharacterLodestoneId).HasMaxLength(10);
         builder.Property(x => x.Name).HasMaxLength(63);
 
         builder.HasOne(x => x.Character)

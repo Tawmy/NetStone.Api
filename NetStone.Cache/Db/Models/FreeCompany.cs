@@ -14,9 +14,9 @@ public class FreeCompany
 
     public required string World { get; set; }
 
-    public required string CrestTop { get; set; }
-    public required string CrestMiddle { get; set; }
-    public required string CrestBottom { get; set; }
+    public string? CrestTop { get; set; }
+    public string? CrestMiddle { get; set; }
+    public string? CrestBottom { get; set; }
 
     public required DateTime Formed { get; set; }
     public required GrandCompany GrandCompany { get; set; }

@@ -77,7 +77,7 @@ internal class FreeCompanyService : IFreeCompanyService
             throw new NotFoundException();
         }
 
-        var lodestoneMembers = lodestoneMembersOuter?.Members.ToList() ?? [];
+        var lodestoneMembers = lodestoneMembersOuter.Members.ToList();
 
         if (lodestoneMembersOuter is { HasResults: true, NumPages: > 1 })
         {
