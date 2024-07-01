@@ -60,6 +60,8 @@ public static class LodestoneCharacterExtension
             "https://lds-img.finalfantasyxiv.com/h/t/HK0jQ1y7YV9qm30cxGOVev6Cck.png" => ClassJob.Dancer,
             "https://lds-img.finalfantasyxiv.com/h/7/cLlXUaeMPJDM2nBhIeM-uDmPzM.png" => ClassJob.Reaper,
             "https://lds-img.finalfantasyxiv.com/h/g/_oYApASVVReLLmsokuCJGkEpk0.png" => ClassJob.Sage,
+            "https://lds-img.finalfantasyxiv.com/h/C/WojNTqMJ_Ye1twvkIhw825zc20.png" => ClassJob.Viper,
+            "https://lds-img.finalfantasyxiv.com/h/_/kLob-U-yh652LQPX1NHpLlUYQY.png" => ClassJob.Pictomancer,
             _ => throw new ArgumentOutOfRangeException(nameof(character), character.ActiveClassJobIcon,
                 "the URL does not belong to any job")
         };
