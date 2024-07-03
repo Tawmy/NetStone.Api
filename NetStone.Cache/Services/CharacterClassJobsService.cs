@@ -60,8 +60,8 @@ public class CharacterClassJobsService(IMapper mapper)
                 or ClassJob.Alchemist or ClassJob.Culinarian or ClassJob.Miner
                 or ClassJob.Botanist or ClassJob.Fisher or ClassJob.Machinist
                 or ClassJob.DarkKnight or ClassJob.Astrologian or ClassJob.Samurai
-                or ClassJob.RedMage or ClassJob.BlueMage or ClassJob.Gunbreaker
-                or ClassJob.Dancer or ClassJob.Reaper or ClassJob.Sage
+                or ClassJob.RedMage or ClassJob.Pictomancer or ClassJob.BlueMage or ClassJob.Gunbreaker
+                or ClassJob.Dancer or ClassJob.Reaper or ClassJob.Viper or ClassJob.Sage
                 or ClassJob.Gladiator or ClassJob.Pugilist or ClassJob.Marauder
                 or ClassJob.Lancer or ClassJob.Archer or ClassJob.Conjurer
                 or ClassJob.Thaumaturge or ClassJob.Arcanist
