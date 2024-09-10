@@ -31,8 +31,6 @@ public class CharacterMapping : IEntityTypeConfiguration<Character>
 
         builder.Property(x => x.PvpTeam).HasMaxLength(31);
 
-        builder.Property(x => x.RaceClanGender).HasMaxLength(31);
-
         builder.Property(x => x.Server).HasMaxLength(31);
 
         builder.Property(x => x.Title).HasMaxLength(63);

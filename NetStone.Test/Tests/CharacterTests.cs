@@ -5,6 +5,8 @@ using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
+using NetStone.Common.Helpers;
+using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
 using NetStone.Test.DataGenerators;
@@ -36,10 +38,10 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         var classJobsLodestone = await _client.GetCharacterClassJob(lodestoneId);
         Assert.NotNull(classJobsLodestone);
 
-        foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value is not null))
+        foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value.IsUnlocked))
         {
             var classJobDb = _jobService
-                .GetCharacterClassJobs(new Dictionary<ClassJob, ClassJobEntry?> { { key, classJobLodestone } }, [])
+                .GetCharacterClassJobs(new Dictionary<ClassJob, ClassJobEntry> { { key, classJobLodestone } }, [])
                 .FirstOrDefault();
 
             if (classJobDb is null)
@@ -52,12 +54,12 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
             var classJobDto = _mapper.Map<CharacterClassJobDto>(classJobDb);
             Assert.NotNull(classJobDto);
 
-            Assert.Equal(classJobLodestone?.IsJobUnlocked, classJobDto.IsJobUnlocked);
-            Assert.Equal(classJobLodestone?.Level, classJobDto.Level);
-            Assert.Equal(classJobLodestone?.ExpCurrent, classJobDto.ExpCurrent);
-            Assert.Equal(classJobLodestone?.ExpMax, classJobDto.ExpMax);
-            Assert.Equal(classJobLodestone?.ExpToGo, classJobDto.ExpToGo);
-            Assert.Equal(classJobLodestone?.IsSpecialized, classJobDto.IsSpecialized);
+            Assert.Equal(classJobLodestone.IsJobUnlocked, classJobDto.IsJobUnlocked);
+            Assert.Equal(classJobLodestone.Level, classJobDto.Level);
+            Assert.Equal(classJobLodestone.ExpCurrent, classJobDto.ExpCurrent);
+            Assert.Equal(classJobLodestone.ExpMax, classJobDto.ExpMax);
+            Assert.Equal(classJobLodestone.ExpToGo, classJobDto.ExpToGo);
+            Assert.Equal(classJobLodestone.IsSpecialized, classJobDto.IsSpecialized);
         }
     }
 
@@ -166,7 +168,19 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(characterLodestone.GuardianDeityIcon?.ToString(), characterDto.GuardianDeityIcon);
 
         Assert.Equal(characterLodestone.PvPTeam?.Name, characterDto.PvpTeam);
-        Assert.Equal(characterLodestone.RaceClanGender, characterDto.RaceClanGender);
+        Assert.Equal(EnumHelper.ParseFromDisplayString<Race>(characterLodestone.Race), characterDto.Race);
+        Assert.Equal(EnumHelper.ParseFromDisplayString<Tribe>(characterLodestone.Tribe), characterDto.Tribe);
+
+        switch (characterLodestone.Gender)
+        {
+            case LodestoneCharacter.MaleChar:
+                Assert.Equal(Gender.Male, characterDto.Gender);
+                break;
+            case LodestoneCharacter.FemaleChar:
+                Assert.Equal(Gender.Female, characterDto.Gender);
+                break;
+        }
+
         Assert.Equal(characterLodestone.TownName, characterDto.TownName);
         Assert.Equal(characterLodestone.TownIcon?.ToString(), characterDto.TownIcon);
 

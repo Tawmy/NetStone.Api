@@ -37,7 +37,11 @@ public class DatabaseContext : DbContext
 
         modelBuilder.HasPostgresEnum<ClassJob>();
         modelBuilder.HasPostgresEnum<GrandCompany>();
-        modelBuilder.HasPostgresEnum<ClassJob>();
+        modelBuilder.HasPostgresEnum<GearSlot>();
+        modelBuilder.HasPostgresEnum<FreeCompanyFocus>();
+        modelBuilder.HasPostgresEnum<Race>();
+        modelBuilder.HasPostgresEnum<Tribe>();
+        modelBuilder.HasPostgresEnum<Gender>();
 
         base.OnModelCreating(modelBuilder);
     }
@@ -46,7 +50,11 @@ public class DatabaseContext : DbContext
     {
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<GrandCompany>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<GearSlot>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<FreeCompanyFocus>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Race>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Tribe>();
+        NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
     }
 
     #region DbSets

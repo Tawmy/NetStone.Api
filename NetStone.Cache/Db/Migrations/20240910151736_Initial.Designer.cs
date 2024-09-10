@@ -13,19 +13,24 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20240524151557_FixMateriaStrLength")]
-    partial class FixMateriaStrLength
+    [Migration("20240910151736_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage", "viper", "pictomancer" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "free_company_focus", new[] { "none", "role_play", "leveling", "casual", "hardcore", "dungeons", "guildhests", "trials", "raids", "pv_p" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_slot", new[] { "main_hand", "off_hand", "head", "body", "hands", "legs", "feet", "earrings", "necklace", "bracelets", "ring1", "ring2", "soul_crystal" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender", new[] { "male", "female" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "no_affiliation", "maelstrom", "order_of_the_twin_adder", "immortal_flames" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "race", new[] { "hyur", "elezen", "lalafell", "miqote", "roegadyn", "au_ra", "hrothgar", "viera" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "tribe", new[] { "midlander", "highlander", "wildwood", "duskwight", "plainsfolk", "dunesfolk", "seeker_of_the_sun", "keeper_of_the_moon", "sea_wolf", "hellsguard", "raen", "xaela", "helions", "the_lost", "rava", "veena" });
             NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
 
             modelBuilder.Entity("NetStone.Cache.Db.Models.Character", b =>
@@ -83,6 +88,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("integer")
                         .HasColumnName("full_free_company_id");
 
+                    b.Property<Gender>("Gender")
+                        .HasColumnType("gender")
+                        .HasColumnName("gender");
+
                     b.Property<GrandCompany>("GrandCompany")
                         .HasColumnType("grand_company")
                         .HasColumnName("grand_company");
@@ -133,11 +142,9 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("character varying(31)")
                         .HasColumnName("pvp_team");
 
-                    b.Property<string>("RaceClanGender")
-                        .IsRequired()
-                        .HasMaxLength(31)
-                        .HasColumnType("character varying(31)")
-                        .HasColumnName("race_clan_gender");
+                    b.Property<Race>("Race")
+                        .HasColumnType("race")
+                        .HasColumnName("race");
 
                     b.Property<string>("Server")
                         .IsRequired()
@@ -159,6 +166,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasMaxLength(31)
                         .HasColumnType("character varying(31)")
                         .HasColumnName("town_name");
+
+                    b.Property<Tribe>("Tribe")
+                        .HasColumnType("tribe")
+                        .HasColumnName("tribe");
 
                     b.HasKey("Id")
                         .HasName("pk_characters");
@@ -348,7 +359,6 @@ namespace NetStone.Cache.Db.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityAlwaysColumn(b.Property<int>("Id"));
 
                     b.Property<string>("BottomLayer")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("bottom_layer");
@@ -370,7 +380,6 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("lodestone_id");
 
                     b.Property<string>("MiddleLayer")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("middle_layer");
@@ -382,7 +391,6 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("name");
 
                     b.Property<string>("TopLayer")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("top_layer");
@@ -465,8 +473,8 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("character varying(63)")
                         .HasColumnName("materia5");
 
-                    b.Property<int>("Slot")
-                        .HasColumnType("integer")
+                    b.Property<GearSlot>("Slot")
+                        .HasColumnType("gear_slot")
                         .HasColumnName("slot");
 
                     b.Property<string>("StrippedItemName")
@@ -499,7 +507,8 @@ namespace NetStone.Cache.Db.Migrations
 
                     b.Property<string>("CharacterLodestoneId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("character_lodestone_id");
 
                     b.Property<string>("Name")
@@ -536,7 +545,8 @@ namespace NetStone.Cache.Db.Migrations
 
                     b.Property<string>("CharacterLodestoneId")
                         .IsRequired()
-                        .HasColumnType("text")
+                        .HasMaxLength(10)
+                        .HasColumnType("character varying(10)")
                         .HasColumnName("character_lodestone_id");
 
                     b.Property<string>("Name")
@@ -578,19 +588,16 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("active_state");
 
                     b.Property<string>("CrestBottom")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("crest_bottom");
 
                     b.Property<string>("CrestMiddle")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("crest_middle");
 
                     b.Property<string>("CrestTop")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("character varying(255)")
                         .HasColumnName("crest_top");
@@ -610,8 +617,8 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("character varying(63)")
                         .HasColumnName("estate_plot");
 
-                    b.Property<int>("Focus")
-                        .HasColumnType("integer")
+                    b.Property<FreeCompanyFocus>("Focus")
+                        .HasColumnType("free_company_focus")
                         .HasColumnName("focus");
 
                     b.Property<DateTime>("Formed")

@@ -14,8 +14,13 @@ namespace NetStone.Cache.Db.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AlterDatabase()
-                .Annotation("Npgsql:Enum:class_job", "gladiator,pugilist,marauder,lancer,archer,conjurer,thaumaturge,carpenter,blacksmith,armorer,goldsmith,leatherworker,weaver,alchemist,culinarian,miner,botanist,fisher,paladin,monk,warrior,dragoon,bard,white_mage,black_mage,arcanist,summoner,scholar,rogue,ninja,machinist,dark_knight,astrologian,samurai,red_mage,blue_mage,gunbreaker,dancer,reaper,sage")
-                .Annotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames");
+                .Annotation("Npgsql:Enum:class_job", "gladiator,pugilist,marauder,lancer,archer,conjurer,thaumaturge,carpenter,blacksmith,armorer,goldsmith,leatherworker,weaver,alchemist,culinarian,miner,botanist,fisher,paladin,monk,warrior,dragoon,bard,white_mage,black_mage,arcanist,summoner,scholar,rogue,ninja,machinist,dark_knight,astrologian,samurai,red_mage,blue_mage,gunbreaker,dancer,reaper,sage,viper,pictomancer")
+                .Annotation("Npgsql:Enum:free_company_focus", "none,role_play,leveling,casual,hardcore,dungeons,guildhests,trials,raids,pv_p")
+                .Annotation("Npgsql:Enum:gear_slot", "main_hand,off_hand,head,body,hands,legs,feet,earrings,necklace,bracelets,ring1,ring2,soul_crystal")
+                .Annotation("Npgsql:Enum:gender", "male,female")
+                .Annotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames")
+                .Annotation("Npgsql:Enum:race", "hyur,elezen,lalafell,miqote,roegadyn,au_ra,hrothgar,viera")
+                .Annotation("Npgsql:Enum:tribe", "midlander,highlander,wildwood,duskwight,plainsfolk,dunesfolk,seeker_of_the_sun,keeper_of_the_moon,sea_wolf,hellsguard,raen,xaela,helions,the_lost,rava,veena");
 
             migrationBuilder.CreateTable(
                 name: "free_companies",
@@ -28,9 +33,9 @@ namespace NetStone.Cache.Db.Migrations
                     slogan = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     tag = table.Column<string>(type: "character varying(7)", maxLength: 7, nullable: false),
                     world = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
-                    crest_top = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    crest_middle = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    crest_bottom = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
+                    crest_top = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    crest_middle = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    crest_bottom = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     formed = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     grand_company = table.Column<GrandCompany>(type: "grand_company", nullable: false),
                     rank = table.Column<short>(type: "smallint", nullable: false),
@@ -44,7 +49,7 @@ namespace NetStone.Cache.Db.Migrations
                     estate_plot = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     free_company_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     free_company_members_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    focus = table.Column<int>(type: "integer", nullable: false),
+                    focus = table.Column<FreeCompanyFocus>(type: "free_company_focus", nullable: false),
                     maelstrom_progress = table.Column<short>(type: "smallint", nullable: false),
                     maelstrom_rank = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     twin_adder_progress = table.Column<short>(type: "smallint", nullable: false),
@@ -78,7 +83,9 @@ namespace NetStone.Cache.Db.Migrations
                     nameday = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false),
                     portrait = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
                     pvp_team = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
-                    race_clan_gender = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
+                    race = table.Column<Race>(type: "race", nullable: false),
+                    tribe = table.Column<Tribe>(type: "tribe", nullable: false),
+                    gender = table.Column<Gender>(type: "gender", nullable: false),
                     server = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
                     title = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     town_name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
@@ -175,9 +182,9 @@ namespace NetStone.Cache.Db.Migrations
                     lodestone_id = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
                     name = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: false),
                     link = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    top_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    middle_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false),
-                    bottom_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: false)
+                    top_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    middle_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
+                    bottom_layer = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -197,7 +204,7 @@ namespace NetStone.Cache.Db.Migrations
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
                     character_id = table.Column<int>(type: "integer", nullable: false),
-                    slot = table.Column<int>(type: "integer", nullable: false),
+                    slot = table.Column<GearSlot>(type: "gear_slot", nullable: false),
                     item_name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false),
                     item_database_link = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     is_hq = table.Column<bool>(type: "boolean", nullable: true),
@@ -205,11 +212,11 @@ namespace NetStone.Cache.Db.Migrations
                     glamour_database_link = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     glamour_name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     creator_name = table.Column<string>(type: "character varying(21)", maxLength: 21, nullable: true),
-                    materia1 = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
-                    materia2 = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
-                    materia3 = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
-                    materia4 = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true),
-                    materia5 = table.Column<string>(type: "character varying(31)", maxLength: 31, nullable: true)
+                    materia1 = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
+                    materia2 = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
+                    materia3 = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
+                    materia4 = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
+                    materia5 = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -228,7 +235,7 @@ namespace NetStone.Cache.Db.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    character_lodestone_id = table.Column<string>(type: "text", nullable: false),
+                    character_lodestone_id = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     character_id = table.Column<int>(type: "integer", nullable: true),
                     name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false)
                 },
@@ -249,7 +256,7 @@ namespace NetStone.Cache.Db.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
-                    character_lodestone_id = table.Column<string>(type: "text", nullable: false),
+                    character_lodestone_id = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
                     character_id = table.Column<int>(type: "integer", nullable: true),
                     name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false)
                 },

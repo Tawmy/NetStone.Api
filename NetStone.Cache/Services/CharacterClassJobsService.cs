@@ -9,7 +9,7 @@ namespace NetStone.Cache.Services;
 public class CharacterClassJobsService(IMapper mapper)
 {
     public ICollection<CharacterClassJob> GetCharacterClassJobs(
-        IReadOnlyDictionary<ClassJob, ClassJobEntry?> lodestoneClassJobs,
+        IReadOnlyDictionary<ClassJob, ClassJobEntry> lodestoneClassJobs,
         ICollection<CharacterClassJob> dbClassJobs)
     {
         foreach (var lodestoneClassJob in lodestoneClassJobs)
@@ -40,18 +40,8 @@ public class CharacterClassJobsService(IMapper mapper)
         return dbClassJobs;
     }
 
-    private Common.Enums.ClassJob ParseClassJob(KeyValuePair<ClassJob, ClassJobEntry> classJobEntry)
-    {
-        // TODO remove!!!
-
-        // try to parse name first since in some cases ClassJob is wrong!
-        return Enum.TryParse<Common.Enums.ClassJob>(classJobEntry.Value.Name, true, out var resultName)
-            ? resultName
-            : Enum.Parse<Common.Enums.ClassJob>(classJobEntry.Key.ToString());
-    }
-
     private IEnumerable<CharacterClassJob?> MapToDbEntry(
-        KeyValuePair<ClassJob, ClassJobEntry?> lodestoneClassJob, ICollection<CharacterClassJob> dbClassJobs)
+        KeyValuePair<ClassJob, ClassJobEntry> lodestoneClassJob, ICollection<CharacterClassJob> dbClassJobs)
     {
         return lodestoneClassJob.Key switch
         {
@@ -123,16 +113,16 @@ public class CharacterClassJobsService(IMapper mapper)
         };
     }
 
-    private CharacterClassJob? ToClassJob(KeyValuePair<ClassJob, ClassJobEntry?> lodestoneClassJob,
+    private CharacterClassJob? ToClassJob(KeyValuePair<ClassJob, ClassJobEntry> lodestoneClassJob,
         IEnumerable<CharacterClassJob> dbClassJobs, Common.Enums.ClassJob? classJobOverride = null)
     {
-        if (lodestoneClassJob.Value is null)
+        if (!lodestoneClassJob.Value.IsUnlocked)
         {
             return null;
         }
 
         var classJob = mapper.Map<CharacterClassJob>(lodestoneClassJob.Value);
-        classJob.ClassJob = classJobOverride ?? ParseClassJob(lodestoneClassJob!);
+        classJob.ClassJob = classJobOverride ?? Enum.Parse<Common.Enums.ClassJob>(lodestoneClassJob.Key.ToString());
 
         if (classJob.ClassJob.EvolvesFromClass() && !classJob.IsJobUnlocked)
         {

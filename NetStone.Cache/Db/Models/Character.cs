@@ -33,7 +33,9 @@ public class Character
 
     public string? PvpTeam { get; set; }
 
-    public required string RaceClanGender { get; set; }
+    public required Race Race { get; set; }
+    public required Tribe Tribe { get; set; }
+    public required Gender Gender { get; set; }
 
     public required string Server { get; set; }
 
