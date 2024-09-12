@@ -15,7 +15,6 @@ namespace NetStone.Cache.Db.Migrations
         {
             migrationBuilder.AlterDatabase()
                 .Annotation("Npgsql:Enum:class_job", "gladiator,pugilist,marauder,lancer,archer,conjurer,thaumaturge,carpenter,blacksmith,armorer,goldsmith,leatherworker,weaver,alchemist,culinarian,miner,botanist,fisher,paladin,monk,warrior,dragoon,bard,white_mage,black_mage,arcanist,summoner,scholar,rogue,ninja,machinist,dark_knight,astrologian,samurai,red_mage,blue_mage,gunbreaker,dancer,reaper,sage,viper,pictomancer")
-                .Annotation("Npgsql:Enum:free_company_focus", "none,role_play,leveling,casual,hardcore,dungeons,guildhests,trials,raids,pv_p")
                 .Annotation("Npgsql:Enum:gear_slot", "main_hand,off_hand,head,body,hands,legs,feet,earrings,necklace,bracelets,ring1,ring2,soul_crystal")
                 .Annotation("Npgsql:Enum:gender", "male,female")
                 .Annotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames")
@@ -49,7 +48,7 @@ namespace NetStone.Cache.Db.Migrations
                     estate_plot = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
                     free_company_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     free_company_members_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    focus = table.Column<FreeCompanyFocus>(type: "free_company_focus", nullable: false),
+                    focus = table.Column<int>(type: "integer", nullable: false),
                     maelstrom_progress = table.Column<short>(type: "smallint", nullable: false),
                     maelstrom_rank = table.Column<string>(type: "character varying(15)", maxLength: 15, nullable: false),
                     twin_adder_progress = table.Column<short>(type: "smallint", nullable: false),

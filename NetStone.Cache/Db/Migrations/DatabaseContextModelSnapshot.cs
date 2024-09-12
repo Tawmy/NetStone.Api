@@ -22,7 +22,6 @@ namespace NetStone.Cache.Db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage", "viper", "pictomancer" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "free_company_focus", new[] { "none", "role_play", "leveling", "casual", "hardcore", "dungeons", "guildhests", "trials", "raids", "pv_p" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_slot", new[] { "main_hand", "off_hand", "head", "body", "hands", "legs", "feet", "earrings", "necklace", "bracelets", "ring1", "ring2", "soul_crystal" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender", new[] { "male", "female" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "no_affiliation", "maelstrom", "order_of_the_twin_adder", "immortal_flames" });
@@ -614,8 +613,8 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("character varying(63)")
                         .HasColumnName("estate_plot");
 
-                    b.Property<FreeCompanyFocus>("Focus")
-                        .HasColumnType("free_company_focus")
+                    b.Property<int>("Focus")
+                        .HasColumnType("integer")
                         .HasColumnName("focus");
 
                     b.Property<DateTime>("Formed")

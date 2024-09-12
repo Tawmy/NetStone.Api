@@ -35,10 +35,10 @@ public class DatabaseContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DatabaseContext).Assembly); // load models from assembly
         modelBuilder.UseIdentityAlwaysColumns(); // always generate identity column, do not allow user values
 
+        // do not add free company focus as it's a flags enum
         modelBuilder.HasPostgresEnum<ClassJob>();
         modelBuilder.HasPostgresEnum<GrandCompany>();
         modelBuilder.HasPostgresEnum<GearSlot>();
-        modelBuilder.HasPostgresEnum<FreeCompanyFocus>();
         modelBuilder.HasPostgresEnum<Race>();
         modelBuilder.HasPostgresEnum<Tribe>();
         modelBuilder.HasPostgresEnum<Gender>();
@@ -46,12 +46,12 @@ public class DatabaseContext : DbContext
         base.OnModelCreating(modelBuilder);
     }
 
-    private void MapEnums()
+    private static void MapEnums()
     {
+        // do not add free company focus as it's a flags enum
         NpgsqlConnection.GlobalTypeMapper.MapEnum<ClassJob>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<GrandCompany>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<GearSlot>();
-        NpgsqlConnection.GlobalTypeMapper.MapEnum<FreeCompanyFocus>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Race>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Tribe>();
         NpgsqlConnection.GlobalTypeMapper.MapEnum<Gender>();
