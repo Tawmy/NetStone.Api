@@ -63,6 +63,20 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         await endpoint.Send(new { lodestoneId, error });
     }
 
+    public async Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto)
+    {
+        var uri = new Uri("queue:netstone-get-character-achievements-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetCharacterAchievementsFailedAsync(string lodestoneId, string error)
+    {
+        var uri = new Uri("queue:netstone-get-character-achievements-error");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(new { lodestoneId, error });
+    }
+
     public async Task SendGetFreeCompanySuccessfulAsync(FreeCompanyDto dto)
     {
         var uri = new Uri("queue:netstone-get-free-company-result");

@@ -19,6 +19,9 @@ public interface IRabbitMqSenderService
     Task SendGetCharacterMountsSuccessfulAsync(CharacterMountOuterDto dto);
     Task SendGetCharacterMountsFailedAsync(string lodestoneId, string error);
 
+    Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto);
+    Task SendGetCharacterAchievementsFailedAsync(string lodestoneId, string error);
+
     #endregion
 
     #region Free Company
