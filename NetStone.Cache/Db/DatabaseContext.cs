@@ -66,6 +66,7 @@ public class DatabaseContext : DbContext
     internal DbSet<CharacterClassJob> CharacterClassJobs => Set<CharacterClassJob>();
     internal DbSet<CharacterMinion> CharacterMinions => Set<CharacterMinion>();
     internal DbSet<CharacterMount> CharacterMounts => Set<CharacterMount>();
+    internal DbSet<CharacterAchievement> CharacterAchievements => Set<CharacterAchievement>();
 
     internal DbSet<FreeCompany> FreeCompanies => Set<FreeCompany>();
     internal DbSet<FreeCompanyMember> FreeCompanyMembers => Set<FreeCompanyMember>();

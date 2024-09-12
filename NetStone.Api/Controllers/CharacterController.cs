@@ -47,8 +47,7 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     [HttpGet("{lodestoneId}")]
@@ -69,8 +68,7 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDto.LastUpdated" />
@@ -97,8 +95,7 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMinionOuterDto.LastUpdated" />
@@ -125,8 +122,7 @@ public class CharacterController : ControllerBase
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMountOuterDto.LastUpdated" />
@@ -141,6 +137,34 @@ public class CharacterController : ControllerBase
         try
         {
             return await _characterService.GetCharacterMountsAsync(lodestoneId, maxAge);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    /// <summary>
+    ///     Get a character's achievements.
+    /// </summary>
+    /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached achievements, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
+    /// <remarks>
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="bla.LastUpdated" />
+    ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
+    ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
+    ///     <paramref name="maxAge" /> applies as expected.
+    /// </remarks>
+    /// <returns>Character achievements.</returns>
+    [HttpGet("Achievements/{lodestoneId}")]
+    public async Task<ActionResult<CharacterAchievementOuterDto>> GetAchievementsAsync(string lodestoneId, int? maxAge)
+    {
+        try
+        {
+            return await _characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge);
         }
         catch (NotFoundException)
         {

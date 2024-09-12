@@ -54,10 +54,13 @@ public class Character
 
     public ICollection<CharacterMount> Mounts { get; set; } = new HashSet<CharacterMount>();
 
+    public ICollection<CharacterAchievement> Achievements { get; set; } = new HashSet<CharacterAchievement>();
+
     public FreeCompanyMember? FreeCompanyMembership { get; set; }
 
     public DateTime CharacterUpdatedAt { get; set; }
     public DateTime? CharacterClassJobsUpdatedAt { get; set; }
     public DateTime? CharacterMinionsUpdatedAt { get; set; }
     public DateTime? CharacterMountsUpdatedAt { get; set; }
+    public DateTime? CharacterAchievementsUpdatedAt { get; set; }
 }

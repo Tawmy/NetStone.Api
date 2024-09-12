@@ -4,6 +4,7 @@ using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
+using NetStone.Model.Parseables.Character.Achievement;
 
 namespace NetStone.Data.Services;
 
@@ -138,5 +139,52 @@ internal class CharacterService : ICharacterService
         cachedMountsDtos = await _cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
 
         return new CharacterMountOuterDto(cachedMountsDtos, false, DateTime.UtcNow);
+    }
+
+    public async Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge)
+    {
+        var (cachedAchievementsDtos, lastUpdated) = await _cachingService.GetCharacterAchievementsAsync(lodestoneId);
+
+        if (cachedAchievementsDtos.Any())
+        {
+            if (lastUpdated is not null)
+            {
+                if ((DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+                {
+                    // if character was cached before, last time achievements were cached can be saved.
+                    // If cache is not older than the max age submitted, return cache.
+                    return new CharacterAchievementOuterDto(cachedAchievementsDtos, true, lastUpdated.Value);
+                }
+            }
+            else if (maxAge is null)
+            {
+                // Character was never cached, so LastUpdated value cannot be saved.
+                // If no max age given, return. If any max age value given, refresh.
+                return new CharacterAchievementOuterDto(cachedAchievementsDtos, true, null);
+            }
+        }
+
+        var lodestoneAchievements = await RetrieveAllAchievementsAsync(lodestoneId);
+
+        cachedAchievementsDtos =
+            await _cachingService.CacheCharacterAchievementsAsync(lodestoneId, lodestoneAchievements);
+
+        return new CharacterAchievementOuterDto(cachedAchievementsDtos, false, DateTime.UtcNow);
+    }
+
+    private async Task<List<CharacterAchievementEntry>> RetrieveAllAchievementsAsync(string lodestoneId)
+    {
+        var page1 = await _client.GetCharacterAchievement(lodestoneId);
+        if (page1 == null) throw new NotFoundException();
+        var achievements = page1.Achievements.ToList();
+
+        for (var i = page1.CurrentPage + 1; i <= page1.NumPages; i++)
+        {
+            var page = await _client.GetCharacterAchievement(lodestoneId, i);
+            if (page == null) throw new NotFoundException();
+            achievements.AddRange(page.Achievements);
+        }
+
+        return achievements;
     }
 }

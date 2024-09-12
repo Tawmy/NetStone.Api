@@ -1,5 +1,6 @@
 using NetStone.Common.DTOs.Character;
 using NetStone.Model.Parseables.Character;
+using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Collectable;
 
@@ -44,6 +45,18 @@ public interface ICharacterCachingService
 
     Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(int id);
     Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(string lodestoneId);
+
+    #endregion
+
+    #region CharacterAchievements
+
+    Task<ICollection<CharacterAchievementDto>> CacheCharacterAchievementsAsync(string lodestoneId,
+        IEnumerable<CharacterAchievementEntry> lodestoneAchievements);
+
+    Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)> GetCharacterAchievementsAsync(int id);
+
+    Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)> GetCharacterAchievementsAsync(
+        string lodestoneId);
 
     #endregion
 }

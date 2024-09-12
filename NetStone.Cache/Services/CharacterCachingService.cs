@@ -7,6 +7,7 @@ using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character;
+using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Character.Collectable;
 using CharacterClassJob = NetStone.Model.Parseables.Character.ClassJob.CharacterClassJob;
 
@@ -294,5 +295,77 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
         var mountDtos = mounts.Select(mapper.Map<CharacterMountDto>);
         return (mountDtos.ToList(), mounts.FirstOrDefault()?.Character?.CharacterMountsUpdatedAt);
+    }
+
+    public async Task<ICollection<CharacterAchievementDto>> CacheCharacterAchievementsAsync(string lodestoneId,
+        IEnumerable<CharacterAchievementEntry> lodestoneAchievements)
+    {
+        var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
+
+        var dbAchievements = await context.CharacterAchievements.Where(x => x.CharacterLodestoneId == lodestoneId)
+            .ToListAsync();
+
+        var newLodestoneAchievements = lodestoneAchievements.Where(x =>
+            x.Id is not null && !dbAchievements.Select(y => y.AchievementId).Contains((ulong)x.Id!));
+        var newDbAchievements = new List<CharacterAchievement>();
+        foreach (var newLodestoneAchievement in newLodestoneAchievements)
+        {
+            var newDbAchievement = mapper.Map<CharacterAchievement>(newLodestoneAchievement);
+            newDbAchievement.CharacterLodestoneId = lodestoneId;
+            newDbAchievement.CharacterId = character?.Id ?? null;
+            newDbAchievements.AddIfNotNull(newDbAchievement);
+        }
+
+        await context.CharacterAchievements.AddRangeAsync(newDbAchievements);
+        dbAchievements.AddRange(newDbAchievements);
+
+        // set FK if necessary
+        if (character is not null)
+        {
+            var dbAchievementsWithoutFk = dbAchievements.Where(x => x.CharacterId is null);
+            foreach (var dbMountWithoutFk in dbAchievementsWithoutFk)
+            {
+                dbMountWithoutFk.CharacterId = character.Id;
+            }
+        }
+
+        if (character is not null)
+        {
+            character.CharacterAchievementsUpdatedAt = DateTime.UtcNow;
+        }
+
+        await context.SaveChangesAsync();
+
+        return dbAchievements.Select(mapper.Map<CharacterAchievementDto>).ToList();
+    }
+
+    public async Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)>
+        GetCharacterAchievementsAsync(int id)
+    {
+        var character = await context.Characters.Where(x =>
+                x.Id == id)
+            .Include(x =>
+                x.Achievements)
+            .FirstOrDefaultAsync();
+
+        if (character == null)
+        {
+            return (new List<CharacterAchievementDto>(), null);
+        }
+
+        var achievements = character.Achievements.Select(mapper.Map<CharacterAchievementDto>);
+        return (achievements.ToList(), character.CharacterAchievementsUpdatedAt);
+    }
+
+    public async Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)> GetCharacterAchievementsAsync(
+        string lodestoneId)
+    {
+        var achievements = await context.CharacterAchievements.Where(x =>
+                x.CharacterLodestoneId == lodestoneId)
+            .Include(x => x.Character)
+            .ToListAsync();
+
+        var achievementDtos = achievements.Select(mapper.Map<CharacterAchievementDto>);
+        return (achievementDtos.ToList(), achievements.FirstOrDefault()?.Character?.CharacterAchievementsUpdatedAt);
     }
 }

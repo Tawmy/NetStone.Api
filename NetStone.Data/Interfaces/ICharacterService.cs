@@ -26,8 +26,7 @@ public interface ICharacterService
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use <see cref="SearchCharacterAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
@@ -38,8 +37,7 @@ public interface ICharacterService
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Use <see cref="SearchCharacterAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <returns>Character class jobs.</returns>
     /// <exception cref="NotFoundException"></exception>
@@ -50,8 +48,7 @@ public interface ICharacterService
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
@@ -62,10 +59,21 @@ public interface ICharacterService
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
     public Task<CharacterMountOuterDto> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
+
+    /// <summary>
+    ///     Get a character's achievements.
+    /// </summary>
+    /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
+    /// <param name="maxAge">
+    ///     Optional maximum age of cached achievements, in minutes. If older, they will be refreshed from the
+    ///     Lodestone.
+    /// </param>
+    /// <returns>Character achievements.</returns>
+    /// <exception cref="NotFoundException"></exception>
+    Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge);
 }
