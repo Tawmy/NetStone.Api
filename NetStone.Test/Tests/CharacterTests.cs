@@ -72,6 +72,14 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     public async Task ApiCharacterMinionsMatchDto(string lodestoneId)
     {
         var minionsLodestone = await _client.GetCharacterMinion(lodestoneId);
+
+        if (lodestoneId == "45386124") // Testerinus Maximus, Phoenix)
+        {
+            // test character has no minions
+            Assert.Null(minionsLodestone);
+            return;
+        }
+
         Assert.NotNull(minionsLodestone);
 
         foreach (var minionLodestone in minionsLodestone.Collectables)
@@ -95,6 +103,15 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     public async Task ApiCharacterMountsMatchDto(string lodestoneId)
     {
         var mountsLodestone = await _client.GetCharacterMount(lodestoneId);
+
+        if (new[] { "45386124", "28835226" }
+            .Contains(lodestoneId)) // Testerinus Maximus, Phoenix; Hena Wilbert, Phoenix)
+        {
+            // test character has no mounts
+            Assert.Null(mountsLodestone);
+            return;
+        }
+
         Assert.NotNull(mountsLodestone);
 
         foreach (var mountLodestone in mountsLodestone.Collectables)
