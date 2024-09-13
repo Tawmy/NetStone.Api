@@ -1,0 +1,20 @@
+# This is a generated file. Not intended for manual editing.
+services:
+  api:
+    build:
+      context: "/Users/tawmy/Git/NetStone.Api"
+      dockerfile: "NetStone.Api/Dockerfile"
+      target: "base"
+    command: []
+    entrypoint:
+    - "dotnet"
+    - "/app/bin/Debug/net8.0/NetStone.Api.dll"
+    environment:
+      DOTNET_USE_POLLING_FILE_WATCHER: "true"
+    image: "netstone.api:dev"
+    ports: []
+    volumes:
+    - "/Users/tawmy/.nuget/packages:/home/app/.nuget/packages"
+    - "/Users/tawmy/Git/NetStone.Api/NetStone.Api:/app:rw"
+    - "/Users/tawmy/Git/NetStone.Api:/src:rw"
+    working_dir: "/app"
