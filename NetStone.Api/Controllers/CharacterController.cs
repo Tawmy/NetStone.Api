@@ -98,7 +98,7 @@ public class CharacterController : ControllerBase
     ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMinionOuterDto.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{t}.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
