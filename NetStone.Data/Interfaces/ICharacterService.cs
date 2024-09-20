@@ -52,7 +52,7 @@ public interface ICharacterService
     /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterMinionOuterDto> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's mounts.
@@ -63,7 +63,7 @@ public interface ICharacterService
     /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterMountOuterDto> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's achievements.

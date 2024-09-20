@@ -105,7 +105,7 @@ public class CharacterController : ControllerBase
     /// </remarks>
     /// <returns>Character minions.</returns>
     [HttpGet("Minions/{lodestoneId}")]
-    public async Task<ActionResult<CharacterMinionOuterDto>> GetMinionsAsync(string lodestoneId, int? maxAge)
+    public async Task<ActionResult<CollectionDto<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId, int? maxAge)
     {
         try
         {
@@ -125,14 +125,14 @@ public class CharacterController : ControllerBase
     ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterMountOuterDto.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{T}.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character mounts.</returns>
     [HttpGet("Mounts/{lodestoneId}")]
-    public async Task<ActionResult<CharacterMountOuterDto>> GetMountsAsync(string lodestoneId, int? maxAge)
+    public async Task<ActionResult<CollectionDto<CharacterMountDto>>> GetMountsAsync(string lodestoneId, int? maxAge)
     {
         try
         {
@@ -153,7 +153,8 @@ public class CharacterController : ControllerBase
     ///     Lodestone.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="bla.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />,
+    ///     <see cref="CharacterAchievementOuterDto.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.

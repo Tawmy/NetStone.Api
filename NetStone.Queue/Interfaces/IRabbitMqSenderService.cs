@@ -13,10 +13,10 @@ public interface IRabbitMqSenderService
     Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDto dto);
     Task SendGetCharacterClassJobsFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterMinionsSuccessfulAsync(CharacterMinionOuterDto dto);
+    Task SendGetCharacterMinionsSuccessfulAsync(CollectionDto<CharacterMinionDto> dto);
     Task SendGetCharacterMinionsFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterMountsSuccessfulAsync(CharacterMountOuterDto dto);
+    Task SendGetCharacterMountsSuccessfulAsync(CollectionDto<CharacterMountDto> dto);
     Task SendGetCharacterMountsFailedAsync(string lodestoneId, string error);
 
     Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto);
