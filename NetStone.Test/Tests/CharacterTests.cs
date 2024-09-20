@@ -246,26 +246,45 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
     private static void CompareAttributes(CharacterAttributes attributes, CharacterDto characterDto)
     {
-        Assert.Equal(attributes.Strength, characterDto.Attributes.Strength);
-        Assert.Equal(attributes.Dexterity, characterDto.Attributes.Dexterity);
-        Assert.Equal(attributes.Vitality, characterDto.Attributes.Vitality);
-        Assert.Equal(attributes.Intelligence, characterDto.Attributes.Intelligence);
-        Assert.Equal(attributes.Mind, characterDto.Attributes.Mind);
-        Assert.Equal(attributes.CriticalHitRate, characterDto.Attributes.CriticalHitRate);
-        Assert.Equal(attributes.Determination, characterDto.Attributes.Determination);
-        Assert.Equal(attributes.DirectHitRate, characterDto.Attributes.DirectHitRate);
-        Assert.Equal(attributes.Defense, characterDto.Attributes.Defense);
-        Assert.Equal(attributes.MagicDefense, characterDto.Attributes.MagicDefense);
-        Assert.Equal(attributes.AttackPower, characterDto.Attributes.AttackPower);
-        Assert.Equal(attributes.SkillSpeed, characterDto.Attributes.SkillSpeed);
-        Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes.AttackMagicPotency);
-        Assert.Equal(attributes.HealingMagicPotency, characterDto.Attributes.HealingMagicPotency);
-        Assert.Equal(attributes.SpellSpeed, characterDto.Attributes.SpellSpeed);
-        Assert.Equal(attributes.Tenacity, characterDto.Attributes.Tenacity);
-        Assert.Equal(attributes.Piety, characterDto.Attributes.Piety);
-        Assert.Equal(attributes.Hp, characterDto.Attributes.Hp);
-        Assert.Equal(attributes.MpGpCp, characterDto.Attributes.MpGpCp);
-        Assert.Equal(attributes.MpGpCpParameterName, characterDto.Attributes.MpGpCpParameterName);
+        Assert.Equal(attributes.Strength, characterDto.Attributes[CharacterAttribute.Strength]);
+        Assert.Equal(attributes.Dexterity, characterDto.Attributes[CharacterAttribute.Dexterity]);
+        Assert.Equal(attributes.Vitality, characterDto.Attributes[CharacterAttribute.Vitality]);
+        Assert.Equal(attributes.Intelligence, characterDto.Attributes[CharacterAttribute.Intelligence]);
+        Assert.Equal(attributes.Mind, characterDto.Attributes[CharacterAttribute.Mind]);
+        Assert.Equal(attributes.CriticalHitRate, characterDto.Attributes[CharacterAttribute.CriticalHitRate]);
+        Assert.Equal(attributes.Determination, characterDto.Attributes[CharacterAttribute.Determination]);
+        Assert.Equal(attributes.DirectHitRate, characterDto.Attributes[CharacterAttribute.DirectHitRate]);
+        Assert.Equal(attributes.Defense, characterDto.Attributes[CharacterAttribute.Defense]);
+        Assert.Equal(attributes.MagicDefense, characterDto.Attributes[CharacterAttribute.MagicDefense]);
+        Assert.Equal(attributes.AttackPower, characterDto.Attributes[CharacterAttribute.Strength]);
+        Assert.Equal(attributes.SkillSpeed, characterDto.Attributes[CharacterAttribute.SkillSpeed]);
+
+        if (characterDto.ActiveClassJob.IsDiscipleOfHand())
+        {
+            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.Craftmanship]);
+            Assert.Equal(attributes.HealingMagicPotency, characterDto.Attributes[CharacterAttribute.Control]);
+
+            Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Cp]);
+        }
+        else if (characterDto.ActiveClassJob.IsDiscipleOfLand())
+        {
+            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.Gathering]);
+            Assert.Equal(attributes.HealingMagicPotency, characterDto.Attributes[CharacterAttribute.Perception]);
+
+            Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Gp]);
+        }
+        else
+        {
+            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.AttackMagicPotency]);
+            Assert.Equal(attributes.HealingMagicPotency,
+                characterDto.Attributes[CharacterAttribute.HealingMagicPotency]);
+            Assert.Equal(attributes.SpellSpeed, characterDto.Attributes[CharacterAttribute.SpellSpeed]);
+
+            Assert.Equal(attributes.Tenacity, characterDto.Attributes[CharacterAttribute.Tenacity]);
+            Assert.Equal(attributes.Piety, characterDto.Attributes[CharacterAttribute.Piety]);
+
+            Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Mp]);
+        }
     }
 
     #endregion
