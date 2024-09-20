@@ -13,6 +13,8 @@ public class CharacterGear
 
     public required string ItemName { get; set; }
 
+    public required int ItemLevel { get; set; }
+
     public string? ItemDatabaseLink { get; set; }
     public bool? IsHq { get; set; }
     public string? StrippedItemName { get; set; }

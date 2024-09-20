@@ -229,6 +229,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
             Assert.NotNull(gearPieceDto);
 
             Assert.Equal(gearPieceLodestone.ItemName, gearPieceDto.ItemName);
+            Assert.Equal(gearPieceLodestone.ItemLevel, gearPieceDto.ItemLevel);
             Assert.Equal(gearPieceLodestone.ItemDatabaseLink?.ToString(), gearPieceDto.ItemDatabaseLink);
             Assert.Equal(gearPieceLodestone.IsHq, gearPieceDto.IsHq);
             Assert.Equal(gearPieceLodestone.StrippedItemName, gearPieceDto.StrippedItemName);
