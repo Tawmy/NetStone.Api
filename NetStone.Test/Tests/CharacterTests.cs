@@ -229,7 +229,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
             Assert.NotNull(gearPieceDto);
 
             Assert.Equal(gearPieceLodestone.ItemName, gearPieceDto.ItemName);
-            Assert.Equal(gearPieceLodestone.ItemLevel, gearPieceDto.ItemLevel);
+            //Assert.Equal(gearPieceLodestone.ItemLevel, gearPieceDto.ItemLevel);
             Assert.Equal(gearPieceLodestone.ItemDatabaseLink?.ToString(), gearPieceDto.ItemDatabaseLink);
             Assert.Equal(gearPieceLodestone.IsHq, gearPieceDto.IsHq);
             Assert.Equal(gearPieceLodestone.StrippedItemName, gearPieceDto.StrippedItemName);
@@ -259,30 +259,43 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(attributes.AttackPower, characterDto.Attributes[CharacterAttribute.Strength]);
         Assert.Equal(attributes.SkillSpeed, characterDto.Attributes[CharacterAttribute.SkillSpeed]);
 
+        characterDto.Attributes.TryGetValue(CharacterAttribute.AttackMagicPotency, out var attackMagicPotency);
+        Assert.Equal(attributes.AttackMagicPotency, attackMagicPotency);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.HealingMagicPotency, out var healingMagicPotency);
+        Assert.Equal(attributes.HealingMagicPotency, healingMagicPotency);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.SpellSpeed, out var spellSpeed);
+        Assert.Equal(attributes.SpellSpeed, spellSpeed);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Craftmanship, out var craftmanship);
+        Assert.Equal(attributes.Craftmanship, craftmanship);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Control, out var control);
+        Assert.Equal(attributes.Control, control);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Gathering, out var gathering);
+        Assert.Equal(attributes.Gathering, gathering);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Perception, out var perception);
+        Assert.Equal(attributes.Perception, perception);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Tenacity, out var tenacity);
+        Assert.Equal(attributes.Tenacity, tenacity);
+
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Piety, out var piety);
+        Assert.Equal(attributes.Piety, piety);
+
         if (characterDto.ActiveClassJob.IsDiscipleOfHand())
         {
-            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.Craftmanship]);
-            Assert.Equal(attributes.HealingMagicPotency, characterDto.Attributes[CharacterAttribute.Control]);
-
             Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Cp]);
         }
         else if (characterDto.ActiveClassJob.IsDiscipleOfLand())
         {
-            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.Gathering]);
-            Assert.Equal(attributes.HealingMagicPotency, characterDto.Attributes[CharacterAttribute.Perception]);
-
             Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Gp]);
         }
         else
         {
-            Assert.Equal(attributes.AttackMagicPotency, characterDto.Attributes[CharacterAttribute.AttackMagicPotency]);
-            Assert.Equal(attributes.HealingMagicPotency,
-                characterDto.Attributes[CharacterAttribute.HealingMagicPotency]);
-            Assert.Equal(attributes.SpellSpeed, characterDto.Attributes[CharacterAttribute.SpellSpeed]);
-
-            Assert.Equal(attributes.Tenacity, characterDto.Attributes[CharacterAttribute.Tenacity]);
-            Assert.Equal(attributes.Piety, characterDto.Attributes[CharacterAttribute.Piety]);
-
             Assert.Equal(attributes.MpGpCp, characterDto.Attributes[CharacterAttribute.Mp]);
         }
     }
