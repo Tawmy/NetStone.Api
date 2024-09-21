@@ -36,15 +36,15 @@ public class CharacterAttributeResolver : IValueResolver<Character, CharacterDto
         {
             dict.Add(CharacterAttribute.Cp, source.Attributes.MpGpCp);
 
-            dict.Add(CharacterAttribute.Craftmanship, source.Attributes.AttackMagicPotency);
-            dict.Add(CharacterAttribute.Control, source.Attributes.HealingMagicPotency);
+            dict.Add(CharacterAttribute.Craftmanship, source.Attributes.Craftmanship);
+            dict.Add(CharacterAttribute.Control, source.Attributes.Control);
         }
         else if (source.ActiveClassJob.IsDiscipleOfLand())
         {
             dict.Add(CharacterAttribute.Gp, source.Attributes.MpGpCp);
 
-            dict.Add(CharacterAttribute.Gathering, source.Attributes.AttackMagicPotency);
-            dict.Add(CharacterAttribute.Perception, source.Attributes.HealingMagicPotency);
+            dict.Add(CharacterAttribute.Gathering, source.Attributes.Gathering);
+            dict.Add(CharacterAttribute.Perception, source.Attributes.Perception);
         }
         else
         {
