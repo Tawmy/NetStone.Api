@@ -46,7 +46,7 @@ public class Character
 
     public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 
-    public CharacterAttributes Attributes { get; set; } = null!;
+    public CharacterAttributes Attributes { get; set; } = null!; // TODO complex type?
 
     public ICollection<CharacterClassJob> CharacterClassJobs { get; set; } = new HashSet<CharacterClassJob>();
 
@@ -56,7 +56,7 @@ public class Character
 
     public ICollection<CharacterAchievement> Achievements { get; set; } = new HashSet<CharacterAchievement>();
 
-    public FreeCompanyMember? FreeCompanyMembership { get; set; }
+    public FreeCompanyMember? FreeCompanyMembership { get; set; } // TODO complex type?
 
     public DateTime CharacterUpdatedAt { get; set; }
     public DateTime? CharacterClassJobsUpdatedAt { get; set; }

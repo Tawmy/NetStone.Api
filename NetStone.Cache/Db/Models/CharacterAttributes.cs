@@ -19,11 +19,15 @@ public class CharacterAttributes
     public required int MagicDefense { get; set; }
     public required int AttackPower { get; set; }
     public required int SkillSpeed { get; set; }
-    public required int AttackMagicPotency { get; set; }
-    public required int HealingMagicPotency { get; set; }
+    public int? AttackMagicPotency { get; set; }
+    public int? HealingMagicPotency { get; set; }
     public int? SpellSpeed { get; set; }
     public int? Tenacity { get; set; }
     public int? Piety { get; set; }
+    public int? Craftmanship { get; set; }
+    public int? Control { get; set; }
+    public int? Gathering { get; set; }
+    public int? Perception { get; set; }
     public required int Hp { get; set; }
     public required int MpGpCp { get; set; }
     public required string MpGpCpParameterName { get; set; }
