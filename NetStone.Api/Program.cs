@@ -22,7 +22,8 @@ ConfigureSwagger(builder.Services);
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
     typeof(DependencyInjection).Assembly);
 
-builder.Services.AddSingleton(typeof(Program).Assembly.GetName().Version!);
+var version = typeof(Program).Assembly.GetName().Version!;
+builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddCacheServices();
 builder.Services.AddDataServices();
@@ -61,6 +62,8 @@ app.MapControllers();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
 
 app.Run();
 
