@@ -7,7 +7,6 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["NetStone.Api/NetStone.Api.csproj", "NetStone.Api/"]
-COPY ["NetStone/NetStone/NetStone.csproj", "NetStone/NetStone/"]
 RUN dotnet restore "NetStone.Api/NetStone.Api.csproj"
 COPY . .
 WORKDIR "/src/NetStone.Api"

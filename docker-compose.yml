@@ -1,0 +1,29 @@
+﻿services:
+  db:
+    image: postgres:16.4-alpine
+    container_name: netstone.api-postgres
+    restart: unless-stopped
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=netstone-api
+      - POSTGRES_USER=netstone-api
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d netstone-api -U netstone-api" ]
+      interval: 5s
+      timeout: 4s
+      retries: 5
+  api:
+    image: netstone.api
+    container_name: netstone.api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: NetStone.Api/Dockerfile
+    environment:
+      AUTH_AUDIENCE: ${AUTH_AUDIENCE}
+      AUTH_AUTHORITY: ${AUTH_AUTHORITY}
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
+      CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
+  

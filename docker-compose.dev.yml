@@ -1,0 +1,22 @@
+services:
+  db:
+    networks:
+      - netstone
+  api:
+    networks:
+      - caddy
+      - netstone
+    labels:
+      caddy: api.netstone.tawmy.dev
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+
+networks:
+  caddy:
+    external: true
+  netstone:
+    external: true
+
+volumes:
+  postgres_data:
+    external: true
+    name: netstone-api

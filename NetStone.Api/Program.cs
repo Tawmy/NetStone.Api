@@ -1,12 +1,17 @@
-using System.Configuration;
+using System.Data;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using NetStone;
 using NetStone.Api;
-using NetStone.Api.Interfaces;
-using NetStone.Api.Messages;
-using NetStone.Api.Services;
+using NetStone.Cache;
+using NetStone.Cache.Db;
+using NetStone.Common.Extensions;
+using NetStone.Data;
+using NetStone.Queue;
+using Npgsql;
+using DependencyInjection = NetStone.Data.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,31 +19,40 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 ConfigureSwagger(builder.Services);
 
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
-builder.Services.AddSingleton<LodestoneClient>(_ =>
-{
-    // Assuming that GetClientAsync returns a Task<LodestoneClient>
-    var clientTask = LodestoneClient.GetClientAsync();
-    clientTask.Wait();
-    return clientTask.Result;
-});
+builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
+    typeof(DependencyInjection).Assembly);
 
-builder.Services.AddTransient<ICharacterService, CharacterService>();
-builder.Services.AddTransient<IFreeCompanyService, FreeCompanyService>();
+builder.Services.AddSingleton(typeof(Program).Assembly.GetName().Version!);
+builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddCacheServices();
+builder.Services.AddDataServices();
+builder.Services.AddQueueServices(builder.Configuration);
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-AddAuthentication(builder.Services);
+AddAuthentication(builder);
 
 var app = builder.Build();
+
+await MigrateDatabaseAsync(app.Services);
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
+        foreach (var description in app.DescribeApiVersions().Reverse())
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
 }
 
 app.UseHttpsRedirection();
@@ -55,33 +69,37 @@ return;
 void ConfigureSwagger(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
+
+    services.AddApiVersioning(x =>
+        {
+            x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
+            x.AssumeDefaultVersionWhenUnspecified = true; // assume V1 if request is sent without version
+            x.ReportApiVersions = true; // respond with supported versions in response header
+        })
+        .AddMvc()
+        .AddApiExplorer(options => { options.GroupNameFormat = "'v'VVV"; });
+
     services.AddSwaggerGen(options =>
     {
         options.SupportNonNullableReferenceTypes();
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
             $"{typeof(Program).Assembly.GetName().Name}.xml"));
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
-            $"{typeof(LodestoneClient).Assembly.GetName().Name}.xml"));
         options.CustomSchemaIds(type => type.ToString());
     });
     services.ConfigureOptions<ConfigureSwaggerOptions>();
 }
 
-void AddAuthentication(IServiceCollection services)
+void AddAuthentication(WebApplicationBuilder webAppBuilder)
 {
-    services.AddAuthentication(options =>
+    webAppBuilder.Services.AddAuthentication(options =>
         {
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         })
         .AddJwtBearer(options =>
         {
-            options.Authority = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAuthority) ??
-                                throw new ConfigurationErrorsException(
-                                    Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAuthority));
-            options.Audience = Environment.GetEnvironmentVariable(EnvironmentVariables.AuthAudience) ??
-                               throw new ConfigurationErrorsException(
-                                   Errors.Environment.EnvironmentVariableNotSet(EnvironmentVariables.AuthAudience));
+            options.Authority = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
+            options.Audience = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAudience);
 
             options.TokenValidationParameters = new TokenValidationParameters
             {
@@ -92,4 +110,30 @@ void AddAuthentication(IServiceCollection services)
                 ValidateTokenReplay = true
             };
         });
+}
+
+async Task MigrateDatabaseAsync(IServiceProvider services)
+{
+    using var scope = services.CreateScope();
+
+    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
+
+    await dbContext.Database.MigrateAsync();
+
+    if (dbContext.Database.GetDbConnection() is NpgsqlConnection npgsqlConnection)
+    {
+        if (npgsqlConnection.State != ConnectionState.Open)
+        {
+            await npgsqlConnection.OpenAsync();
+        }
+
+        try
+        {
+            await npgsqlConnection.ReloadTypesAsync();
+        }
+        finally
+        {
+            await npgsqlConnection.CloseAsync();
+        }
+    }
 }
