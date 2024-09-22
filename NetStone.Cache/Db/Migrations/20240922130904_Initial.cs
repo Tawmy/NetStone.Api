@@ -92,7 +92,8 @@ namespace NetStone.Cache.Db.Migrations
                     character_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     character_class_jobs_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
                     character_minions_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    character_mounts_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
+                    character_mounts_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    character_achievements_updated_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -101,6 +102,30 @@ namespace NetStone.Cache.Db.Migrations
                         name: "fk_characters_free_companies_full_free_company_id",
                         column: x => x.full_free_company_id,
                         principalTable: "free_companies",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "character_achievements",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityAlwaysColumn),
+                    character_lodestone_id = table.Column<string>(type: "character varying(10)", maxLength: 10, nullable: false),
+                    character_id = table.Column<int>(type: "integer", nullable: true),
+                    achievement_id = table.Column<decimal>(type: "numeric(20,0)", nullable: false),
+                    name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false),
+                    database_link = table.Column<string>(type: "text", nullable: false),
+                    time_achieved = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_character_achievements", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_character_achievements_characters_character_id",
+                        column: x => x.character_id,
+                        principalTable: "characters",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -124,11 +149,15 @@ namespace NetStone.Cache.Db.Migrations
                     magic_defense = table.Column<int>(type: "integer", nullable: false),
                     attack_power = table.Column<int>(type: "integer", nullable: false),
                     skill_speed = table.Column<int>(type: "integer", nullable: false),
-                    attack_magic_potency = table.Column<int>(type: "integer", nullable: false),
-                    healing_magic_potency = table.Column<int>(type: "integer", nullable: false),
+                    attack_magic_potency = table.Column<int>(type: "integer", nullable: true),
+                    healing_magic_potency = table.Column<int>(type: "integer", nullable: true),
                     spell_speed = table.Column<int>(type: "integer", nullable: true),
                     tenacity = table.Column<int>(type: "integer", nullable: true),
                     piety = table.Column<int>(type: "integer", nullable: true),
+                    craftmanship = table.Column<int>(type: "integer", nullable: true),
+                    control = table.Column<int>(type: "integer", nullable: true),
+                    gathering = table.Column<int>(type: "integer", nullable: true),
+                    perception = table.Column<int>(type: "integer", nullable: true),
                     hp = table.Column<int>(type: "integer", nullable: false),
                     mp_gp_cp = table.Column<int>(type: "integer", nullable: false),
                     mp_gp_cp_parameter_name = table.Column<string>(type: "character varying(2)", maxLength: 2, nullable: false)
@@ -205,6 +234,7 @@ namespace NetStone.Cache.Db.Migrations
                     character_id = table.Column<int>(type: "integer", nullable: false),
                     slot = table.Column<GearSlot>(type: "gear_slot", nullable: false),
                     item_name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: false),
+                    item_level = table.Column<int>(type: "integer", nullable: false),
                     item_database_link = table.Column<string>(type: "character varying(255)", maxLength: 255, nullable: true),
                     is_hq = table.Column<bool>(type: "boolean", nullable: true),
                     stripped_item_name = table.Column<string>(type: "character varying(63)", maxLength: 63, nullable: true),
@@ -305,6 +335,17 @@ namespace NetStone.Cache.Db.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "ix_character_achievements_character_id",
+                table: "character_achievements",
+                column: "character_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_character_achievements_character_lodestone_id_achievement_id",
+                table: "character_achievements",
+                columns: new[] { "character_lodestone_id", "achievement_id" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_character_attributes_character_id",
                 table: "character_attributes",
                 column: "character_id",
@@ -393,6 +434,9 @@ namespace NetStone.Cache.Db.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "character_achievements");
+
             migrationBuilder.DropTable(
                 name: "character_attributes");
 

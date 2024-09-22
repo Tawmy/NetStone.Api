@@ -22,6 +22,7 @@ ConfigureSwagger(builder.Services);
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
     typeof(DependencyInjection).Assembly);
 
+builder.Services.AddSingleton(typeof(Program).Assembly.GetName().Version!);
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddCacheServices();
 builder.Services.AddDataServices();
