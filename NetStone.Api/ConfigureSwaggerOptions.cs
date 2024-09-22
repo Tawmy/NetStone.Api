@@ -1,7 +1,6 @@
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using NetStone.Api.Extensions;
 using NetStone.Common.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
