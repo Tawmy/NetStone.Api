@@ -1,3 +1,4 @@
+using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NetStone.Common.Extensions;
@@ -5,7 +6,8 @@ using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace NetStone.Api;
 
-internal class ConfigureSwaggerOptions(IConfiguration configuration) : IConfigureNamedOptions<SwaggerGenOptions>
+internal class ConfigureSwaggerOptions(IConfiguration configuration, IApiVersionDescriptionProvider provider)
+    : IConfigureNamedOptions<SwaggerGenOptions>
 {
     /// <summary>
     ///     Configure each API discovered for Swagger Documentation
@@ -44,6 +46,17 @@ internal class ConfigureSwaggerOptions(IConfiguration configuration) : IConfigur
                 Array.Empty<string>()
             }
         });
+
+        foreach (var description in provider.ApiVersionDescriptions)
+        {
+            options.SwaggerDoc(
+                description.GroupName,
+                new OpenApiInfo
+                {
+                    Title = $"NetStone API {description.ApiVersion}",
+                    Version = description.ApiVersion.ToString()
+                });
+        }
     }
 
     /// <summary>

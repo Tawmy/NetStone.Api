@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetStone.Api.Controllers;
+using NetStone.Api.Controllers.V2;
 using NetStone.Cache.Db;
 using NetStone.Cache.Services;
 using Xunit.Microsoft.DependencyInjection;

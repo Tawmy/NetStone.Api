@@ -1,5 +1,6 @@
 using System.Data;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -41,7 +42,16 @@ await MigrateDatabaseAsync(app.Services);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
+        foreach (var description in app.DescribeApiVersions().Reverse())
+        {
+            var url = $"/swagger/{description.GroupName}/swagger.json";
+            var name = description.GroupName.ToUpperInvariant();
+            options.SwaggerEndpoint(url, name);
+        }
+    });
 }
 
 app.UseHttpsRedirection();
@@ -58,6 +68,16 @@ return;
 void ConfigureSwagger(IServiceCollection services)
 {
     services.AddEndpointsApiExplorer();
+
+    services.AddApiVersioning(x =>
+        {
+            x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
+            x.AssumeDefaultVersionWhenUnspecified = true; // assume V1 if request is sent without version
+            x.ReportApiVersions = true; // respond with supported versions in response header
+        })
+        .AddMvc()
+        .AddApiExplorer(options => { options.GroupNameFormat = "'v'VVV"; });
+
     services.AddSwaggerGen(options =>
     {
         options.SupportNonNullableReferenceTypes();

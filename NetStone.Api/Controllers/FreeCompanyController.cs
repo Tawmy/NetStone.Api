@@ -1,3 +1,4 @@
+using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.FreeCompany;
@@ -13,6 +14,7 @@ namespace NetStone.Api.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
+[ApiVersion(2)]
 public class FreeCompanyController : ControllerBase
 {
     private readonly IFreeCompanyService _freeCompanyService;
