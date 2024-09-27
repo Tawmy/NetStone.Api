@@ -14,11 +14,7 @@ internal class CharacterProfile : Profile
     {
         CreateMap<LodestoneCharacter, Db.Models.Character>()
             .ForMember(x => x.ActiveClassJob, x => x.MapFrom(y => y.GetActiveClassJob()))
-            .ForMember(x => x.GrandCompany,
-                x => x.MapFrom((y, _) =>
-                    Enum.TryParse<GrandCompany>(y.GrandCompanyName, true, out var result)
-                        ? result
-                        : GrandCompany.NoAffiliation))
+            .ForMember(x => x.GrandCompany, x => x.MapFrom<GrandCompanyResolver>())
             .ForMember(x => x.PvpTeam, x => x.MapFrom(y => y.PvPTeam != null ? y.PvPTeam.Name : null))
             .ForMember(x => x.Race, x => x.MapFrom(y => EnumHelper.ParseFromDisplayString<Race>(y.Race)))
             .ForMember(x => x.Tribe, x => x.MapFrom(y => EnumHelper.ParseFromDisplayString<Tribe>(y.Tribe)))
