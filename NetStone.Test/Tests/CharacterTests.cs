@@ -158,7 +158,11 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(characterLodestone.ActiveClassJobLevel, characterDto.ActiveClassJobLevel);
         Assert.Equal(characterLodestone.ActiveClassJobIcon, characterDto.ActiveClassJobIcon);
 
-        // Grand Company is parsed, so check is skipped. Parsing would've failed earlier already.
+        if (!string.IsNullOrWhiteSpace(characterLodestone.GrandCompanyName))
+        {
+            Assert.NotEqual(GrandCompany.NoAffiliation, characterDto.GrandCompany);
+        }
+
         Assert.Equal(characterLodestone.GrandCompanyRank, characterDto.GrandCompanyRank);
 
         if (characterLodestone.FreeCompany is null)
@@ -256,7 +260,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(attributes.DirectHitRate, characterDto.Attributes[CharacterAttribute.DirectHitRate]);
         Assert.Equal(attributes.Defense, characterDto.Attributes[CharacterAttribute.Defense]);
         Assert.Equal(attributes.MagicDefense, characterDto.Attributes[CharacterAttribute.MagicDefense]);
-        Assert.Equal(attributes.AttackPower, characterDto.Attributes[CharacterAttribute.Strength]);
+        Assert.Equal(attributes.AttackPower, characterDto.Attributes[CharacterAttribute.AttackPower]);
         Assert.Equal(attributes.SkillSpeed, characterDto.Attributes[CharacterAttribute.SkillSpeed]);
 
         characterDto.Attributes.TryGetValue(CharacterAttribute.AttackMagicPotency, out var attackMagicPotency);
