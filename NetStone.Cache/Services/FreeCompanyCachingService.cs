@@ -155,6 +155,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
                 x.Id == id)
             .Include(x => x.Members)
             .ThenInclude(x => x.FullCharacter)
+            .ThenInclude(x => x!.Attributes /* may be null, but will be translated correctly by efcore */)
             .FirstOrDefaultAsync();
 
         if (freeCompany is null)
@@ -172,6 +173,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
         var members = await context.FreeCompanyMembers.Where(x =>
                 x.FreeCompanyLodestoneId == lodestoneId)
             .Include(x => x.FullCharacter)
+            .ThenInclude(x => x!.Attributes /* may be null, but will be translated correctly by efcore */)
             .ToListAsync();
 
         var freeCompanyUpdatedAt = await context.FreeCompanies.Where(x =>
