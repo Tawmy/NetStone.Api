@@ -57,7 +57,7 @@ internal class FreeCompanyService : IFreeCompanyService
             {
                 if ((DateTime.UtcNow - lastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
                 {
-                    // if free company cached before, last time memberes were cached can be saved.
+                    // if free company cached before, last time members were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
                     return new FreeCompanyMembersOuterDto(cachedMembers, true, lastUpdated.Value);
                 }
