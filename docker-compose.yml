@@ -22,8 +22,8 @@
       context: .
       dockerfile: NetStone.Api/Dockerfile
     environment:
-      AUTH_AUDIENCE: ${AUTH_AUDIENCE}
-      AUTH_AUTHORITY: ${AUTH_AUTHORITY}
+      AUTH_AUDIENCE: netstone.api
+      AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
   

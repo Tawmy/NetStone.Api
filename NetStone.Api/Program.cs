@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetStone.Api;
+using NetStone.Api.Components;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
@@ -34,6 +35,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 AddAuthentication(builder);
 
 var app = builder.Build();
@@ -55,13 +58,21 @@ if (app.Environment.IsDevelopment())
         }
     });
 }
+else
+{
+    app.UseExceptionHandler("/Error", true);
+}
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
 
+app.UseStaticFiles(new StaticFileOptions());
+app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
 
