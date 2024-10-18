@@ -1,0 +1,222 @@
+.container {
+    /* not nested to reduce nesting levels */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 40px;
+    margin-top: 128px;
+    margin-bottom: 48px;
+
+    h2 {
+        text-align: center;
+    }
+
+    > #description {
+        text-align: center;
+    }
+}
+
+#parts {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+
+    .arrow {
+        z-index: -1;
+
+        font-size: 200%;
+        transform: rotate(90deg);
+
+        animation-name: fade-in-arrow;
+        animation-duration: 1.2s;
+        animation-fill-mode: both;
+
+        &::after {
+            content: '➤';
+        }
+    }
+
+    .part {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        width: min(100%, 280px);
+        height: 100%;
+
+        backdrop-filter: blur(32px);
+
+        border: 1px solid #ccc;
+        border-radius: 24px;
+        padding: 12px 20px;
+
+        overflow: hidden;
+
+        &::after {
+            position: absolute;
+            content: '';
+            height: 100%;
+            width: 140%;
+            top: 0;
+            left: -20%;
+            background: linear-gradient(0deg, transparent 0, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+
+            animation-name: move-highlight;
+            animation-duration: 15s;
+            animation-iteration-count: infinite;
+            animation-delay: inherit;
+            animation-fill-mode: both;
+        }
+
+        a {
+            display: block;
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            &::after {
+                content: "➚";
+                margin-left: 6px;
+                font-size: 60%;
+            }
+        }
+
+        .title {
+            font-size: 140%;
+        }
+
+        .author {
+            font-size: 80%;
+            color: rgb(230, 200, 200);
+        }
+    }
+}
+
+#reasons {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: calc(100vw - 32px);
+    gap: 32px;
+    justify-content: center;
+
+    > .reason {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        width: min(100%, 350px);
+        padding: 20px 28px;
+
+        border: 1px solid #ccc;
+        border-radius: 24px;
+
+        backdrop-filter: blur(32px);
+
+        .title {
+            font-size: 140%;
+        }
+
+        .description {
+            font-size: 90%;
+            line-height: 1.5;
+        }
+    }
+}
+
+footer {
+    position: fixed;
+    bottom: 8px;
+    width: calc(100% - 16px);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(32px);
+}
+
+@media screen and (min-width: 1000px) {
+    #parts {
+        flex-direction: unset;
+
+        .arrow {
+            animation-name: fade-in-arrow-horizontal;
+            transform: unset;
+        }
+
+        .part {
+            &::after {
+                width: 80px;
+                background: linear-gradient(90deg, transparent 0, rgba(255, 255, 255, 0.15) 50%, transparent 100%);
+                animation-name: move-highlight-horizontal;
+            }
+        }
+    }
+}
+
+@keyframes fade-in-arrow {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) rotate(92deg);
+    }
+    33% {
+        opacity: 0;
+        transform: translateY(-50%) rotate(92deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(90deg);
+    }
+}
+
+@keyframes fade-in-arrow-horizontal {
+    0% {
+        opacity: 0;
+        transform: translateX(-50%) rotate(2deg);
+    }
+    33% {
+        opacity: 0;
+        transform: translateX(-50%) rotate(2deg);
+    }
+    100% {
+        opacity: 1;
+        transform: translateX(0) rotate(0deg);
+    }
+}
+
+@keyframes move-highlight {
+    0% {
+        transform: rotate(-8deg) translateY(-120%);
+        top: 0;
+    }
+    15% {
+        transform: rotate(5deg) translateY(30%);
+        top: 100%;
+    }
+    100% {
+        transform: rotate(5deg) translateY(30%);
+        top: 100%;
+    }
+}
+
+@keyframes move-highlight-horizontal {
+    0% {
+        transform: skew(6deg) translateX(-120%);
+        left: 0;
+    }
+    15% {
+        transform: skew(0deg) translateX(30%);
+        left: 100%;
+    }
+    100% {
+        transform: skew(0deg) translateX(30%);
+        left: 100%;
+    }
+}

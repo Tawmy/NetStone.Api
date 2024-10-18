@@ -2,6 +2,8 @@ services:
   api:
     labels:
       - dev.orbstack.domains=api.netstone.local
+    ports:
+      - "8085:8080"
 
 volumes:
   postgres_data:

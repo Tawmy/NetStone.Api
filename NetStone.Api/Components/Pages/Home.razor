@@ -1,7 +1,60 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>NetStone API - Lodestone API and Cache</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container">
+    <h1>NetStone API</h1>
 
-Welcome to your new app.
+    <h2>The API Square never made.</h2>
+
+    <div id="description">NetStone API and NetStone API Client tie the Lodestone and projects together. The chain consists of four parts:</div>
+
+    <div id="parts">
+        @{
+            var loopIndexParts = 0;
+
+            foreach (var (part, index) in Parts.Select((x, i) => (x, i)))
+            {
+                if (index != 0)
+                {
+                    <div class="arrow" style="animation-delay: @(loopIndexParts * AnimationDelay)ms"></div>
+                    loopIndexParts++;
+                }
+
+                <div class="part" style="animation-delay: @(loopIndexParts * AnimationDelay)ms">
+                    @if (part.TitleUrl is not null)
+                    {
+                        <a class="title" href="@part.TitleUrl" target="_blank">@part.Title</a>
+                    }
+                    else
+                    {
+                        <div class="title">@part.Title</div>
+                    }
+                    <div class="description">@part.Description</div>
+                    <a class="author" href="@part.AuthorUrl" target="_blank">@part.Author</a>
+                </div>
+
+                loopIndexParts++;
+            }
+        }
+
+    </div>
+
+    <h2>Why use NetStone API?</h2>
+
+    <div id="reasons">
+        @foreach (var (reason, index) in Reasons.Select((x, i) => (x, i)))
+        {
+            <div class="reason" style="animation-delay: @(index * AnimationDelay * 2)ms">
+                <div class="title">@reason.Title</div>
+                <div class="description">@reason.Description</div>
+            </div>
+        }
+    </div>
+</div>
+
+<footer>
+    <a href="https://tawmy.dev">Tawmy</a>
+    <div>•</div>
+    <a href="https://github.com/Tawmy/NetStone.Api">Source Code</a>
+</footer>
