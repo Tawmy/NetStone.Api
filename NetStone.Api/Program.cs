@@ -44,9 +44,12 @@ var app = builder.Build();
 await MigrateDatabaseAsync(app.Services);
 
 // Configure the HTTP request pipeline.
+
+// always make swagger definition available
+app.UseSwagger();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
         // build a swagger endpoint for each discovered API version -> reversed so most recent is on top

@@ -50,12 +50,24 @@ main {
 
 button {
     padding: 12px 16px;
-    background: #304FFE;
-    border: 1px solid #162578;
     border-radius: 12px;
     cursor: pointer;
+}
+
+.btn-primary {
+    background: #304FFE;
+    border: 1px solid #162578;
 
     &:hover {
         background: #4b64fa;
+    }
+}
+
+.btn-secondary {
+    background: #90A4AE;
+    border: 1px solid #535f65;
+
+    &:hover {
+        background: #a0b6c1;
     }
 }
