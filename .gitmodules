@@ -1,3 +1,6 @@
 [submodule "NetStone.Common"]
 	path = NetStone.Common
 	url = https://github.com/Tawmy/NetStone.Common.git
+[submodule "NetStone"]
+	path = NetStone
+	url = https://github.com/Tawmy/NetStone
