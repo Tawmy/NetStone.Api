@@ -52,7 +52,6 @@
         justify-content: space-between;
         gap: 12px;
         width: min(100%, 280px);
-        height: 100%;
 
         backdrop-filter: blur(32px);
 
