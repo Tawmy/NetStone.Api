@@ -24,7 +24,7 @@ public class CharacterAttributes
     public int? SpellSpeed { get; set; }
     public int? Tenacity { get; set; }
     public int? Piety { get; set; }
-    public int? Craftmanship { get; set; }
+    public int? Craftsmanship { get; set; }
     public int? Control { get; set; }
     public int? Gathering { get; set; }
     public int? Perception { get; set; }

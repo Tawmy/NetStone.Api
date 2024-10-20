@@ -36,7 +36,7 @@ public class CharacterAttributeResolver : IValueResolver<Character, CharacterDto
         {
             dict.Add(CharacterAttribute.Cp, source.Attributes.MpGpCp);
 
-            dict.Add(CharacterAttribute.Craftmanship, source.Attributes.Craftmanship);
+            dict.Add(CharacterAttribute.Craftsmanship, source.Attributes.Craftsmanship);
             dict.Add(CharacterAttribute.Control, source.Attributes.Control);
         }
         else if (source.ActiveClassJob.IsDiscipleOfLand())

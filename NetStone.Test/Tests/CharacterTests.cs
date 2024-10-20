@@ -272,8 +272,8 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         characterDto.Attributes.TryGetValue(CharacterAttribute.SpellSpeed, out var spellSpeed);
         Assert.Equal(attributes.SpellSpeed, spellSpeed);
 
-        characterDto.Attributes.TryGetValue(CharacterAttribute.Craftmanship, out var craftmanship);
-        Assert.Equal(attributes.Craftmanship, craftmanship);
+        characterDto.Attributes.TryGetValue(CharacterAttribute.Craftsmanship, out var craftsmanship);
+        Assert.Equal(attributes.Craftsmanship, craftsmanship);
 
         characterDto.Attributes.TryGetValue(CharacterAttribute.Control, out var control);
         Assert.Equal(attributes.Control, control);
