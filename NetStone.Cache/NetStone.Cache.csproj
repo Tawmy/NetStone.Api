@@ -21,7 +21,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\NetStone.Common\NetStone.Common\NetStone.Common.csproj"/>
-        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj" />
+        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
     </ItemGroup>
 
 </Project>
