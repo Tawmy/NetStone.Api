@@ -4,6 +4,18 @@ article {
     gap: 32px;
     width: min(100%, 800px);
 
+    .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+
+        fieldset {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+    }
+
     .result {
         width: 100%;
         min-height: 200px;

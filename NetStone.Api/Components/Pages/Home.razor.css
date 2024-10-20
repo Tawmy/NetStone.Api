@@ -129,19 +129,6 @@
     }
 }
 
-footer {
-    position: fixed;
-    bottom: 8px;
-    width: calc(100% - 16px);
-    padding: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    border-radius: 8px;
-    backdrop-filter: blur(32px);
-}
-
 @media screen and (min-width: 1000px) {
     #parts {
         flex-direction: unset;
@@ -152,6 +139,8 @@ footer {
         }
 
         .part {
+            align-self: stretch; /* override center of parent */
+
             &::after {
                 width: 80px;
                 background: linear-gradient(90deg, transparent 0, rgba(255, 255, 255, 0.15) 50%, transparent 100%);

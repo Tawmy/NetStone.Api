@@ -16,3 +16,16 @@
     right: 0.75rem;
     top: 0.5rem;
 }
+
+footer {
+    position: fixed;
+    bottom: 8px;
+    width: calc(100% - 16px);
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border-radius: 8px;
+    backdrop-filter: blur(32px);
+}
