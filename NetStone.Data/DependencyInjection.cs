@@ -6,14 +6,9 @@ namespace NetStone.Data;
 
 public static class DependencyInjection
 {
-    public static void AddDataServices(this IServiceCollection services)
+    public static async Task AddDataServices(this IServiceCollection services)
     {
-        services.AddSingleton<LodestoneClient>(_ =>
-        {
-            var clientTask = LodestoneClient.GetClientAsync();
-            clientTask.Wait();
-            return clientTask.Result;
-        });
+        services.AddSingleton(await LodestoneClient.GetClientAsync());
 
         services.AddTransient<ICharacterService, CharacterService>();
         services.AddTransient<IFreeCompanyService, FreeCompanyService>();

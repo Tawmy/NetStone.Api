@@ -1,0 +1,38 @@
+@page "/demo"
+@rendermode InteractiveServer
+
+<h1>NetStone API | Demo</h1>
+
+<article>
+    <div class="buttons">
+        <fieldset>
+            <legend>Character</legend>
+            <button @onclick="CharacterSearchAsync">Search</button>
+            <button @onclick="CharacterProfileAsync">Profile</button>
+            <button @onclick="CharacterClassJobsAsync">Jobs</button>
+            <button @onclick="CharacterMinionsAsync">Minions</button>
+            <button @onclick="CharacterMountsAsync">Mounts</button>
+            <button @onclick="CharacterAchievementsAsync">Achievements</button>
+        </fieldset>
+        <fieldset>
+            <legend>Free Company</legend>
+            <button @onclick="FreeCompanySearchAsync">Search</button>
+            <button @onclick="FreeCompanyProfileAsync">Profile</button>
+            <button @onclick="FreeCompanyMembersAsync">Members</button>
+        </fieldset>
+    </div>
+
+    <div class="result">
+        @if (!string.IsNullOrEmpty(_placeholder))
+        {
+            @_placeholder
+        }
+        else
+        {
+            @((MarkupString)_result
+                .Replace("\n", "<br/>") // use html line breaks
+                .Replace(" ", "&nbsp;") // use html space as multiple regular spaces do not get displayed
+                .Replace("&nbsp;&nbsp;", "&nbsp;&nbsp;&nbsp;&nbsp;")) // increase indentation
+        }
+    </div>
+</article>

@@ -27,7 +27,7 @@ var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddCacheServices();
-builder.Services.AddDataServices();
+await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
