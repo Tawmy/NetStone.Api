@@ -32,7 +32,7 @@ public partial class Home
             new Reason("📄 Standardised and Documented",
                 "All replies, no matter whether cached or not, use the same format. Information about whether data was cached and how long ago data was last refreshed is included. OpenAPI specification and Swagger UI are available."),
             new Reason("❤️ Fair Use",
-                "Parsing the Lodestone taxes both your server, but also Square Enix's. NetStone API greatly reduces the amount of times the Lodestone has to be parsed directly, thus also greatly reducing load on Square's serers.")
+                "Parsing the Lodestone taxes both your server, but also Square Enix's. NetStone API greatly reduces the amount of times the Lodestone has to be parsed directly, thus also greatly reducing load on Square's servers.")
         ];
     }
 }

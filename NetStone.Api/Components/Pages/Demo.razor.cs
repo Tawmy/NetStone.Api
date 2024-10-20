@@ -28,15 +28,6 @@ public partial class Demo : ComponentBase
     [Inject]
     public IFreeCompanyService FreeCompanyService { get; set; } = default!;
 
-    private async Task CharacterSearchAsync()
-    {
-        _placeholder = "Searching for \"Alyx\" on Phoenix...";
-        var query = new CharacterSearchQuery("Alyx", "Phoenix");
-        var result = await CharacterService.SearchCharacterAsync(query, 1);
-        _result = JsonSerializer.Serialize(result, SerOptions);
-        _placeholder = null;
-    }
-
     private async Task CharacterProfileAsync()
     {
         _placeholder = $"Retrieving profile for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
@@ -80,15 +71,6 @@ public partial class Demo : ComponentBase
     #endregion
 
     #region Free Company Clicks
-
-    private async Task FreeCompanySearchAsync()
-    {
-        _placeholder = "Searching for \"Dust\" on Phoenix...";
-        var query = new FreeCompanySearchQuery("Dust", "Phoenix");
-        var result = await FreeCompanyService.SearchFreeCompanyAsync(query, 1);
-        _result = JsonSerializer.Serialize(result, SerOptions);
-        _placeholder = null;
-    }
 
     private async Task FreeCompanyProfileAsync()
     {
