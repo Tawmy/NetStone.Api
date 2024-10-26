@@ -58,6 +58,7 @@ if (app.Environment.IsDevelopment())
             var url = $"/swagger/{description.GroupName}/swagger.json";
             var name = description.GroupName.ToUpperInvariant();
             options.SwaggerEndpoint(url, name);
+            options.EnableDeepLinking();
         }
     });
 }
