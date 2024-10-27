@@ -1,5 +1,8 @@
 namespace NetStone.Api.Components.Pages;
 
+/// <summary>
+/// Logic for Home page.
+/// </summary>
 public partial class Home
 {
     private const int AnimationDelay = 650;

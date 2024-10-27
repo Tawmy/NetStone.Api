@@ -4,6 +4,9 @@ using NetStone.Data.Interfaces;
 
 namespace NetStone.Api.Components.Pages;
 
+/// <summary>
+/// Logic for Demo page.
+/// </summary>
 public partial class Demo : ComponentBase
 {
     private const string CharacterLodestoneId = "28812634";
