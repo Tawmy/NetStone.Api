@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Microsoft.AspNetCore.Components;
-using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
 
 namespace NetStone.Api.Components.Pages;

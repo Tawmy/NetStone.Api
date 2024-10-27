@@ -14,6 +14,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         await endpoint.Send(dto);
     }
 
+    public async Task SendGetCharacterRefreshedAsync(CharacterDto dto)
+    {
+        var uri = new Uri("exchange:netstone-get-character-refreshed");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
     public async Task SendGetCharacterFailedAsync(string lodestoneId, string error)
     {
         var uri = new Uri("queue:netstone-get-character-error");
@@ -24,6 +31,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
     public async Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDto dto)
     {
         var uri = new Uri("exchange:netstone-get-character-class-jobs-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetCharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto dto)
+    {
+        var uri = new Uri("exchange:netstone-get-character-class-jobs-refreshed");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -42,6 +56,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         await endpoint.Send(dto);
     }
 
+    public async Task SendGetCharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> dto)
+    {
+        var uri = new Uri("exchange:netstone-get-character-minions-refreshed");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
     public async Task SendGetCharacterMinionsFailedAsync(string lodestoneId, string error)
     {
         var uri = new Uri("queue:netstone-get-character-minions-error");
@@ -56,6 +77,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         await endpoint.Send(dto);
     }
 
+    public async Task SendGetCharacterMountsRefreshedAsync(CollectionDto<CharacterMountDto> dto)
+    {
+        var uri = new Uri("exchange:netstone-get-character-mounts-refreshed");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
     public async Task SendGetCharacterMountsFailedAsync(string lodestoneId, string error)
     {
         var uri = new Uri("queue:netstone-get-character-mounts-error");
@@ -66,6 +94,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
     public async Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto)
     {
         var uri = new Uri("exchange:netstone-get-character-achievements-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetCharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto dto)
+    {
+        var uri = new Uri("exchange:netstone-get-character-achievements-refreshed");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
