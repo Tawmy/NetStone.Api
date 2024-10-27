@@ -1,0 +1,13 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="docker-compose.yml" />
+    <File Path="docker-compose.local.yml" />
+    <File Path="docker-compose.dev.yml" />
+  </Folder>
+  <Project Path="NetStone.Api\NetStone.Api.csproj" Type="Classic C#" />
+  <Project Path="NetStone.Cache\NetStone.Cache.csproj" Type="Classic C#" />
+  <Project Path="NetStone.Common\NetStone.Common\NetStone.Common.csproj" Type="Classic C#" />
+  <Project Path="NetStone.Data\NetStone.Data.csproj" Type="Classic C#" />
+  <Project Path="NetStone.Queue\NetStone.Queue.csproj" Type="Classic C#" />
+  <Project Path="NetStone.Test\NetStone.Test.csproj" Type="Classic C#" />
+</Solution>
