@@ -5,7 +5,7 @@ using NetStone.Data.Interfaces;
 namespace NetStone.Api.Components.Pages;
 
 /// <summary>
-/// Logic for Demo page.
+///     Logic for Demo page.
 /// </summary>
 public partial class Demo : ComponentBase
 {
