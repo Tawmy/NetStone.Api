@@ -119,6 +119,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
         await endpoint.Send(dto);
     }
 
+    public async Task SendGetFreeCompanyRefreshedAsync(FreeCompanyDto dto)
+    {
+        var uri = new Uri("exchange:netstone-get-free-company-refreshed");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
     public async Task SendGetFreeCompanyFailedAsync(string lodestoneId, string error)
     {
         var uri = new Uri("queue:netstone-get-free-company-error");
@@ -129,6 +136,13 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
     public async Task SendGetFreeCompanyMembersSuccessfulAsync(FreeCompanyMembersOuterDto dto)
     {
         var uri = new Uri("exchange:netstone-get-free-company-members-result");
+        var endpoint = await provider.GetSendEndpoint(uri);
+        await endpoint.Send(dto);
+    }
+
+    public async Task SendGetFreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto dto)
+    {
+        var uri = new Uri("exchange:netstone-get-free-company-members-refreshed");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }

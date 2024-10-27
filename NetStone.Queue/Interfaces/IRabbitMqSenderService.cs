@@ -32,9 +32,11 @@ public interface IRabbitMqSenderService
     #region Free Company
 
     Task SendGetFreeCompanySuccessfulAsync(FreeCompanyDto dto);
+    Task SendGetFreeCompanyRefreshedAsync(FreeCompanyDto dto);
     Task SendGetFreeCompanyFailedAsync(string lodestoneId, string error);
 
     Task SendGetFreeCompanyMembersSuccessfulAsync(FreeCompanyMembersOuterDto dto);
+    Task SendGetFreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto dto);
     Task SendGetFreeCompanyMembersFailedAsync(string lodestoneId, string error);
 
     #endregion

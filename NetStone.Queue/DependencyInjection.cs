@@ -62,6 +62,7 @@ public static class DependencyInjection
 
         services.AddTransient<IRabbitMqSenderService, RabbitMqSenderService>();
         services.AddHostedService<CharacterEventSubscriber>();
+        services.AddHostedService<FreeCompanyEventSubscriber>();
     }
 
     private static void ConfigureReceiveEndpoint<TConsumer>(this IRabbitMqReceiveEndpointConfigurator configurator,

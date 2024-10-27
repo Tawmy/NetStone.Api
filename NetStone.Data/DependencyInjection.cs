@@ -16,5 +16,6 @@ public static class DependencyInjection
         services.AddTransient<ILegacyCharacterService, LegacyCharacterService>();
 
         services.AddSingleton<ICharacterEventService, CharacterEventService>();
+        services.AddSingleton<IFreeCompanyEventService, FreeCompanyEventService>();
     }
 }

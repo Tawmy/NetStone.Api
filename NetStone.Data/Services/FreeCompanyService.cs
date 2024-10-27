@@ -7,31 +7,25 @@ using NetStone.Data.Interfaces;
 
 namespace NetStone.Data.Services;
 
-internal class FreeCompanyService : IFreeCompanyService
+internal class FreeCompanyService(
+    LodestoneClient client,
+    IFreeCompanyCachingService cachingService,
+    IFreeCompanyEventService eventService,
+    IMapper mapper)
+    : IFreeCompanyService
 {
-    private readonly IFreeCompanyCachingService _cachingService;
-    private readonly LodestoneClient _client;
-    private readonly IMapper _mapper;
-
-    public FreeCompanyService(LodestoneClient client, IFreeCompanyCachingService cachingService, IMapper mapper)
-    {
-        _client = client;
-        _cachingService = cachingService;
-        _mapper = mapper;
-    }
-
     public async Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
     {
-        var lodestoneQuery = _mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
-        var result = await _client.SearchFreeCompany(lodestoneQuery, page);
+        var lodestoneQuery = mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
+        var result = await client.SearchFreeCompany(lodestoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
-        return _mapper.Map<FreeCompanySearchPageDto>(result);
+        return mapper.Map<FreeCompanySearchPageDto>(result);
     }
 
     public async Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge)
     {
-        var cachedFcDto = await _cachingService.GetFreeCompanyAsync(lodestoneId);
+        var cachedFcDto = await cachingService.GetFreeCompanyAsync(lodestoneId);
 
         if (cachedFcDto is not null &&
             (DateTime.UtcNow - cachedFcDto.LastUpdated).TotalMinutes <= (maxAge ?? int.MaxValue))
@@ -40,16 +34,18 @@ internal class FreeCompanyService : IFreeCompanyService
             return cachedFcDto with { Cached = true };
         }
 
-        var lodestoneFc = await _client.GetFreeCompany(lodestoneId);
+        var lodestoneFc = await client.GetFreeCompany(lodestoneId);
         if (lodestoneFc is null) throw new NotFoundException();
 
         // cache fc and return
-        return await _cachingService.CacheFreeCompanyAsync(lodestoneFc);
+        cachedFcDto = await cachingService.CacheFreeCompanyAsync(lodestoneFc);
+        _ = eventService.FreeCompanyRefreshedAsync(cachedFcDto);
+        return cachedFcDto;
     }
 
     public async Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge)
     {
-        var (cachedMembers, lastUpdated) = await _cachingService.GetFreeCompanyMembersAsync(lodestoneId);
+        var (cachedMembers, lastUpdated) = await cachingService.GetFreeCompanyMembersAsync(lodestoneId);
 
         if (cachedMembers.Any())
         {
@@ -70,7 +66,7 @@ internal class FreeCompanyService : IFreeCompanyService
             }
         }
 
-        var lodestoneMembersOuter = await _client.GetFreeCompanyMembers(lodestoneId);
+        var lodestoneMembersOuter = await client.GetFreeCompanyMembers(lodestoneId);
 
         if (lodestoneMembersOuter is null || !lodestoneMembersOuter.HasResults || !lodestoneMembersOuter.Members.Any())
         {
@@ -83,7 +79,7 @@ internal class FreeCompanyService : IFreeCompanyService
         {
             for (var i = 2; i <= lodestoneMembersOuter.NumPages; i++)
             {
-                var lodestoneMembersOuter2 = await _client.GetFreeCompanyMembers(lodestoneId, i);
+                var lodestoneMembersOuter2 = await client.GetFreeCompanyMembers(lodestoneId, i);
                 if (lodestoneMembersOuter2?.HasResults == true)
                 {
                     lodestoneMembers.AddRange(lodestoneMembersOuter2.Members);
@@ -91,7 +87,9 @@ internal class FreeCompanyService : IFreeCompanyService
             }
         }
 
-        cachedMembers = await _cachingService.CacheFreeCompanyMembersAsync(lodestoneId, lodestoneMembers);
-        return new FreeCompanyMembersOuterDto(cachedMembers, false, DateTime.UtcNow);
+        cachedMembers = await cachingService.CacheFreeCompanyMembersAsync(lodestoneId, lodestoneMembers);
+        var outerDto = new FreeCompanyMembersOuterDto(cachedMembers, false, DateTime.UtcNow);
+        _ = eventService.FreeCompanyMembersRefreshedAsync(outerDto);
+        return outerDto;
     }
 }
