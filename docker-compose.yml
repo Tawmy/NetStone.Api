@@ -26,4 +26,20 @@
       AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT}
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-  
+      RABBITMQ_HOST: "rabbitmq://queue"
+      RABBITMQ_USERNAME:
+      RABBITMQ_PASSWORD:
+  queue:
+    image: rabbitmq:4-management
+    container_name: netstone.api-queue
+    restart: unless-stopped
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    environment:
+      RABBITMQ_DEFAULT_USER:
+      RABBITMQ_DEFAULT_PASS:
+    volumes:
+      - rmq_data:/var/lib/rabbitmq

@@ -1,22 +1,35 @@
 services:
   db:
     networks:
-      - netstone
+      - default
   api:
+    depends_on:
+      db:
+        condition: service_healthy
+      queue:
+        condition: service_healthy
     networks:
+      - default
       - caddy
-      - netstone
     labels:
       caddy: api.netstone.tawmy.dev
       caddy.reverse_proxy: "{{upstreams 8080}}"
+  queue:
+    labels:
+      caddy: queue.netstone.tawmy.dev
+      caddy.reverse_proxy: "{{upstreams 15672}}"
+    networks:
+      - default
+      - caddy
 
 networks:
   caddy:
     external: true
-  netstone:
-    external: true
 
 volumes:
   postgres_data:
+    name: netstone-api-db
     external: true
-    name: netstone-api
+  rmq_data:
+    name: netstone-api-queue
+    external: true
