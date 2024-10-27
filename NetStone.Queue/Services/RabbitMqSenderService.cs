@@ -9,7 +9,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 {
     public async Task SendGetCharacterSuccessfulAsync(CharacterDto dto)
     {
-        var uri = new Uri("queue:netstone-get-character-result");
+        var uri = new Uri("exchange:netstone-get-character-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -23,7 +23,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDto dto)
     {
-        var uri = new Uri("queue:netstone-get-character-class-jobs-result");
+        var uri = new Uri("exchange:netstone-get-character-class-jobs-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -37,7 +37,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetCharacterMinionsSuccessfulAsync(CollectionDto<CharacterMinionDto> dto)
     {
-        var uri = new Uri("queue:netstone-get-character-minions-result");
+        var uri = new Uri("exchange:netstone-get-character-minions-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -51,7 +51,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetCharacterMountsSuccessfulAsync(CollectionDto<CharacterMountDto> dto)
     {
-        var uri = new Uri("queue:netstone-get-character-mounts-result");
+        var uri = new Uri("exchange:netstone-get-character-mounts-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -65,7 +65,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto)
     {
-        var uri = new Uri("queue:netstone-get-character-achievements-result");
+        var uri = new Uri("exchange:netstone-get-character-achievements-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -79,7 +79,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetFreeCompanySuccessfulAsync(FreeCompanyDto dto)
     {
-        var uri = new Uri("queue:netstone-get-free-company-result");
+        var uri = new Uri("exchange:netstone-get-free-company-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
@@ -93,7 +93,7 @@ public class RabbitMqSenderService(ISendEndpointProvider provider) : IRabbitMqSe
 
     public async Task SendGetFreeCompanyMembersSuccessfulAsync(FreeCompanyMembersOuterDto dto)
     {
-        var uri = new Uri("queue:netstone-get-free-company-members-result");
+        var uri = new Uri("exchange:netstone-get-free-company-members-result");
         var endpoint = await provider.GetSendEndpoint(uri);
         await endpoint.Send(dto);
     }
