@@ -17,6 +17,9 @@ services:
   queue:
     labels:
       caddy: queue.netstone.tawmy.dev
+      caddy.@denied.not_0: remote_ip ${RABBITMQ_REMOTE_IP}
+      caddy.abort: "@denied"
+
       caddy.reverse_proxy: "{{upstreams 15672}}"
     networks:
       - default
