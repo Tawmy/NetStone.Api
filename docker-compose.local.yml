@@ -1,5 +1,9 @@
 services:
   api:
+    environment:
+      RABBITMQ_HOST: "rabbitmq://rabbitmq.local"
+      RABBITMQ_USERNAME:
+      RABBITMQ_PASSWORD:
     labels:
       - dev.orbstack.domains=api.netstone.local
     ports:
