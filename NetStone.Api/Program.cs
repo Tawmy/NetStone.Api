@@ -43,26 +43,20 @@ var app = builder.Build();
 
 await MigrateDatabaseAsync(app.Services);
 
-// Configure the HTTP request pipeline.
-
-// always make swagger definition available
 app.UseSwagger();
-
-if (app.Environment.IsDevelopment())
+app.UseSwaggerUI(options =>
 {
-    app.UseSwaggerUI(options =>
+    // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
+    foreach (var description in app.DescribeApiVersions().Reverse())
     {
-        // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
-        foreach (var description in app.DescribeApiVersions().Reverse())
-        {
-            var url = $"/swagger/{description.GroupName}/swagger.json";
-            var name = description.GroupName.ToUpperInvariant();
-            options.SwaggerEndpoint(url, name);
-            options.EnableDeepLinking();
-        }
-    });
-}
-else
+        var url = $"/swagger/{description.GroupName}/swagger.json";
+        var name = description.GroupName.ToUpperInvariant();
+        options.SwaggerEndpoint(url, name);
+        options.EnableDeepLinking();
+    }
+});
+
+if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error", true);
 }
@@ -91,7 +85,8 @@ void ConfigureSwagger(IServiceCollection services)
     services.AddApiVersioning(x =>
         {
             x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-            x.AssumeDefaultVersionWhenUnspecified = true; // assume V1 if request is sent without version
+            x.DefaultApiVersion = new ApiVersion(2);
+            x.AssumeDefaultVersionWhenUnspecified = true; // assume V2 if request is sent without version
             x.ReportApiVersions = true; // respond with supported versions in response header
         })
         .AddMvc()
