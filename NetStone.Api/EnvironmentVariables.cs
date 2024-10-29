@@ -3,7 +3,7 @@ namespace NetStone.Api;
 /// <summary>
 ///     Environment variables, to avoid typos.
 /// </summary>
-internal class EnvironmentVariables
+internal static class EnvironmentVariables
 {
     /// <summary>
     ///     Used for JWT Token validation.
