@@ -72,7 +72,6 @@
 
             animation-name: move-highlight;
             animation-duration: 15s;
-            animation-iteration-count: infinite;
             animation-delay: inherit;
             animation-fill-mode: both;
         }
