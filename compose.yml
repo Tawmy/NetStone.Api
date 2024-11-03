@@ -32,6 +32,7 @@
   queue:
     image: rabbitmq:4-management
     container_name: netstone.api-queue
+    hostname: netstone-api-queue
     restart: unless-stopped
     healthcheck:
       test: rabbitmq-diagnostics -q ping
