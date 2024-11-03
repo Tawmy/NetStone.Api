@@ -1,8 +1,0 @@
-services:
-  api:
-    labels:
-      - dev.orbstack.domains=api.netstone.local
-
-volumes:
-  postgres_data:
-    name: netstone-api

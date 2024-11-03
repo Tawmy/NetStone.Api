@@ -1,0 +1,38 @@
+services:
+  db:
+    networks:
+      - default
+  api:
+    depends_on:
+      db:
+        condition: service_healthy
+      queue:
+        condition: service_healthy
+    networks:
+      - default
+      - caddy
+    labels:
+      caddy: api.netstone.tawmy.dev
+      caddy.reverse_proxy: "{{upstreams 8080}}"
+  queue:
+    labels:
+      caddy: queue.netstone.tawmy.dev
+      caddy.@denied.not_0: remote_ip ${RABBITMQ_REMOTE_IP}
+      caddy.abort: "@denied"
+
+      caddy.reverse_proxy: "{{upstreams 15672}}"
+    networks:
+      - default
+      - caddy
+
+networks:
+  caddy:
+    external: true
+
+volumes:
+  postgres_data:
+    name: netstone-api-db
+    external: true
+  rmq_data:
+    name: netstone-api-queue
+    external: true

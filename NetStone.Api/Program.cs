@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetStone.Api;
+using NetStone.Api.Components;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
@@ -26,7 +27,7 @@ var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddCacheServices();
-builder.Services.AddDataServices();
+await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
@@ -34,34 +35,42 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+
 AddAuthentication(builder);
 
 var app = builder.Build();
 
 await MigrateDatabaseAsync(app.Services);
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+app.UseSwagger();
+app.UseSwaggerUI(options =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI(options =>
+    // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
+    foreach (var description in app.DescribeApiVersions().Reverse())
     {
-        // build a swagger endpoint for each discovered API version -> reversed so most recent is on top
-        foreach (var description in app.DescribeApiVersions().Reverse())
-        {
-            var url = $"/swagger/{description.GroupName}/swagger.json";
-            var name = description.GroupName.ToUpperInvariant();
-            options.SwaggerEndpoint(url, name);
-        }
-    });
+        var url = $"/swagger/{description.GroupName}/swagger.json";
+        var name = description.GroupName.ToUpperInvariant();
+        options.SwaggerEndpoint(url, name);
+        options.EnableDeepLinking();
+    }
+});
+
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", true);
 }
 
 app.UseHttpsRedirection();
 
 app.MapControllers();
 
+app.UseStaticFiles();
+app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
 
@@ -76,7 +85,8 @@ void ConfigureSwagger(IServiceCollection services)
     services.AddApiVersioning(x =>
         {
             x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-            x.AssumeDefaultVersionWhenUnspecified = true; // assume V1 if request is sent without version
+            x.DefaultApiVersion = new ApiVersion(2);
+            x.AssumeDefaultVersionWhenUnspecified = true; // assume V2 if request is sent without version
             x.ReportApiVersions = true; // respond with supported versions in response header
         })
         .AddMvc()

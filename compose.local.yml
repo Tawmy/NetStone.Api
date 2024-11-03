@@ -1,0 +1,16 @@
+services:
+  api:
+    labels:
+      - dev.orbstack.domains=api.netstone.local
+    ports:
+      - "8085:8080"
+  queue:
+    labels:
+      - dev.orbstack.domains=rabbitmq.local
+      - dev.orbstack.http-port=15672
+
+volumes:
+  postgres_data:
+    name: netstone-api-db
+  rmq_data:
+    name: netstone-api-queue
