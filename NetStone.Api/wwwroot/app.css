@@ -42,6 +42,7 @@ body {
     display: grid;
     justify-items: center;
     gap: 40px;
+    grid-template-columns: minmax(0, 1fr);
 
     background: rgb(40, 44, 56);
 }
@@ -50,6 +51,7 @@ main {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: min(100%, 800px);
 }
 
 button {
