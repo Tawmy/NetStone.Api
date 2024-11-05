@@ -1,8 +1,8 @@
-article {
+.demo {
     display: flex;
     flex-direction: column;
     gap: 32px;
-    width: 100%;
+    width: min(100%, 800px);
 
     .buttons {
         display: flex;
