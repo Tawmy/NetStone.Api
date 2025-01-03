@@ -20,7 +20,7 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     {
         var character = await context.Characters
             .IncludeBasic()
-            .SingleOrDefaultAsync(x => x.Name == lodestoneCharacter.Name && x.Server == lodestoneCharacter.Server);
+            .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
 
         await using var transaction = await context.Database.BeginTransactionAsync();
 
