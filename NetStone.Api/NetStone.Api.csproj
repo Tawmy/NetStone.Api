@@ -23,7 +23,6 @@
         <PackageReference Include="AutoMapper" Version="14.0.0"/>
         <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.2"/>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.2"/>
-        <PackageReference Include="NetStone" Version="1.4.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1"/>
     </ItemGroup>
 
@@ -31,6 +30,7 @@
         <ProjectReference Include="..\NetStone.Cache\NetStone.Cache.csproj"/>
         <ProjectReference Include="..\NetStone.Data\NetStone.Data.csproj"/>
         <ProjectReference Include="..\NetStone.Queue\NetStone.Queue.csproj"/>
+        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

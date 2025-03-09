@@ -15,7 +15,8 @@ public class GetCharacterClassJobsConsumer(ICharacterService characterService, I
 
         try
         {
-            var classJobs = await characterService.GetCharacterClassJobsAsync(m.LodestoneId, m.MaxAge);
+            var classJobs = await characterService.GetCharacterClassJobsAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetCharacterClassJobsSuccessfulAsync(classJobs);
         }
         catch (NotFoundException)

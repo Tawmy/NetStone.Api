@@ -22,6 +22,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\NetStone.Api\NetStone.Api.csproj"/>
+        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
     </ItemGroup>
 
 </Project>

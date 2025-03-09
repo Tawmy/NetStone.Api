@@ -52,13 +52,14 @@ public class FreeCompanyController : ControllerBase
     ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
     ///     Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Parsed free company data.</returns>
     [HttpGet("{lodestoneId}")]
-    public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge)
+    public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge, bool useFallback = false)
     {
         try
         {
-            return await _freeCompanyService.GetFreeCompanyAsync(lodestoneId, maxAge);
+            return await _freeCompanyService.GetFreeCompanyAsync(lodestoneId, maxAge, useFallback);
         }
         catch (NotFoundException)
         {
@@ -80,13 +81,15 @@ public class FreeCompanyController : ControllerBase
     ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
     ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
     /// </remarks>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Free company members.</returns>
     [HttpGet("Members/{lodestoneId}")]
-    public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge)
+    public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge,
+        bool useFallback = false)
     {
         try
         {
-            return await _freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, maxAge);
+            return await _freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, maxAge, useFallback);
         }
         catch (NotFoundException)
         {

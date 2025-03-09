@@ -29,9 +29,10 @@ public interface IFreeCompanyService
     ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
     ///     Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback);
 
     /// <summary>
     ///     Get a free company's members.
@@ -41,7 +42,8 @@ public interface IFreeCompanyService
     ///     Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
     ///     Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge, bool useFallback);
 }

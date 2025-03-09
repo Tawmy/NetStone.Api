@@ -15,7 +15,8 @@ public class GetFreeCompanyMembersConsumer(IFreeCompanyService freeCompanyServic
 
         try
         {
-            var freeCompanyMembers = await freeCompanyService.GetFreeCompanyMembersAsync(m.LodestoneId, m.MaxAge);
+            var freeCompanyMembers = await freeCompanyService.GetFreeCompanyMembersAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetFreeCompanyMembersSuccessfulAsync(freeCompanyMembers);
         }
         catch (NotFoundException)

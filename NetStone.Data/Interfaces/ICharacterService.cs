@@ -28,9 +28,10 @@ public interface ICharacterService
     /// <param name="maxAge">
     ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge);
+    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, bool useFallback);
 
     /// <summary>
     ///     Get a character's ClassJobs.
@@ -39,9 +40,11 @@ public interface ICharacterService
     /// <param name="maxAge">
     ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Character class jobs.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge);
+    public Task<CharacterClassJobOuterDto>
+        GetCharacterClassJobsAsync(string lodestoneId, int? maxAge, bool useFallback);
 
     /// <summary>
     ///     Get a character's minions.
@@ -50,9 +53,11 @@ public interface ICharacterService
     /// <param name="maxAge">
     ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge,
+        bool useFallback);
 
     /// <summary>
     ///     Get a character's mounts.
@@ -61,9 +66,11 @@ public interface ICharacterService
     /// <param name="maxAge">
     ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge,
+        bool useFallback);
 
     /// <summary>
     ///     Get a character's achievements.
@@ -73,7 +80,8 @@ public interface ICharacterService
     ///     Optional maximum age of cached achievements, in minutes. If older, they will be refreshed from the
     ///     Lodestone.
     /// </param>
+    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Character achievements.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge);
+    Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge, bool useFallback);
 }

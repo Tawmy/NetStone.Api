@@ -15,7 +15,8 @@ public class GetCharacterAchievementsConsumer(ICharacterService characterService
 
         try
         {
-            var achievements = await characterService.GetCharacterAchievementsAsync(m.LodestoneId, m.MaxAge);
+            var achievements = await characterService.GetCharacterAchievementsAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetCharacterAchievementsSuccessfulAsync(achievements);
         }
         catch (NotFoundException)

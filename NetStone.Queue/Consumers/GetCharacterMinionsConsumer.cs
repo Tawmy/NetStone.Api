@@ -15,7 +15,8 @@ public class GetCharacterMinionsConsumer(ICharacterService characterService, IRa
 
         try
         {
-            var minions = await characterService.GetCharacterMinionsAsync(m.LodestoneId, m.MaxAge);
+            var minions = await characterService.GetCharacterMinionsAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetCharacterMinionsSuccessfulAsync(minions);
         }
         catch (NotFoundException)

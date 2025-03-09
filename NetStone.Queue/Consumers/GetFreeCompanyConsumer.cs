@@ -15,7 +15,8 @@ public class GetFreeCompanyConsumer(IFreeCompanyService freeCompanyService, IRab
 
         try
         {
-            var freeCompany = await freeCompanyService.GetFreeCompanyAsync(m.LodestoneId, m.MaxAge);
+            var freeCompany = await freeCompanyService.GetFreeCompanyAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetFreeCompanySuccessfulAsync(freeCompany);
         }
         catch (NotFoundException)

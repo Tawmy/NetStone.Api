@@ -15,7 +15,7 @@ public class GetCharacterConsumer(ICharacterService characterService, IRabbitMqS
 
         try
         {
-            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge);
+            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge, m.UseFallback ?? false);
             await senderService.SendGetCharacterSuccessfulAsync(character);
         }
         catch (NotFoundException)
