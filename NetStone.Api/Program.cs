@@ -1,24 +1,18 @@
-using System.Data;
 using System.Text.Json.Serialization;
-using Asp.Versioning;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using NetStone.Api;
 using NetStone.Api.Components;
+using NetStone.Api.Extensions;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
 using NetStone.Data;
 using NetStone.Queue;
-using Npgsql;
 using DependencyInjection = NetStone.Data.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-ConfigureSwagger(builder.Services);
+builder.Services.ConfigureSwagger();
 
 builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
     typeof(DependencyInjection).Assembly);
@@ -37,11 +31,11 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
-AddAuthentication(builder);
+builder.AddAuthentication();
 
 var app = builder.Build();
 
-await MigrateDatabaseAsync(app.Services);
+await app.Services.MigrateDatabaseAsync();
 
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -75,78 +69,3 @@ app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
 
 app.Run();
-
-return;
-
-void ConfigureSwagger(IServiceCollection services)
-{
-    services.AddEndpointsApiExplorer();
-
-    services.AddApiVersioning(x =>
-        {
-            x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-            x.DefaultApiVersion = new ApiVersion(2);
-            x.AssumeDefaultVersionWhenUnspecified = true; // assume V2 if request is sent without version
-            x.ReportApiVersions = true; // respond with supported versions in response header
-        })
-        .AddMvc()
-        .AddApiExplorer(options => { options.GroupNameFormat = "'v'VVV"; });
-
-    services.AddSwaggerGen(options =>
-    {
-        options.SupportNonNullableReferenceTypes();
-        options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory,
-            $"{typeof(Program).Assembly.GetName().Name}.xml"));
-        options.CustomSchemaIds(type => type.ToString());
-    });
-    services.ConfigureOptions<ConfigureSwaggerOptions>();
-}
-
-void AddAuthentication(WebApplicationBuilder webAppBuilder)
-{
-    webAppBuilder.Services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.Authority = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
-            options.Audience = webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAudience);
-
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidateActor = true,
-                ValidateAudience = true,
-                ValidateTokenReplay = true
-            };
-        });
-}
-
-async Task MigrateDatabaseAsync(IServiceProvider services)
-{
-    using var scope = services.CreateScope();
-
-    var dbContext = scope.ServiceProvider.GetRequiredService<DatabaseContext>();
-
-    await dbContext.Database.MigrateAsync();
-
-    if (dbContext.Database.GetDbConnection() is NpgsqlConnection npgsqlConnection)
-    {
-        if (npgsqlConnection.State != ConnectionState.Open)
-        {
-            await npgsqlConnection.OpenAsync();
-        }
-
-        try
-        {
-            await npgsqlConnection.ReloadTypesAsync();
-        }
-        finally
-        {
-            await npgsqlConnection.CloseAsync();
-        }
-    }
-}
