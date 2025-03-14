@@ -1,4 +1,4 @@
-using AutoMapper;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db;
 using NetStone.Cache.Db.Models;
@@ -9,10 +9,14 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Cache.Services;
 
-public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) : IFreeCompanyCachingService
+public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperService mapper) : IFreeCompanyCachingService
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyCachingService));
+
     public async Task<FreeCompanyDto> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var freeCompany = await context.FreeCompanies
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneFreeCompany.Id);
 
@@ -60,12 +64,16 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
 
     public async Task<FreeCompanyDto?> GetFreeCompanyAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.Id == id);
         return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
     }
 
     public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
         return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
     }
@@ -73,6 +81,8 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
     public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
         ICollection<FreeCompanyMembersEntry> members)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var freeCompany = await context.FreeCompanies.Where(x => x.LodestoneId == fcLodestoneId).FirstOrDefaultAsync();
 
         var dbMembers = await context.FreeCompanyMembers.Where(x =>
@@ -151,6 +161,8 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
     public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)>
         GetFreeCompanyMembersAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var freeCompany = await context.FreeCompanies.Where(x =>
                 x.Id == id)
             .Include(x => x.Members)
@@ -170,6 +182,8 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
     public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
         string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var members = await context.FreeCompanyMembers.Where(x =>
                 x.FreeCompanyLodestoneId == lodestoneId)
             .Include(x => x.FullCharacter)

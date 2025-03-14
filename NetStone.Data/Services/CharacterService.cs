@@ -1,4 +1,4 @@
-using AutoMapper;
+using System.Diagnostics;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
@@ -9,16 +9,20 @@ using NetStone.Model.Parseables.Character.Achievement;
 namespace NetStone.Data.Services;
 
 internal class CharacterService(
-    LodestoneClient client,
+    INetStoneService netStoneService,
     ICharacterCachingService cachingService,
     ICharacterEventService eventService,
-    IMapper mapper)
+    IAutoMapperService mapper)
     : ICharacterService
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(ICharacterService));
+
     public async Task<CharacterSearchPageDto> SearchCharacterAsync(CharacterSearchQuery query, int page)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var netStoneQuery = mapper.Map<Search.Character.CharacterSearchQuery>(query);
-        var result = await client.SearchCharacter(netStoneQuery, page);
+        var result = await netStoneService.SearchCharacter(netStoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
         return mapper.Map<CharacterSearchPageDto>(result);
@@ -26,6 +30,8 @@ internal class CharacterService(
 
     public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var cachedCharacterDto = await cachingService.GetCharacterAsync(lodestoneId);
 
         if (cachedCharacterDto is not null &&
@@ -35,7 +41,7 @@ internal class CharacterService(
             return cachedCharacterDto with { Cached = true };
         }
 
-        var lodestoneCharacter = await client.GetCharacter(lodestoneId);
+        var lodestoneCharacter = await netStoneService.GetCharacter(lodestoneId);
         if (lodestoneCharacter == null) throw new NotFoundException();
 
         // cache character, send to queue, and return
@@ -46,6 +52,8 @@ internal class CharacterService(
 
     public async Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var (cachedClassJobsDtos, lastUpdated) = await cachingService.GetCharacterClassJobsAsync(lodestoneId);
 
         if (cachedClassJobsDtos.Any())
@@ -67,7 +75,7 @@ internal class CharacterService(
             }
         }
 
-        var lodestoneCharacterClassJobs = await client.GetCharacterClassJob(lodestoneId);
+        var lodestoneCharacterClassJobs = await netStoneService.GetCharacterClassJob(lodestoneId);
         if (lodestoneCharacterClassJobs == null) throw new NotFoundException();
 
         cachedClassJobsDtos =
@@ -79,6 +87,8 @@ internal class CharacterService(
 
     public async Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var (cachedMinionsDtos, lastUpdated) = await cachingService.GetCharacterMinionsAsync(lodestoneId);
 
         if (cachedMinionsDtos.Any())
@@ -101,7 +111,7 @@ internal class CharacterService(
             }
         }
 
-        var lodestoneMinions = await client.GetCharacterMinion(lodestoneId);
+        var lodestoneMinions = await netStoneService.GetCharacterMinion(lodestoneId);
         if (lodestoneMinions == null) throw new NotFoundException();
 
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
@@ -114,6 +124,8 @@ internal class CharacterService(
 
     public async Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var (cachedMountsDtos, lastUpdated) = await cachingService.GetCharacterMountsAsync(lodestoneId);
 
         if (cachedMountsDtos.Any())
@@ -136,7 +148,7 @@ internal class CharacterService(
             }
         }
 
-        var lodestoneMounts = await client.GetCharacterMount(lodestoneId);
+        var lodestoneMounts = await netStoneService.GetCharacterMount(lodestoneId);
         if (lodestoneMounts == null) throw new NotFoundException();
 
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
@@ -149,6 +161,8 @@ internal class CharacterService(
 
     public async Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var (cachedAchievementsDtos, lastUpdated) = await cachingService.GetCharacterAchievementsAsync(lodestoneId);
 
         if (cachedAchievementsDtos.Any())
@@ -182,15 +196,20 @@ internal class CharacterService(
 
     private async Task<List<CharacterAchievementEntry>> RetrieveAllAchievementsAsync(string lodestoneId)
     {
-        var page1 = await client.GetCharacterAchievement(lodestoneId);
-        if (page1 == null) throw new NotFoundException();
+        var page1 = await netStoneService.GetCharacterAchievement(lodestoneId);
+        if (page1 is null) throw new NotFoundException();
         var achievements = page1.Achievements.ToList();
 
+        var tasks = new List<Task<CharacterAchievementPage?>>();
         for (var i = page1.CurrentPage + 1; i <= page1.NumPages; i++)
         {
-            var page = await client.GetCharacterAchievement(lodestoneId, i);
-            if (page == null) throw new NotFoundException();
-            achievements.AddRange(page.Achievements);
+            tasks.Add(netStoneService.GetCharacterAchievement(lodestoneId, i));
+        }
+
+        await foreach (var task in Task.WhenEach(tasks))
+        {
+            if (task.Result is null) throw new NotFoundException();
+            achievements.AddRange(task.Result.Achievements);
         }
 
         return achievements;

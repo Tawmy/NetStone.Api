@@ -1,4 +1,4 @@
-using AutoMapper;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.StaticData;
@@ -6,7 +6,7 @@ using CharacterClassJob = NetStone.Cache.Db.Models.CharacterClassJob;
 
 namespace NetStone.Cache.Services;
 
-public class CharacterClassJobsService(IMapper mapper)
+public class CharacterClassJobsService(IAutoMapperService mapper)
 {
     public ICollection<CharacterClassJob> GetCharacterClassJobs(
         IReadOnlyDictionary<ClassJob, ClassJobEntry> lodestoneClassJobs,

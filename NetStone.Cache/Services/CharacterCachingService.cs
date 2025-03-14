@@ -1,4 +1,4 @@
-using AutoMapper;
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db;
 using NetStone.Cache.Db.Models;
@@ -13,11 +13,18 @@ using CharacterClassJob = NetStone.Model.Parseables.Character.ClassJob.Character
 
 namespace NetStone.Cache.Services;
 
-public class CharacterCachingService(DatabaseContext context, IMapper mapper, CharacterClassJobsService jobsService)
+internal class CharacterCachingService(
+    DatabaseContext context,
+    IAutoMapperService mapper,
+    CharacterClassJobsService jobsService)
     : ICharacterCachingService
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(ICharacterCachingService));
+
     public async Task<CharacterDto> CacheCharacterAsync(string lodestoneId, LodestoneCharacter lodestoneCharacter)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters
             .IncludeBasic()
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
@@ -76,6 +83,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
     public async Task<CharacterDto?> GetCharacterAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.Id == id);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
@@ -83,6 +92,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
     public async Task<CharacterDto?> GetCharacterAsync(string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
         return character != null ? mapper.Map<CharacterDto>(character) : null;
@@ -91,6 +102,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<ICollection<CharacterClassJobDto>> CacheCharacterClassJobsAsync(string lodestoneId,
         CharacterClassJob lodestoneClassJobs)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
 
         var dbClassJobs = await context.CharacterClassJobs.Where(x =>
@@ -128,6 +141,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterClassJobDto> classJobs, DateTime? LastUpdated)>
         GetCharacterClassJobsAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x =>
                 x.Id == id)
             .Include(x =>
@@ -146,6 +161,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterClassJobDto> classJobs, DateTime? LastUpdated)> GetCharacterClassJobsAsync(
         string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var classJobs = await context.CharacterClassJobs.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
             .Include(x => x.Character)
@@ -158,6 +175,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<ICollection<CharacterMinionDto>> CacheCharacterMinionsAsync(string lodestoneId,
         CharacterCollectable lodestoneMinions)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
 
         var dbMinions = await context.CharacterMinions.Where(x => x.CharacterLodestoneId == lodestoneId).ToListAsync();
@@ -199,6 +218,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
     public async Task<(ICollection<CharacterMinionDto>, DateTime? LastUpdated)> GetCharacterMinionsAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x =>
                 x.Id == id)
             .Include(x =>
@@ -229,6 +250,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<ICollection<CharacterMountDto>> CacheCharacterMountsAsync(string lodestoneId,
         CharacterCollectable lodestoneMounts)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
 
         var dbMounts = await context.CharacterMounts.Where(x => x.CharacterLodestoneId == lodestoneId).ToListAsync();
@@ -270,6 +293,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
 
     public async Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x =>
                 x.Id == id)
             .Include(x =>
@@ -288,6 +313,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterMountDto>, DateTime? LastUpdated)> GetCharacterMountsAsync(
         string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var mounts = await context.CharacterMounts.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
             .Include(x => x.Character)
@@ -300,6 +327,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<ICollection<CharacterAchievementDto>> CacheCharacterAchievementsAsync(string lodestoneId,
         IEnumerable<CharacterAchievementEntry> lodestoneAchievements)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x => x.LodestoneId == lodestoneId).FirstOrDefaultAsync();
 
         var dbAchievements = await context.CharacterAchievements.Where(x => x.CharacterLodestoneId == lodestoneId)
@@ -342,6 +371,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)>
         GetCharacterAchievementsAsync(int id)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var character = await context.Characters.Where(x =>
                 x.Id == id)
             .Include(x =>
@@ -360,6 +391,8 @@ public class CharacterCachingService(DatabaseContext context, IMapper mapper, Ch
     public async Task<(ICollection<CharacterAchievementDto>, DateTime? LastUpdated)> GetCharacterAchievementsAsync(
         string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var achievements = await context.CharacterAchievements.Where(x =>
                 x.CharacterLodestoneId == lodestoneId)
             .Include(x => x.Character)

@@ -1,11 +1,16 @@
 using System.Data;
+using System.Reflection;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetStone.Cache.Db;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.Extensions;
+using NetStone.Data.Interfaces;
 using Npgsql;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 namespace NetStone.Api.Extensions;
 
@@ -84,5 +89,33 @@ internal static class StartupExtensions
                 await npgsqlConnection.CloseAsync();
             }
         }
+    }
+
+    public static bool AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
+    {
+        if (configuration[EnvironmentVariables.OtelEndpointUri] is not { } otelUri)
+        {
+            return false;
+        }
+
+        var serviceName = Assembly.GetCallingAssembly().GetName().Name ??
+                          throw new InvalidOperationException("Service name must not be null");
+
+        services.AddOpenTelemetry().WithTracing(x =>
+        {
+            x.AddAspNetCoreInstrumentation(y => y.RecordException = true);
+            x.AddHttpClientInstrumentation(y => y.RecordException = true);
+            x.AddEntityFrameworkCoreInstrumentation(y => y.SetDbStatementForText = true);
+            x.AddSource(nameof(IAutoMapperService));
+            x.AddSource(nameof(INetStoneService));
+            x.AddSource(nameof(ICharacterCachingService));
+            x.AddSource(nameof(ICharacterService));
+            x.AddSource(nameof(IFreeCompanyCachingService));
+            x.AddSource(nameof(IFreeCompanyService));
+            x.AddSource(nameof(IFreeCompanyService));
+            x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
+        }).ConfigureResource(x => x.AddService(serviceName));
+
+        return true;
     }
 }

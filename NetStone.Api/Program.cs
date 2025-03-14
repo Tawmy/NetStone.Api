@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using NetStone.Api;
 using NetStone.Api.Components;
 using NetStone.Api.Extensions;
 using NetStone.Cache;
@@ -23,6 +24,8 @@ builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
+
+var tracingActive = builder.Services.AddOpenTelemetry(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -67,5 +70,10 @@ app.UseAuthorization();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
+if (tracingActive)
+{
+    app.Logger.LogInformation("Tracing active. OTLP Endpoint: {a}",
+        builder.Configuration.GetGuardedConfiguration(EnvironmentVariables.OtelEndpointUri));
+}
 
 app.Run();

@@ -14,6 +14,7 @@
       interval: 5s
       timeout: 4s
       retries: 5
+
   api:
     image: netstone.api
     container_name: netstone.api
@@ -26,9 +27,10 @@
       AUTH_AUDIENCE: netstone.api
       AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-      RABBITMQ_HOST: "rabbitmq://queue"
+      RABBITMQ_HOST: rabbitmq://queue
       RABBITMQ_USERNAME:
       RABBITMQ_PASSWORD:
+
   queue:
     image: rabbitmq:4-management
     container_name: netstone.api-queue

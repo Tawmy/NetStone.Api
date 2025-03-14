@@ -1,4 +1,4 @@
-using AutoMapper;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Data.LegacyDtos;
@@ -9,7 +9,7 @@ using NetStone.Search.Character;
 
 namespace NetStone.Data.Services;
 
-public class LegacyCharacterService(LodestoneClient client, IMapper mapper) : ILegacyCharacterService
+public class LegacyCharacterService(LodestoneClient client, IAutoMapperService mapper) : ILegacyCharacterService
 {
     public async Task<CharacterSearchPage> SearchCharacterAsync(CharacterSearchQuery query, int page)
     {
