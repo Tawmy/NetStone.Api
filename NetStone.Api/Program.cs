@@ -25,7 +25,8 @@ builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
-var tracingActive = builder.AddOpenTelemetry(builder.Configuration);
+var metricsActive = builder.AddOtelMetrics(builder.Configuration);
+var tracingActive = builder.AddOtelTracing(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -61,6 +62,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
+app.MapPrometheusScrapingEndpoint();
 
 app.UseStaticFiles();
 app.UseAntiforgery();
@@ -70,6 +72,12 @@ app.UseAuthorization();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
+
+if (metricsActive)
+{
+    app.Logger.LogInformation("Metrics active. Metrics endpoint: {a}", "/metrics");
+}
+
 if (tracingActive)
 {
     app.Logger.LogInformation("Tracing active. OTLP Endpoint: {a}",

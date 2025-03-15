@@ -9,6 +9,7 @@ using NetStone.Cache.Interfaces;
 using NetStone.Common.Extensions;
 using NetStone.Data.Interfaces;
 using Npgsql;
+using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 
@@ -91,7 +92,20 @@ internal static class StartupExtensions
         }
     }
 
-    public static bool AddOpenTelemetry(this WebApplicationBuilder builder, IConfiguration configuration)
+    public static bool AddOtelMetrics(this WebApplicationBuilder builder, IConfiguration configuration)
+    {
+        if (configuration.GetOptionalConfiguration<bool>(EnvironmentVariables.MetricsEnabled) is not true)
+        {
+            return false;
+        }
+
+        builder.Services.AddOpenTelemetry().WithMetrics(x => x.AddAspNetCoreInstrumentation()
+            .AddPrometheusExporter());
+
+        return true;
+    }
+
+    public static bool AddOtelTracing(this WebApplicationBuilder builder, IConfiguration configuration)
     {
         if (configuration[EnvironmentVariables.OtelEndpointUri] is not { } otelUri)
         {
