@@ -62,7 +62,11 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 app.MapControllers();
-app.MapPrometheusScrapingEndpoint();
+
+if (metricsActive)
+{
+    app.MapPrometheusScrapingEndpoint();
+}
 
 app.UseStaticFiles();
 app.UseAntiforgery();
