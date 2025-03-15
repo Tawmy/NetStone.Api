@@ -25,7 +25,7 @@ builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
-var tracingActive = builder.Services.AddOpenTelemetry(builder.Configuration);
+var tracingActive = builder.AddOpenTelemetry(builder.Configuration);
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {

@@ -24,6 +24,9 @@
       dockerfile: NetStone.Api/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT:
+      LOGGING__LOGLEVEL__DEFAULT: Information
+      LOGGING__LOGLEVEL__ASPNETCORE: Warning
+      LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Warning
       AUTH_AUDIENCE: netstone.api
       AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}

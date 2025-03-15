@@ -91,7 +91,7 @@ internal static class StartupExtensions
         }
     }
 
-    public static bool AddOpenTelemetry(this IServiceCollection services, IConfiguration configuration)
+    public static bool AddOpenTelemetry(this WebApplicationBuilder builder, IConfiguration configuration)
     {
         if (configuration[EnvironmentVariables.OtelEndpointUri] is not { } otelUri)
         {
@@ -101,7 +101,7 @@ internal static class StartupExtensions
         var serviceName = Assembly.GetCallingAssembly().GetName().Name ??
                           throw new InvalidOperationException("Service name must not be null");
 
-        services.AddOpenTelemetry().WithTracing(x =>
+        builder.Services.AddOpenTelemetry().WithTracing(x =>
         {
             x.AddAspNetCoreInstrumentation(y => y.RecordException = true);
             x.AddHttpClientInstrumentation(y => y.RecordException = true);
@@ -115,6 +115,12 @@ internal static class StartupExtensions
             x.AddSource(nameof(IFreeCompanyService));
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
         }).ConfigureResource(x => x.AddService(serviceName));
+
+        builder.Logging.AddOpenTelemetry(x =>
+        {
+            x.AttachLogsToActivityEvent();
+            x.IncludeFormattedMessage = true;
+        });
 
         return true;
     }

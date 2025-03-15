@@ -1,5 +1,9 @@
 services:
   api:
+    environment:
+      LOGGING__LOGLEVEL__DEFAULT: Debug
+      LOGGING__LOGLEVEL__ASPNETCORE: Debug
+      LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Debug
     labels:
       - dev.orbstack.domains=api.netstone.local
     ports:
