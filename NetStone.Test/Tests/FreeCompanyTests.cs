@@ -3,6 +3,7 @@ using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
+using NetStone.Search.FreeCompany;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
@@ -59,6 +60,28 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             Assert.Equal(memberLodestone.Server, memberDto.Server);
             Assert.Equal(memberLodestone.Datacenter, memberDto.DataCenter);
             Assert.Equal(memberLodestone.Avatar?.ToString(), memberDto.Avatar);
+        }
+    }
+
+    #endregion
+
+    #region FreeCompanySearch
+
+    [Theory]
+    [ClassData(typeof(FreeCompanySearchDataGenerator))]
+    public async Task ApiFreeCompanySearch(FreeCompanySearchTestData data)
+    {
+        var netStoneQuery = _mapper.Map<FreeCompanySearchQuery>(data.Query);
+        var searchResult = await _client.SearchFreeCompany(netStoneQuery, data.Page ?? 1);
+        Assert.NotNull(searchResult);
+
+        if (data.ExpectedResults is -1)
+        {
+            Assert.True(searchResult.Results.Count() > 1, "Expected more than one result.");
+        }
+        else
+        {
+            Assert.Equal(data.ExpectedResults, searchResult.Results.Count());
         }
     }
 

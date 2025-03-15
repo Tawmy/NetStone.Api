@@ -1,6 +1,6 @@
 namespace NetStone.Test.DataGenerators;
 
-public class CharacterTestsDataGenerator : TheoryData<string>
+internal class CharacterTestsDataGenerator : TheoryData<string>
 {
     public CharacterTestsDataGenerator()
     {

@@ -133,7 +133,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
     [Theory]
     [ClassData(typeof(CharacterSearchDataGenerator))]
-    public async Task ApiCharacterSearch(SearchTestData data)
+    public async Task ApiCharacterSearch(CharacterSearchTestData data)
     {
         var netStoneQuery = _mapper.Map<CharacterSearchQuery>(data.Query);
         var searchResult = await _client.SearchCharacter(netStoneQuery, data.Page ?? 1);

@@ -3,17 +3,17 @@ using NetStone.Common.Queries;
 
 namespace NetStone.Test.DataGenerators;
 
-public class CharacterSearchDataGenerator : TheoryData<SearchTestData>
+internal class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData>
 {
     public CharacterSearchDataGenerator()
     {
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx Bergen", "Phoenix"),
             1
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx Bergen",
                 "Phoenix",
@@ -25,7 +25,7 @@ public class CharacterSearchDataGenerator : TheoryData<SearchTestData>
             1
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx Bergen",
                 DataCenter: "Light",
@@ -35,27 +35,27 @@ public class CharacterSearchDataGenerator : TheoryData<SearchTestData>
             1
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx"),
             -1
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx"),
             -1,
             1
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx"),
             -1,
             2
         ));
 
-        Add(new SearchTestData
+        Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx", "Phoenix", Tribe: Tribe.Xaela,
                 GrandCompany: GrandCompany.Maelstrom),
@@ -64,4 +64,4 @@ public class CharacterSearchDataGenerator : TheoryData<SearchTestData>
     }
 }
 
-public record SearchTestData(CharacterSearchQuery Query, int ExpectedResults, int? Page = null);
+public record CharacterSearchTestData(CharacterSearchQuery Query, int ExpectedResults, int? Page = null);
