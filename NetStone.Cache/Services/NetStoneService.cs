@@ -16,7 +16,7 @@ namespace NetStone.Cache.Services;
 internal class NetStoneService(LodestoneClient lodestoneClient) : INetStoneService
 {
     private static readonly ActivitySource ActivitySource = new(nameof(INetStoneService));
-    
+
     public async Task<CharacterSearchPage?> SearchCharacter(CharacterSearchQuery query, int page = 1)
     {
         // do not return task directly as it would be executed outside the activity

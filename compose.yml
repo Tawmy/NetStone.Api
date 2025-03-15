@@ -30,6 +30,7 @@
       RABBITMQ_HOST: rabbitmq://queue
       RABBITMQ_USERNAME:
       RABBITMQ_PASSWORD:
+      OTEL_ENDPOINT_URI: http://tracing:4317
 
   queue:
     image: rabbitmq:4-management
@@ -46,3 +47,10 @@
       RABBITMQ_DEFAULT_PASS:
     volumes:
       - rmq_data:/var/lib/rabbitmq
+  
+  tracing:
+    image: jaegertracing/all-in-one:1.67.0
+    container_name: netstone-tracing
+    restart: unless-stopped
+    volumes:
+      - tracing_tmp:/tmp

@@ -16,7 +16,7 @@ internal static class EnvironmentVariables
     public const string AuthAuthority = "AUTH_AUTHORITY";
 
     /// <summary>
-    ///     Optional OpenTelemetry tracing endpoint. If set, tracing data will be send to this endpoint. 
+    ///     Optional OpenTelemetry tracing endpoint. If set, tracing data will be send to this endpoint.
     /// </summary>
     public const string OtelEndpointUri = "OTEL_ENDPOINT_URI";
 }
