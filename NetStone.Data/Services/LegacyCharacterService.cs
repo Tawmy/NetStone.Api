@@ -22,14 +22,14 @@ public class LegacyCharacterService(LodestoneClient client, IAutoMapperService m
     public async Task<LegacyLodestoneCharacterDto> GetCharacterAsync(string lodestoneId)
     {
         var character = await client.GetCharacter(lodestoneId);
-        if (character == null) throw new NotFoundException();
+        if (character is null) throw new NotFoundException();
         return mapper.Map<LegacyLodestoneCharacterDto>(character);
     }
 
     public async Task<CharacterClassJob> GetCharacterClassJobsAsync(string lodestoneId)
     {
         var result = await client.GetCharacterClassJob(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        if (result is null) throw new NotFoundException();
 
         return result;
     }
@@ -37,7 +37,7 @@ public class LegacyCharacterService(LodestoneClient client, IAutoMapperService m
     public async Task<CharacterCollectable> GetCharacterMinions(string lodestoneId)
     {
         var result = await client.GetCharacterMinion(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        if (result is null) throw new NotFoundException();
 
         return result;
     }
@@ -45,7 +45,7 @@ public class LegacyCharacterService(LodestoneClient client, IAutoMapperService m
     public async Task<CharacterCollectable> GetCharacterMounts(string lodestoneId)
     {
         var result = await client.GetCharacterMount(lodestoneId);
-        if (result == null) throw new NotFoundException();
+        if (result is null) throw new NotFoundException();
 
         return result;
     }

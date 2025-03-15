@@ -22,7 +22,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
 
         await using var transaction = await context.Database.BeginTransactionAsync();
 
-        if (freeCompany != null)
+        if (freeCompany is not null)
         {
             mapper.Map(lodestoneFreeCompany, freeCompany);
             context.Entry(freeCompany).State = EntityState.Modified;
@@ -67,7 +67,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         using var activity = ActivitySource.StartActivity();
 
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.Id == id);
-        return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
+        return freeCompany is not null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
     }
 
     public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId)
@@ -75,7 +75,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         using var activity = ActivitySource.StartActivity();
 
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
-        return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
+        return freeCompany is not null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
     }
 
     public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,

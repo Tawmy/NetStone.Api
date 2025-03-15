@@ -90,7 +90,7 @@ internal class FreeCompanyService(
             for (var i = 2; i <= lodestoneMembersOuter.NumPages; i++)
             {
                 var lodestoneMembersOuter2 = await netStoneService.GetFreeCompanyMembers(lodestoneId, i);
-                if (lodestoneMembersOuter2?.HasResults == true)
+                if (lodestoneMembersOuter2?.HasResults is true)
                 {
                     lodestoneMembers.AddRange(lodestoneMembersOuter2.Members);
                 }

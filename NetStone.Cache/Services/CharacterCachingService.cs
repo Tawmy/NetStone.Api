@@ -31,7 +31,7 @@ internal class CharacterCachingService(
 
         await using var transaction = await context.Database.BeginTransactionAsync();
 
-        if (character != null)
+        if (character is not null)
         {
             mapper.Map(lodestoneCharacter, character);
             context.Entry(character).State = EntityState.Modified;
@@ -87,7 +87,7 @@ internal class CharacterCachingService(
 
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.Id == id);
-        return character != null ? mapper.Map<CharacterDto>(character) : null;
+        return character is not null ? mapper.Map<CharacterDto>(character) : null;
     }
 
     public async Task<CharacterDto?> GetCharacterAsync(string lodestoneId)
@@ -96,7 +96,7 @@ internal class CharacterCachingService(
 
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
-        return character != null ? mapper.Map<CharacterDto>(character) : null;
+        return character is not null ? mapper.Map<CharacterDto>(character) : null;
     }
 
     public async Task<ICollection<CharacterClassJobDto>> CacheCharacterClassJobsAsync(string lodestoneId,
@@ -114,7 +114,7 @@ internal class CharacterCachingService(
 
         if (character is not null)
         {
-            foreach (var dbClassJob in dbClassJobs.Where(x => x.CharacterId == null))
+            foreach (var dbClassJob in dbClassJobs.Where(x => x.CharacterId is null))
             {
                 // Set FK for new entries
                 dbClassJob.CharacterId = character.Id;
@@ -149,7 +149,7 @@ internal class CharacterCachingService(
                 x.CharacterClassJobs)
             .FirstOrDefaultAsync();
 
-        if (character == null)
+        if (character is null)
         {
             return (new List<CharacterClassJobDto>(), null);
         }
@@ -226,7 +226,7 @@ internal class CharacterCachingService(
                 x.Minions)
             .FirstOrDefaultAsync();
 
-        if (character == null)
+        if (character is null)
         {
             return (new List<CharacterMinionDto>(), null);
         }
@@ -301,7 +301,7 @@ internal class CharacterCachingService(
                 x.Mounts)
             .FirstOrDefaultAsync();
 
-        if (character == null)
+        if (character is null)
         {
             return (new List<CharacterMountDto>(), null);
         }
@@ -379,7 +379,7 @@ internal class CharacterCachingService(
                 x.Achievements)
             .FirstOrDefaultAsync();
 
-        if (character == null)
+        if (character is null)
         {
             return (new List<CharacterAchievementDto>(), null);
         }

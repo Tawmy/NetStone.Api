@@ -44,7 +44,7 @@ internal class CharacterService(
         }
 
         var lodestoneCharacter = await netStoneService.GetCharacter(lodestoneId);
-        if (lodestoneCharacter == null) throw new NotFoundException();
+        if (lodestoneCharacter is null) throw new NotFoundException();
 
         // cache character, send to queue, and return
         cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
@@ -78,7 +78,7 @@ internal class CharacterService(
         }
 
         var lodestoneCharacterClassJobs = await netStoneService.GetCharacterClassJob(lodestoneId);
-        if (lodestoneCharacterClassJobs == null) throw new NotFoundException();
+        if (lodestoneCharacterClassJobs is null) throw new NotFoundException();
 
         cachedClassJobsDtos =
             await cachingService.CacheCharacterClassJobsAsync(lodestoneId, lodestoneCharacterClassJobs);
@@ -114,7 +114,7 @@ internal class CharacterService(
         }
 
         var lodestoneMinions = await netStoneService.GetCharacterMinion(lodestoneId);
-        if (lodestoneMinions == null) throw new NotFoundException();
+        if (lodestoneMinions is null) throw new NotFoundException();
 
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
 
@@ -151,7 +151,7 @@ internal class CharacterService(
         }
 
         var lodestoneMounts = await netStoneService.GetCharacterMount(lodestoneId);
-        if (lodestoneMounts == null) throw new NotFoundException();
+        if (lodestoneMounts is null) throw new NotFoundException();
 
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
 
