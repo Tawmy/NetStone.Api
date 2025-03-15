@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
@@ -19,6 +20,7 @@ internal class FreeCompanyService(
     public async Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
     {
         using var activity = ActivitySource.StartActivity();
+        activity?.AddTag(nameof(FreeCompanySearchQuery), JsonSerializer.Serialize(query));
 
         var lodestoneQuery = mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
         var result = await netStoneService.SearchFreeCompany(lodestoneQuery, page);

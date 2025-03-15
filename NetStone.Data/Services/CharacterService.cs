@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
@@ -20,6 +21,7 @@ internal class CharacterService(
     public async Task<CharacterSearchPageDto> SearchCharacterAsync(CharacterSearchQuery query, int page)
     {
         using var activity = ActivitySource.StartActivity();
+        activity?.AddTag(nameof(CharacterSearchQuery), JsonSerializer.Serialize(query));
 
         var netStoneQuery = mapper.Map<Search.Character.CharacterSearchQuery>(query);
         var result = await netStoneService.SearchCharacter(netStoneQuery, page);
