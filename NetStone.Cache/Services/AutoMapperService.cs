@@ -4,7 +4,7 @@ using NetStone.Cache.Interfaces;
 
 namespace NetStone.Cache.Services;
 
-internal class AutoMapperService(IMapper mapper) : IAutoMapperService
+public class AutoMapperService(IMapper mapper) : IAutoMapperService
 {
     private static readonly ActivitySource ActivitySource = new(nameof(IAutoMapperService));
 

@@ -1,6 +1,6 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
+using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Enums;
@@ -9,6 +9,7 @@ using NetStone.Common.Helpers;
 using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
+using NetStone.Search.Character;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
@@ -27,7 +28,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     private readonly CharacterClassJobsService _jobService =
         fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
 
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
 
     #region CharacterClassJobs
 
@@ -123,6 +124,28 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
             Assert.NotNull(mountDb);
 
             Assert.Equal(mountLodestone.Name, mountDto.Name);
+        }
+    }
+
+    #endregion
+
+    #region CharacterSearch
+
+    [Theory]
+    [ClassData(typeof(CharacterSearchDataGenerator))]
+    public async Task ApiCharacterSearch(SearchTestData data)
+    {
+        var netStoneQuery = _mapper.Map<CharacterSearchQuery>(data.Query);
+        var searchResult = await _client.SearchCharacter(netStoneQuery, data.Page ?? 1);
+        Assert.NotNull(searchResult);
+
+        if (data.ExpectedResults is -1)
+        {
+            Assert.True(searchResult.Results.Count() > 1, "Expected more than one result.");
+        }
+        else
+        {
+            Assert.Equal(data.ExpectedResults, searchResult.Results.Count());
         }
     }
 

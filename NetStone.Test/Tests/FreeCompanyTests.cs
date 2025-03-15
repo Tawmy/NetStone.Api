@@ -1,5 +1,5 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
@@ -15,7 +15,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
 {
     private readonly LodestoneClient _client = fixture.GetService<LodestoneClient>(testOutputHelper)!;
 
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
 
     #region Free Company Members
 
