@@ -89,7 +89,11 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
         Assert.Equal(freeCompanyLodestone.CrestLayers.BottomLayer?.ToString(), freeCompanyDto.CrestLayers.BottomLayer);
 
         Assert.Equal(freeCompanyLodestone.Formed, freeCompanyDto.Formed);
-        // Grand Company is parsed, so check is skipped. Parsing would've failed earlier already.
+
+        if (!string.IsNullOrWhiteSpace(freeCompanyLodestone.GrandCompany))
+        {
+            Assert.NotEqual(GrandCompany.NoAffiliation, freeCompanyDto.GrandCompany);
+        }
 
         Assert.Equal(freeCompanyLodestone.Rank, freeCompanyDto.Rank);
         Assert.Equal(freeCompanyLodestone.RankingMonthly, freeCompanyDto.RankingMonthly);
