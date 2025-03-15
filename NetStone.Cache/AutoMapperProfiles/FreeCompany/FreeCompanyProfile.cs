@@ -1,7 +1,6 @@
 using AutoMapper;
 using NetStone.Cache.Db.Resolvers;
 using NetStone.Common.DTOs.FreeCompany;
-using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
 
 namespace NetStone.Cache.AutoMapperProfiles.FreeCompany;
@@ -16,10 +15,7 @@ public class FreeCompanyProfile : Profile
             .ForMember(x => x.CrestTop, x => x.MapFrom(y => y.CrestLayers.TopLayer))
             .ForMember(x => x.CrestMiddle, x => x.MapFrom(y => y.CrestLayers.MiddleLayer))
             .ForMember(x => x.CrestBottom, x => x.MapFrom(y => y.CrestLayers.BottomLayer))
-            .ForMember(x => x.GrandCompany, x => x.MapFrom((y, _) =>
-                Enum.TryParse<GrandCompany>(y.GrandCompany, true, out var result)
-                    ? result
-                    : GrandCompany.NoAffiliation))
+            .ForMember(x => x.GrandCompany, x => x.MapFrom<FreeCompanyGrandCompanyResolver>())
             .ForMember(x => x.EstateName, x => x.MapFrom(y => y.Estate != null ? y.Estate.Name : null))
             .ForMember(x => x.EstateGreeting, x => x.MapFrom(y => y.Estate != null ? y.Estate.Greeting : null))
             .ForMember(x => x.EstatePlot, x => x.MapFrom(y => y.Estate != null ? y.Estate.Plot : null))
