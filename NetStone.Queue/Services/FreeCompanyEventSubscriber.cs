@@ -17,7 +17,21 @@ public class FreeCompanyEventSubscriber(
         return service.SendGetFreeCompanyRefreshedAsync(freeCompanyDto);
     }
 
+    public Task FreeCompanyRefreshedAsync(FreeCompanyDtoV3 freeCompanyDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetFreeCompanyRefreshedAsync(freeCompanyDto);
+    }
+
     public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto freeCompanyMemberDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetFreeCompanyMembersRefreshedAsync(freeCompanyMemberDto);
+    }
+
+    public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDtoV3 freeCompanyMemberDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();

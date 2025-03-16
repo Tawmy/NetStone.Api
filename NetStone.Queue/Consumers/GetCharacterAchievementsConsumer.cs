@@ -6,7 +6,9 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetCharacterAchievementsConsumer(ICharacterService characterService, IRabbitMqSenderService senderService)
+public class GetCharacterAchievementsConsumer(
+    ICharacterServiceV3 characterService,
+    IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterAchievementsMessage>
 {
     public async Task Consume(ConsumeContext<GetCharacterAchievementsMessage> context)

@@ -8,9 +8,9 @@ public interface IFreeCompanyCachingService
 {
     #region Free Company
 
-    Task<FreeCompanyDto> CacheFreeCompanyAsync(LodestoneFreeCompany freeCompany);
-    Task<FreeCompanyDto?> GetFreeCompanyAsync(int id);
-    Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId);
+    Task<FreeCompanyDtoV3> CacheFreeCompanyAsync(LodestoneFreeCompany freeCompany);
+    Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(int id);
+    Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(string lodestoneId);
 
     #endregion
 

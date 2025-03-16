@@ -9,12 +9,12 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Data.Services;
 
-internal class FreeCompanyService(
+internal class FreeCompanyServiceV3(
     LodestoneClient client,
     IFreeCompanyCachingService cachingService,
     IFreeCompanyEventService eventService,
     IMapper mapper)
-    : IFreeCompanyService
+    : IFreeCompanyServiceV3
 {
     public async Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
     {
@@ -25,7 +25,7 @@ internal class FreeCompanyService(
         return mapper.Map<FreeCompanySearchPageDto>(result);
     }
 
-    public async Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback)
+    public async Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback)
     {
         var cachedFcDto = await cachingService.GetFreeCompanyAsync(lodestoneId);
 
@@ -69,7 +69,7 @@ internal class FreeCompanyService(
         return cachedFcDto;
     }
 
-    public async Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
+    public async Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
         bool useFallback)
     {
         var (cachedMembers, lastUpdated) = await cachingService.GetFreeCompanyMembersAsync(lodestoneId);
@@ -82,14 +82,14 @@ internal class FreeCompanyService(
                 {
                     // if free company cached before, last time members were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
-                    return new FreeCompanyMembersOuterDto(cachedMembers, true, lastUpdated.Value);
+                    return new FreeCompanyMembersOuterDtoV3(cachedMembers, true, lastUpdated.Value);
                 }
             }
             else if (maxAge is null)
             {
                 // Free company was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new FreeCompanyMembersOuterDto(cachedMembers, true, null);
+                return new FreeCompanyMembersOuterDtoV3(cachedMembers, true, null);
             }
         }
 
@@ -102,7 +102,7 @@ internal class FreeCompanyService(
         {
             if (useFallback && cachedMembers.Any())
             {
-                return new FreeCompanyMembersOuterDto(cachedMembers, true, lastUpdated, true, ex.Message);
+                return new FreeCompanyMembersOuterDtoV3(cachedMembers, true, lastUpdated, true, ex.Message);
             }
 
             throw;
@@ -120,7 +120,7 @@ internal class FreeCompanyService(
             for (var i = 2; i <= lodestoneMembersOuter.NumPages; i++)
             {
                 var lodestoneMembersOuter2 = await client.GetFreeCompanyMembers(lodestoneId, i);
-                if (lodestoneMembersOuter2?.HasResults == true)
+                if (lodestoneMembersOuter2?.HasResults is true)
                 {
                     lodestoneMembers.AddRange(lodestoneMembersOuter2.Members);
                 }
@@ -128,7 +128,7 @@ internal class FreeCompanyService(
         }
 
         cachedMembers = await cachingService.CacheFreeCompanyMembersAsync(lodestoneId, lodestoneMembers);
-        var outerDto = new FreeCompanyMembersOuterDto(cachedMembers, false, DateTime.UtcNow);
+        var outerDto = new FreeCompanyMembersOuterDtoV3(cachedMembers, false, DateTime.UtcNow);
         _ = eventService.FreeCompanyMembersRefreshedAsync(outerDto);
         return outerDto;
     }

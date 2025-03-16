@@ -22,7 +22,17 @@ public class FreeCompanyEventService : IFreeCompanyEventService
         return Task.WhenAll(_subscribers.Select(x => x.FreeCompanyRefreshedAsync(freeCompanyDto)));
     }
 
+    public Task FreeCompanyRefreshedAsync(FreeCompanyDtoV3 freeCompanyDto)
+    {
+        return Task.WhenAll(_subscribers.Select(x => x.FreeCompanyRefreshedAsync(freeCompanyDto)));
+    }
+
     public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto freeCompanyMemberDto)
+    {
+        return Task.WhenAll(_subscribers.Select(x => x.FreeCompanyMembersRefreshedAsync(freeCompanyMemberDto)));
+    }
+
+    public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDtoV3 freeCompanyMemberDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.FreeCompanyMembersRefreshedAsync(freeCompanyMemberDto)));
     }

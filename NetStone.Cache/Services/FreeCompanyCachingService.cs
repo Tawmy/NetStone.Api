@@ -11,7 +11,7 @@ namespace NetStone.Cache.Services;
 
 public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) : IFreeCompanyCachingService
 {
-    public async Task<FreeCompanyDto> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
+    public async Task<FreeCompanyDtoV3> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
     {
         var freeCompany = await context.FreeCompanies
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneFreeCompany.Id);
@@ -55,19 +55,19 @@ public class FreeCompanyCachingService(DatabaseContext context, IMapper mapper) 
             throw;
         }
 
-        return mapper.Map<FreeCompanyDto>(freeCompany);
+        return mapper.Map<FreeCompanyDtoV3>(freeCompany);
     }
 
-    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(int id)
+    public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(int id)
     {
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.Id == id);
-        return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
+        return freeCompany != null ? mapper.Map<FreeCompanyDtoV3>(freeCompany) : null;
     }
 
-    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId)
+    public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(string lodestoneId)
     {
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
-        return freeCompany != null ? mapper.Map<FreeCompanyDto>(freeCompany) : null;
+        return freeCompany != null ? mapper.Map<FreeCompanyDtoV3>(freeCompany) : null;
     }
 
     public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,

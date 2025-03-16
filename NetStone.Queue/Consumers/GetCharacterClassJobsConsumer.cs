@@ -6,7 +6,7 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetCharacterClassJobsConsumer(ICharacterService characterService, IRabbitMqSenderService senderService)
+public class GetCharacterClassJobsConsumer(ICharacterServiceV3 characterService, IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterClassJobsMessage>
 {
     public async Task Consume(ConsumeContext<GetCharacterClassJobsMessage> context)

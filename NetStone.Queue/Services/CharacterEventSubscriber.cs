@@ -16,7 +16,21 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterRefreshedAsync(characterDto);
     }
 
+    public Task CharacterRefreshedAsync(CharacterDtoV3 characterDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetCharacterRefreshedAsync(characterDto);
+    }
+
     public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto characterClassJobsDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetCharacterClassJobsRefreshedAsync(characterClassJobsDto);
+    }
+
+    public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV3 characterClassJobsDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
@@ -30,6 +44,13 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterMountsRefreshedAsync(characterMountDto);
     }
 
+    public Task CharacterMountsRefreshedAsync(CollectionDtoV3<CharacterMountDto> characterMountDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetCharacterMountsRefreshedAsync(characterMountDto);
+    }
+
     public Task CharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> characterMinionDto)
     {
         using var scope = serviceProvider.CreateScope();
@@ -37,7 +58,21 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterMinionsRefreshedAsync(characterMinionDto);
     }
 
+    public Task CharacterMinionsRefreshedAsync(CollectionDtoV3<CharacterMinionDto> characterMinionDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetCharacterMinionsRefreshedAsync(characterMinionDto);
+    }
+
     public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto characterAchievementDto)
+    {
+        using var scope = serviceProvider.CreateScope();
+        var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
+        return service.SendGetCharacterAchievementsRefreshedAsync(characterAchievementDto);
+    }
+
+    public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV3 characterAchievementDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();

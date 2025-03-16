@@ -7,7 +7,7 @@ namespace NetStone.Data.Interfaces;
 /// <summary>
 ///     Data service for free company data.
 /// </summary>
-public interface IFreeCompanyService
+public interface IFreeCompanyServiceV3
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -32,7 +32,7 @@ public interface IFreeCompanyService
     /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback);
+    Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback);
 
     /// <summary>
     ///     Get a free company's members.
@@ -45,5 +45,5 @@ public interface IFreeCompanyService
     /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge, bool useFallback);
+    Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge, bool useFallback);
 }
