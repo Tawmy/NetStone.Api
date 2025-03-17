@@ -34,7 +34,15 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterV2V3Match(string lodestoneId)
     {
-        var (characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+
+        characterCachingService.CacheCharacterAsync(Arg.Any<string>(), Arg.Any<LodestoneCharacter>())
+            .Returns(x =>
+            {
+                var db = _mapper.Map<Character>((LodestoneCharacter)x[1]);
+                db.LodestoneId = (string)x[0];
+                return _mapper.Map<CharacterDtoV3>(db);
+            });
 
         var v3 = await characterServiceV3.GetCharacterAsync(lodestoneId, null, false);
         Assert.NotNull(v3);
@@ -104,7 +112,17 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterClassJobsV2V3Match(string lodestoneId)
     {
-        var (characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+
+        characterCachingService.GetCharacterClassJobsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService.CacheCharacterClassJobsAsync(Arg.Any<string>(), Arg.Any<CharacterClassJob>())
+            .Returns(x =>
+            {
+                var db = _classJobsService.GetCharacterClassJobs(((CharacterClassJob)x[1]).ClassJobDict, []).ToList();
+                db.ForEach(y => y.CharacterLodestoneId = (string)x[0]);
+                return db.Select(_mapper.Map<CharacterClassJobDto>).ToList();
+            });
 
         var v3 = await characterServiceV3.GetCharacterClassJobsAsync(lodestoneId, null, false);
         Assert.NotNull(v3);
@@ -131,7 +149,22 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterMinionsV2V3Match(string lodestoneId)
     {
-        var (characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+
+        characterCachingService.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
+                {
+                    var newDb = _mapper.Map<CharacterMinion>(y);
+                    newDb.CharacterLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<CharacterMinionDto>).ToList();
+            });
 
         if (lodestoneId == "45386124") // Testerinus Maximus, Phoenix)
         {
@@ -164,7 +197,22 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterMountsV2V3Match(string lodestoneId)
     {
-        var (characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+
+        characterCachingService.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
+                {
+                    var newDb = _mapper.Map<CharacterMount>(y);
+                    newDb.CharacterLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<CharacterMountDto>).ToList();
+            });
 
         if (new[] { "45386124", "28835226" }
             .Contains(lodestoneId)) // Testerinus Maximus, Phoenix; Hena Wilbert, Phoenix)
@@ -198,75 +246,7 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterAchievementsV2V3Match(string lodestoneId)
     {
-        var (characterServiceV3, characterServiceV2) = CreateServices();
-
-        var v3 = await characterServiceV3.GetCharacterAchievementsAsync(lodestoneId, null, false);
-        Assert.NotNull(v3);
-
-        var v2 = await characterServiceV2.GetCharacterAchievementsAsync(lodestoneId, null);
-        Assert.NotNull(v2);
-
-        foreach (var achievementV3 in v3.Achievements)
-        {
-            Assert.Contains(achievementV3, v2.Achievements);
-        }
-
-        Assert.Equal(v3.Cached, v2.Cached);
-        Assert.NotNull(v3.LastUpdated);
-        Assert.NotNull(v2.LastUpdated);
-    }
-
-    private (ICharacterServiceV3 characterServiceV3, ICharacterServiceV2 characterServiceV2) CreateServices()
-    {
-        var characterCachingService = Substitute.For<ICharacterCachingService>();
-
-        characterCachingService.CacheCharacterAsync(Arg.Any<string>(), Arg.Any<LodestoneCharacter>())
-            .Returns(x =>
-            {
-                var db = _mapper.Map<Character>((LodestoneCharacter)x[1]);
-                db.LodestoneId = (string)x[0];
-                return _mapper.Map<CharacterDtoV3>(db);
-            });
-
-        characterCachingService.GetCharacterClassJobsAsync(Arg.Any<string>()).Returns(([], null));
-
-        characterCachingService.CacheCharacterClassJobsAsync(Arg.Any<string>(), Arg.Any<CharacterClassJob>())
-            .Returns(x =>
-            {
-                var db = _classJobsService.GetCharacterClassJobs(((CharacterClassJob)x[1]).ClassJobDict, []).ToList();
-                db.ForEach(y => y.CharacterLodestoneId = (string)x[0]);
-                return db.Select(_mapper.Map<CharacterClassJobDto>).ToList();
-            });
-
-        characterCachingService.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
-
-        characterCachingService.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
-            .Returns(x =>
-            {
-                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
-                {
-                    var newDb = _mapper.Map<CharacterMinion>(y);
-                    newDb.CharacterLodestoneId = (string)x[0];
-                    return newDb;
-                });
-
-                return dbs.Select(_mapper.Map<CharacterMinionDto>).ToList();
-            });
-
-        characterCachingService.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
-
-        characterCachingService.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
-            .Returns(x =>
-            {
-                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
-                {
-                    var newDb = _mapper.Map<CharacterMount>(y);
-                    newDb.CharacterLodestoneId = (string)x[0];
-                    return newDb;
-                });
-
-                return dbs.Select(_mapper.Map<CharacterMountDto>).ToList();
-            });
+        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
 
         characterCachingService.GetCharacterAchievementsAsync(Arg.Any<string>()).Returns(([], null));
 
@@ -284,12 +264,33 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
                 return dbs.Select(_mapper.Map<CharacterAchievementDto>).ToList();
             });
 
+        var v3 = await characterServiceV3.GetCharacterAchievementsAsync(lodestoneId, null, false);
+        Assert.NotNull(v3);
+
+        var v2 = await characterServiceV2.GetCharacterAchievementsAsync(lodestoneId, null);
+        Assert.NotNull(v2);
+
+        foreach (var achievementV3 in v3.Achievements)
+        {
+            Assert.Contains(achievementV3, v2.Achievements);
+        }
+
+        Assert.Equal(v3.Cached, v2.Cached);
+        Assert.NotNull(v3.LastUpdated);
+        Assert.NotNull(v2.LastUpdated);
+    }
+
+    private (ICharacterCachingService characterCachingService, ICharacterServiceV3 characterServiceV3,
+        ICharacterServiceV2 characterServiceV2) CreateServices()
+    {
+        var characterCachingService = Substitute.For<ICharacterCachingService>();
+
         var characterServiceV3 =
             new CharacterServiceV3(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
 
         var characterServiceV2 =
             new CharacterServiceV2(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
 
-        return (characterServiceV3, characterServiceV2);
+        return (characterCachingService, characterServiceV3, characterServiceV2);
     }
 }
