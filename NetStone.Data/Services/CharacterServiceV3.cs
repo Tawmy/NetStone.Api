@@ -11,7 +11,7 @@ using NetStone.Model.Parseables.Character.Collectable;
 
 namespace NetStone.Data.Services;
 
-internal class CharacterServiceV3(
+public class CharacterServiceV3(
     LodestoneClient client,
     ICharacterCachingService cachingService,
     ICharacterEventService eventService,

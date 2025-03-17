@@ -27,7 +27,7 @@ internal class CharacterProfile : Profile
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.CharacterUpdatedAt))
             .ForMember(x => x.Attributes, x => x.MapFrom<CharacterAttributeResolver>());
-        
+
         CreateMap<CharacterDtoV3, CharacterDto>();
     }
 }

@@ -8,7 +8,7 @@ using NetStone.Model.Parseables.Character.Achievement;
 
 namespace NetStone.Data.Services;
 
-internal class CharacterServiceV2(
+public class CharacterServiceV2(
     LodestoneClient client,
     ICharacterCachingService cachingService,
     ICharacterEventService eventService,
