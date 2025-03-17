@@ -1,4 +1,3 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
@@ -20,8 +19,9 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
     private readonly IFreeCompanyEventService _freeCompanyEventService =
         fixture.GetService<IFreeCompanyEventService>(testOutputHelper)!;
 
-    private readonly LodestoneClient _lodestoneClient = fixture.GetService<LodestoneClient>(testOutputHelper)!;
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
+
+    private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     [Theory]
     [ClassData(typeof(FreeCompanyTestsDataGenerator))]
@@ -135,10 +135,10 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
         var fcCachingService = Substitute.For<IFreeCompanyCachingService>();
 
         var fcServiceV3 =
-            new FreeCompanyServiceV3(_lodestoneClient, fcCachingService, _freeCompanyEventService, _mapper);
+            new FreeCompanyServiceV3(_netStoneService, fcCachingService, _freeCompanyEventService, _mapper);
 
         var fcServiceV2 =
-            new FreeCompanyServiceV2(_lodestoneClient, fcCachingService, _freeCompanyEventService, _mapper);
+            new FreeCompanyServiceV2(_netStoneService, fcCachingService, _freeCompanyEventService, _mapper);
 
         return (fcCachingService, fcServiceV3, fcServiceV2);
     }

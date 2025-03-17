@@ -1,6 +1,6 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
+using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Enums;
@@ -9,6 +9,7 @@ using NetStone.Common.Helpers;
 using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
+using NetStone.Search.Character;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
@@ -22,12 +23,11 @@ namespace NetStone.Test.Tests;
 public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFixture fixture)
     : TestBed<CharacterTestsFixture>(testOutputHelper, fixture)
 {
-    private readonly LodestoneClient _client = fixture.GetService<LodestoneClient>(testOutputHelper)!;
-
     private readonly CharacterClassJobsService _jobService =
         fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
 
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
+    private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     #region CharacterClassJobs
 
@@ -35,7 +35,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterClassJobsMatchDto(string lodestoneId)
     {
-        var classJobsLodestone = await _client.GetCharacterClassJob(lodestoneId);
+        var classJobsLodestone = await _netStoneService.GetCharacterClassJob(lodestoneId);
         Assert.NotNull(classJobsLodestone);
 
         foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value.IsUnlocked))
@@ -71,7 +71,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMinionsMatchDto(string lodestoneId)
     {
-        var minionsLodestone = await _client.GetCharacterMinion(lodestoneId);
+        var minionsLodestone = await _netStoneService.GetCharacterMinion(lodestoneId);
 
         if (lodestoneId == "45386124") // Testerinus Maximus, Phoenix)
         {
@@ -102,7 +102,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMountsMatchDto(string lodestoneId)
     {
-        var mountsLodestone = await _client.GetCharacterMount(lodestoneId);
+        var mountsLodestone = await _netStoneService.GetCharacterMount(lodestoneId);
 
         if (new[] { "45386124", "28835226" }
             .Contains(lodestoneId)) // Testerinus Maximus, Phoenix; Hena Wilbert, Phoenix)
@@ -134,7 +134,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterAchievementsMatchDto(string lodestoneId)
     {
-        var achievementsLodestone = await _client.GetCharacterAchievement(lodestoneId);
+        var achievementsLodestone = await _netStoneService.GetCharacterAchievement(lodestoneId);
         Assert.NotNull(achievementsLodestone);
 
         foreach (var achievementLodestone in achievementsLodestone.Achievements)
@@ -154,13 +154,35 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
     #endregion
 
+    #region CharacterSearch
+
+    [Theory]
+    [ClassData(typeof(CharacterSearchDataGenerator))]
+    public async Task ApiCharacterSearch(SearchTestData data)
+    {
+        var netStoneQuery = _mapper.Map<CharacterSearchQuery>(data.Query);
+        var searchResult = await _netStoneService.SearchCharacter(netStoneQuery, data.Page ?? 1);
+        Assert.NotNull(searchResult);
+
+        if (data.ExpectedResults is -1)
+        {
+            Assert.True(searchResult.Results.Count() > 1, "Expected more than one result.");
+        }
+        else
+        {
+            Assert.Equal(data.ExpectedResults, searchResult.Results.Count());
+        }
+    }
+
+    #endregion
+
     #region Character
 
     [Theory]
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task ApiCharacterMatchesDto(string lodestoneId)
     {
-        var characterLodestone = await _client.GetCharacter(lodestoneId);
+        var characterLodestone = await _netStoneService.GetCharacter(lodestoneId);
         Assert.NotNull(characterLodestone);
 
         var characterDb = _mapper.Map<Character>(characterLodestone);
@@ -168,7 +190,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         characterDb.LodestoneId = lodestoneId; // also set manually in code
 
-        var characterDto = _mapper.Map<CharacterDto>(characterDb);
+        var characterDto = _mapper.Map<CharacterDtoV3>(characterDb);
         Assert.NotNull(characterDto);
 
         Assert.Equal(lodestoneId, characterDto.Id);
@@ -235,7 +257,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         CompareAttributes(characterLodestone.Attributes, characterDto);
     }
 
-    private static void CompareGear(CharacterGear gearLodestone, CharacterDto characterDto)
+    private static void CompareGear(CharacterGear gearLodestone, CharacterDtoV3 characterDto)
     {
         var gearLodestoneDict = new Dictionary<GearSlot, GearEntry>();
         gearLodestoneDict.AddIfValueNotNull(GearSlot.MainHand, gearLodestone.Mainhand);
@@ -274,7 +296,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         }
     }
 
-    private static void CompareAttributes(CharacterAttributes attributes, CharacterDto characterDto)
+    private static void CompareAttributes(CharacterAttributes attributes, CharacterDtoV3 characterDto)
     {
         Assert.Equal(attributes.Strength, characterDto.Attributes[CharacterAttribute.Strength]);
         Assert.Equal(attributes.Dexterity, characterDto.Attributes[CharacterAttribute.Dexterity]);

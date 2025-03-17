@@ -1,4 +1,3 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
@@ -27,8 +26,9 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     private readonly CharacterClassJobsService _classJobsService =
         fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
 
-    private readonly LodestoneClient _lodestoneClient = fixture.GetService<LodestoneClient>(testOutputHelper)!;
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
+
+    private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     [Theory]
     [ClassData(typeof(CharacterTestsDataGenerator))]
@@ -286,10 +286,10 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         var characterCachingService = Substitute.For<ICharacterCachingService>();
 
         var characterServiceV3 =
-            new CharacterServiceV3(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
+            new CharacterServiceV3(_netStoneService, characterCachingService, _characterEventService, _mapper);
 
         var characterServiceV2 =
-            new CharacterServiceV2(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
+            new CharacterServiceV2(_netStoneService, characterCachingService, _characterEventService, _mapper);
 
         return (characterCachingService, characterServiceV3, characterServiceV2);
     }

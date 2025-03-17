@@ -2,6 +2,7 @@ services:
   db:
     networks:
       - default
+  
   api:
     depends_on:
       db:
@@ -14,13 +15,21 @@ services:
     labels:
       caddy: api.netstone.tawmy.dev
       caddy.reverse_proxy: "{{upstreams 8080}}"
+  
   queue:
     labels:
       caddy: queue.netstone.tawmy.dev
-      caddy.@denied.not_0: remote_ip ${RABBITMQ_REMOTE_IP}
-      caddy.abort: "@denied"
-
+      caddy.basic_auth.wsYZs7PMxNUwnxWRaDYRW9b28pjYk4dW: ${RABBITMQ_PASSWORD_HASHED}
       caddy.reverse_proxy: "{{upstreams 15672}}"
+    networks:
+      - default
+      - caddy
+  
+  tracing:
+    labels:
+      caddy: tracing.netstone.tawmy.dev
+      caddy.basic_auth.xBsJjxJgVAxVeurUXLqvJYqsVoBfogmt: ${TRACING_PASSWORD_HASHED} # 1password entry has instructions
+      caddy.reverse_proxy: "{{upstreams 16686}}"
     networks:
       - default
       - caddy
@@ -35,4 +44,7 @@ volumes:
     external: true
   rmq_data:
     name: netstone-api-queue
+    external: true
+  tracing_tmp:
+    name: tracing-tmp
     external: true

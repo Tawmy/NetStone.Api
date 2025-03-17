@@ -1,5 +1,5 @@
-using AutoMapper;
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
@@ -13,9 +13,8 @@ namespace NetStone.Test.Tests;
 public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTestsFixture fixture)
     : TestBed<FreeCompanyTestsFixture>(testOutputHelper, fixture)
 {
-    private readonly LodestoneClient _client = fixture.GetService<LodestoneClient>(testOutputHelper)!;
-
-    private readonly IMapper _mapper = fixture.GetService<IMapper>(testOutputHelper)!;
+    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
+    private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     #region Free Company Members
 
@@ -23,7 +22,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
     [ClassData(typeof(FreeCompanyTestsDataGenerator))]
     public async Task ApiFreeCompanyMembersMatchDto(string lodestoneId)
     {
-        var membersLodestoneOuter = await _client.GetFreeCompanyMembers(lodestoneId);
+        var membersLodestoneOuter = await _netStoneService.GetFreeCompanyMembers(lodestoneId);
         Assert.NotNull(membersLodestoneOuter);
         Assert.True(membersLodestoneOuter.HasResults);
 
@@ -33,7 +32,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
         {
             for (var i = 2; i <= membersLodestoneOuter.NumPages; i++)
             {
-                var lodestoneMembersOuter2 = await _client.GetFreeCompanyMembers(lodestoneId, i);
+                var lodestoneMembersOuter2 = await _netStoneService.GetFreeCompanyMembers(lodestoneId, i);
                 Assert.NotNull(lodestoneMembersOuter2);
                 Assert.True(lodestoneMembersOuter2.HasResults);
 
@@ -70,13 +69,13 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
     [ClassData(typeof(FreeCompanyTestsDataGenerator))]
     public async Task ApiFreeCompanyMatchesDto(string lodestoneId)
     {
-        var freeCompanyLodestone = await _client.GetFreeCompany(lodestoneId);
+        var freeCompanyLodestone = await _netStoneService.GetFreeCompany(lodestoneId);
         Assert.NotNull(freeCompanyLodestone);
 
         var freeCompanyDb = _mapper.Map<FreeCompany>(freeCompanyLodestone);
         Assert.NotNull(freeCompanyDb);
 
-        var freeCompanyDto = _mapper.Map<FreeCompanyDto>(freeCompanyDb);
+        var freeCompanyDto = _mapper.Map<FreeCompanyDtoV3>(freeCompanyDb);
         Assert.NotNull(freeCompanyDto);
 
         Assert.Equal(freeCompanyLodestone.Name, freeCompanyDto.Name);
@@ -120,7 +119,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             freeCompanyDto.Reputation.Single(x => x.GrandCompany == GrandCompany.ImmortalFlames).Progress);
     }
 
-    private static void CompareFocus(LodestoneFreeCompany freeCompanyLodestone, FreeCompanyDto freeCompanyDto)
+    private static void CompareFocus(LodestoneFreeCompany freeCompanyLodestone, FreeCompanyDtoV3 freeCompanyDto)
     {
         if (freeCompanyLodestone.Focus?.HasFocus is not true)
         {

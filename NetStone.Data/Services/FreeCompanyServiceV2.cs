@@ -1,4 +1,5 @@
-using AutoMapper;
+using System.Diagnostics;
+using System.Text.Json;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
@@ -8,16 +9,21 @@ using NetStone.Data.Interfaces;
 namespace NetStone.Data.Services;
 
 public class FreeCompanyServiceV2(
-    LodestoneClient client,
+    INetStoneService netStoneService,
     IFreeCompanyCachingService cachingService,
     IFreeCompanyEventService eventService,
-    IMapper mapper)
+    IAutoMapperService mapper)
     : IFreeCompanyServiceV2
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyServiceV2));
+
     public async Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page)
     {
+        using var activity = ActivitySource.StartActivity();
+        activity?.AddTag(nameof(FreeCompanySearchQuery), JsonSerializer.Serialize(query));
+
         var lodestoneQuery = mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
-        var result = await client.SearchFreeCompany(lodestoneQuery, page);
+        var result = await netStoneService.SearchFreeCompany(lodestoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
         return mapper.Map<FreeCompanySearchPageDto>(result);
@@ -25,6 +31,8 @@ public class FreeCompanyServiceV2(
 
     public async Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var cachedFcDto = await cachingService.GetFreeCompanyAsync(lodestoneId);
 
         if (cachedFcDto is not null)
@@ -42,7 +50,7 @@ public class FreeCompanyServiceV2(
             }
         }
 
-        var lodestoneFc = await client.GetFreeCompany(lodestoneId);
+        var lodestoneFc = await netStoneService.GetFreeCompany(lodestoneId);
         if (lodestoneFc is null) throw new NotFoundException();
 
         // cache fc and return
@@ -53,6 +61,8 @@ public class FreeCompanyServiceV2(
 
     public async Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var (cachedMembers, lastUpdated) = await cachingService.GetFreeCompanyMembersAsync(lodestoneId);
 
         if (cachedMembers.Any())
@@ -74,7 +84,7 @@ public class FreeCompanyServiceV2(
             }
         }
 
-        var lodestoneMembersOuter = await client.GetFreeCompanyMembers(lodestoneId);
+        var lodestoneMembersOuter = await netStoneService.GetFreeCompanyMembers(lodestoneId);
 
         if (lodestoneMembersOuter is null || !lodestoneMembersOuter.HasResults || !lodestoneMembersOuter.Members.Any())
         {
@@ -87,7 +97,7 @@ public class FreeCompanyServiceV2(
         {
             for (var i = 2; i <= lodestoneMembersOuter.NumPages; i++)
             {
-                var lodestoneMembersOuter2 = await client.GetFreeCompanyMembers(lodestoneId, i);
+                var lodestoneMembersOuter2 = await netStoneService.GetFreeCompanyMembers(lodestoneId, i);
                 if (lodestoneMembersOuter2?.HasResults is true)
                 {
                     lodestoneMembers.AddRange(lodestoneMembersOuter2.Members);

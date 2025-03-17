@@ -1,4 +1,4 @@
-using AutoMapper;
+using NetStone.Cache.Interfaces;
 using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.Gear;
@@ -6,7 +6,7 @@ using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 
 namespace NetStone.Cache.Services;
 
-public class CharacterGearService(IMapper mapper)
+public class CharacterGearService(IAutoMapperService mapper)
 {
     public ICollection<CharacterGear> GetGear(Model.Parseables.Character.Gear.CharacterGear gear,
         ICollection<CharacterGear> currentGear)
