@@ -3,9 +3,11 @@ using NetStone.Cache.Db.Models;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Data.Services;
 using NetStone.Model.Parseables.Character;
+using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using NSubstitute;
@@ -124,6 +126,73 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         Assert.NotNull(v2.LastUpdated);
     }
 
+    [Theory]
+    [ClassData(typeof(CharacterTestsDataGenerator))]
+    public async Task CharacterMinionsV2V3Match(string lodestoneId)
+    {
+        var (characterServiceV3, characterServiceV2) = CreateServices();
+
+        if (lodestoneId == "45386124") // Testerinus Maximus, Phoenix)
+        {
+            // test character has no minions
+            await Assert.ThrowsAsync<NotFoundException>(() =>
+                characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, false));
+            await Assert.ThrowsAsync<NotFoundException>(() =>
+                characterServiceV2.GetCharacterMinionsAsync(lodestoneId, null));
+            return;
+        }
+
+        var v3 = await characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, false);
+        Assert.NotNull(v3);
+
+        var v2 = await characterServiceV2.GetCharacterMinionsAsync(lodestoneId, null);
+        Assert.NotNull(v2);
+
+        foreach (var minionV3 in v3.List)
+        {
+            Assert.Contains(minionV3, v2.List);
+        }
+
+        Assert.Equal(v3.Cached, v2.Cached);
+        Assert.NotNull(v3.LastUpdated);
+        Assert.NotNull(v2.LastUpdated);
+        Assert.Equal(v3.Total, v2.Total);
+    }
+
+    [Theory]
+    [ClassData(typeof(CharacterTestsDataGenerator))]
+    public async Task CharacterMountsV2V3Match(string lodestoneId)
+    {
+        var (characterServiceV3, characterServiceV2) = CreateServices();
+
+        if (new[] { "45386124", "28835226" }
+            .Contains(lodestoneId)) // Testerinus Maximus, Phoenix; Hena Wilbert, Phoenix)
+        {
+            // test character has no mounts
+            await Assert.ThrowsAsync<NotFoundException>(() =>
+                characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, false));
+            await Assert.ThrowsAsync<NotFoundException>(() =>
+                characterServiceV2.GetCharacterMountsAsync(lodestoneId, null));
+            return;
+        }
+
+        var v3 = await characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, false);
+        Assert.NotNull(v3);
+
+        var v2 = await characterServiceV2.GetCharacterMountsAsync(lodestoneId, null);
+        Assert.NotNull(v2);
+
+        foreach (var mountV3 in v3.List)
+        {
+            Assert.Contains(mountV3, v2.List);
+        }
+
+        Assert.Equal(v3.Cached, v2.Cached);
+        Assert.NotNull(v3.LastUpdated);
+        Assert.NotNull(v2.LastUpdated);
+        Assert.Equal(v3.Total, v2.Total);
+    }
+
     private (ICharacterServiceV3 characterServiceV3, ICharacterServiceV2 characterServiceV2) CreateServices()
     {
         var characterCachingService = Substitute.For<ICharacterCachingService>();
@@ -143,12 +212,41 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
             {
                 var db = _classJobsService.GetCharacterClassJobs(((CharacterClassJob)x[1]).ClassJobDict, []).ToList();
                 db.ForEach(y => y.CharacterLodestoneId = (string)x[0]);
-                return db.Select(y => _mapper.Map<CharacterClassJobDto>(y)).ToList();
+                return db.Select(_mapper.Map<CharacterClassJobDto>).ToList();
+            });
+
+        characterCachingService.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
+                {
+                    var newDb = _mapper.Map<CharacterMinion>(y);
+                    newDb.CharacterLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<CharacterMinionDto>).ToList();
+            });
+
+        characterCachingService.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
+                {
+                    var newDb = _mapper.Map<CharacterMount>(y);
+                    newDb.CharacterLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<CharacterMountDto>).ToList();
             });
 
         var characterServiceV3 =
             new CharacterServiceV3(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
-
 
         var characterServiceV2 =
             new CharacterServiceV2(_lodestoneClient, characterCachingService, _characterEventService, _mapper);
