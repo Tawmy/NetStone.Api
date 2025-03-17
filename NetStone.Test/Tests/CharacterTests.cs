@@ -128,6 +128,32 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
     #endregion
 
+    #region CharacterAchievements
+
+    [Theory]
+    [ClassData(typeof(CharacterTestsDataGenerator))]
+    public async Task ApiCharacterAchievementsMatchDto(string lodestoneId)
+    {
+        var achievementsLodestone = await _client.GetCharacterAchievement(lodestoneId);
+        Assert.NotNull(achievementsLodestone);
+
+        foreach (var achievementLodestone in achievementsLodestone.Achievements)
+        {
+            var achievemntDb = _mapper.Map<CharacterAchievement>(achievementLodestone);
+            Assert.NotNull(achievemntDb);
+
+            var achievementDto = _mapper.Map<CharacterAchievementDto>(achievemntDb);
+            Assert.NotNull(achievementDto);
+
+            Assert.Equal(achievementLodestone.Id?.ToString(), achievementDto.Id);
+            Assert.Equal(achievementLodestone.Name, achievementDto.Name);
+            Assert.Equal(achievementLodestone.DatabaseLink, achievementDto.DatabaseLink);
+            Assert.Equal(achievementLodestone.TimeAchieved, achievementDto.TimeAchieved);
+        }
+    }
+
+    #endregion
+
     #region Character
 
     [Theory]

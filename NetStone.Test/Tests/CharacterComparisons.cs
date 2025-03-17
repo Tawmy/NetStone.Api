@@ -7,6 +7,7 @@ using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Data.Services;
 using NetStone.Model.Parseables.Character;
+using NetStone.Model.Parseables.Character.Achievement;
 using NetStone.Model.Parseables.Character.Collectable;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
@@ -193,6 +194,28 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         Assert.Equal(v3.Total, v2.Total);
     }
 
+    [Theory]
+    [ClassData(typeof(CharacterTestsDataGenerator))]
+    public async Task CharacterAchievementsV2V3Match(string lodestoneId)
+    {
+        var (characterServiceV3, characterServiceV2) = CreateServices();
+
+        var v3 = await characterServiceV3.GetCharacterAchievementsAsync(lodestoneId, null, false);
+        Assert.NotNull(v3);
+
+        var v2 = await characterServiceV2.GetCharacterAchievementsAsync(lodestoneId, null);
+        Assert.NotNull(v2);
+
+        foreach (var achievementV3 in v3.Achievements)
+        {
+            Assert.Contains(achievementV3, v2.Achievements);
+        }
+
+        Assert.Equal(v3.Cached, v2.Cached);
+        Assert.NotNull(v3.LastUpdated);
+        Assert.NotNull(v2.LastUpdated);
+    }
+
     private (ICharacterServiceV3 characterServiceV3, ICharacterServiceV2 characterServiceV2) CreateServices()
     {
         var characterCachingService = Substitute.For<ICharacterCachingService>();
@@ -243,6 +266,22 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
                 });
 
                 return dbs.Select(_mapper.Map<CharacterMountDto>).ToList();
+            });
+
+        characterCachingService.GetCharacterAchievementsAsync(Arg.Any<string>()).Returns(([], null));
+
+        characterCachingService
+            .CacheCharacterAchievementsAsync(Arg.Any<string>(), Arg.Any<IEnumerable<CharacterAchievementEntry>>())
+            .Returns(x =>
+            {
+                var dbs = ((IEnumerable<CharacterAchievementEntry>)x[1]).Select(y =>
+                {
+                    var newDb = _mapper.Map<CharacterAchievement>(y);
+                    newDb.CharacterLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<CharacterAchievementDto>).ToList();
             });
 
         var characterServiceV3 =
