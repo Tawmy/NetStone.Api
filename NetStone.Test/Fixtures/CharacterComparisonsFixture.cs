@@ -24,6 +24,7 @@ public class CharacterComparisonsFixture : TestBedFixture
 
         services.AddScoped<ICharacterEventService>(_ => Substitute.For<ICharacterEventService>());
         services.AddScoped<CharacterGearService>();
+        services.AddScoped<CharacterClassJobsService>();
     }
 
     protected override IEnumerable<TestAppSettings> GetTestAppSettings()
