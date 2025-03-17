@@ -5,6 +5,7 @@ using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Data.Interfaces;
 using NetStone.Data.Services;
 using NetStone.Model.Parseables.FreeCompany;
+using NetStone.Model.Parseables.FreeCompany.Members;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using NSubstitute;
@@ -70,6 +71,57 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
         foreach (var reputationV3 in v3.Reputation)
         {
             Assert.Contains(reputationV3, v2.Reputation);
+        }
+
+        Assert.Equal(v3.Cached, v2.Cached);
+        Assert.NotNull(v3.LastUpdated);
+        Assert.NotNull(v2.LastUpdated);
+    }
+
+    [Theory]
+    [ClassData(typeof(FreeCompanyTestsDataGenerator))]
+    public async Task FreeCompanyMembersV2V3Match(string lodestoneId)
+    {
+        var (fcCachingService, fcServiceV3, fcServiceV2) = CreateServices();
+
+        fcCachingService.GetFreeCompanyMembersAsync(Arg.Any<string>()).Returns(([], null));
+
+        fcCachingService
+            .CacheFreeCompanyMembersAsync(Arg.Any<string>(), Arg.Any<ICollection<FreeCompanyMembersEntry>>())
+            .Returns(x =>
+            {
+                var dbs = ((ICollection<FreeCompanyMembersEntry>)x[1]).Select(y =>
+                {
+                    var newDb = _mapper.Map<FreeCompanyMember>(y);
+                    newDb.FreeCompanyLodestoneId = (string)x[0];
+                    return newDb;
+                });
+
+                return dbs.Select(_mapper.Map<FreeCompanyMemberDto>).ToList();
+            });
+
+        var v3 = await fcServiceV3.GetFreeCompanyMembersAsync(lodestoneId, null, false);
+        Assert.NotNull(v3);
+
+        var v2 = await fcServiceV2.GetFreeCompanyMembersAsync(lodestoneId, null);
+        Assert.NotNull(v2);
+
+        foreach (var memberV3 in v3.Members)
+        {
+            var memberV2 = v2.Members.FirstOrDefault(x => x.LodestoneId == memberV3.LodestoneId);
+            Assert.NotNull(memberV2);
+
+            Assert.Equal(memberV3.FreeCompanyLodestoneId, memberV2.FreeCompanyLodestoneId);
+            Assert.Equal(memberV3.Name, memberV2.Name);
+            Assert.Equal(memberV3.Rank, memberV2.Rank);
+            Assert.Equal(memberV3.RankIcon, memberV2.RankIcon);
+            Assert.Equal(memberV3.Server, memberV2.Server);
+            Assert.Equal(memberV3.DataCenter, memberV2.DataCenter);
+
+            // remove query parameters from urls
+            var avatarV3 = new Uri(memberV3.Avatar).GetLeftPart(UriPartial.Path);
+            var avatarV2 = new Uri(memberV2.Avatar).GetLeftPart(UriPartial.Path);
+            Assert.Equal(avatarV3, avatarV2);
         }
 
         Assert.Equal(v3.Cached, v2.Cached);
