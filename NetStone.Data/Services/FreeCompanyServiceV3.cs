@@ -9,7 +9,7 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Data.Services;
 
-internal class FreeCompanyServiceV3(
+public class FreeCompanyServiceV3(
     LodestoneClient client,
     IFreeCompanyCachingService cachingService,
     IFreeCompanyEventService eventService,

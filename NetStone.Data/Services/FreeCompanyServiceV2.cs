@@ -7,7 +7,7 @@ using NetStone.Data.Interfaces;
 
 namespace NetStone.Data.Services;
 
-internal class FreeCompanyServiceV2(
+public class FreeCompanyServiceV2(
     LodestoneClient client,
     IFreeCompanyCachingService cachingService,
     IFreeCompanyEventService eventService,
