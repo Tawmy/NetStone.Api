@@ -1,4 +1,4 @@
-using NetStone.Cache.Interfaces;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.StaticData;
@@ -6,9 +6,10 @@ using CharacterClassJob = NetStone.Cache.Db.Models.CharacterClassJob;
 
 namespace NetStone.Cache.Services;
 
-public class CharacterClassJobsService(IAutoMapperService mapper)
+// Can currently be static, but might need DI later
+public static class CharacterClassJobsServiceV3
 {
-    public ICollection<CharacterClassJob> GetCharacterClassJobs(
+    public static ICollection<CharacterClassJob> GetCharacterClassJobs(
         IReadOnlyDictionary<ClassJob, ClassJobEntry> lodestoneClassJobs,
         ICollection<CharacterClassJob> dbClassJobs)
     {
@@ -28,7 +29,7 @@ public class CharacterClassJobsService(IAutoMapperService mapper)
 
                 if (dbClassJobs.FirstOrDefault(x => x.ClassJob == newDbClassJob.ClassJob) is { } existingDbClassJob)
                 {
-                    mapper.Map(newDbClassJob, existingDbClassJob);
+                    newDbClassJob.ToDb(existingDbClassJob);
                 }
                 else
                 {
@@ -40,7 +41,7 @@ public class CharacterClassJobsService(IAutoMapperService mapper)
         return dbClassJobs;
     }
 
-    private IEnumerable<CharacterClassJob?> MapToDbEntry(
+    private static IEnumerable<CharacterClassJob?> MapToDbEntry(
         KeyValuePair<ClassJob, ClassJobEntry> lodestoneClassJob, ICollection<CharacterClassJob> dbClassJobs)
     {
         return lodestoneClassJob.Key switch
@@ -113,29 +114,30 @@ public class CharacterClassJobsService(IAutoMapperService mapper)
         };
     }
 
-    private CharacterClassJob? ToClassJob(KeyValuePair<ClassJob, ClassJobEntry> lodestoneClassJob,
+    private static CharacterClassJob? ToClassJob(KeyValuePair<ClassJob, ClassJobEntry> lodestoneClassJob,
         IEnumerable<CharacterClassJob> dbClassJobs, Common.Enums.ClassJob? classJobOverride = null)
     {
+        /*
+         * 1. if not unlocked, return
+         * 2. check if is job and job not unlocked -> netstone tends to return jobs as unlocked when only class is
+         * 3.
+         */
+
         if (!lodestoneClassJob.Value.IsUnlocked)
         {
             return null;
         }
 
-        var classJob = mapper.Map<CharacterClassJob>(lodestoneClassJob.Value);
-        classJob.ClassJob = classJobOverride ?? Enum.Parse<Common.Enums.ClassJob>(lodestoneClassJob.Key.ToString());
-
-        if (classJob.ClassJob.EvolvesFromClass() && !classJob.IsJobUnlocked)
+        var classJob = classJobOverride ?? Enum.Parse<Common.Enums.ClassJob>(lodestoneClassJob.Key.ToString());
+        if (classJob.EvolvesFromClass() && !lodestoneClassJob.Value.IsJobUnlocked)
         {
             // do not add job to database if not actually unlocked. NetStone returns nonsense.
             return null;
         }
 
-        var currentDbClassJob = dbClassJobs.FirstOrDefault(x => x.ClassJob == classJob.ClassJob);
+        var currentDbClassJob = dbClassJobs.FirstOrDefault(x => x.ClassJob == classJob);
 
-        classJob.Id = currentDbClassJob?.Id ?? default;
-        classJob.CharacterId = currentDbClassJob?.CharacterId ?? null;
-        classJob.CharacterLodestoneId = currentDbClassJob?.CharacterLodestoneId ?? string.Empty;
-
-        return classJob;
+        return lodestoneClassJob.Value.ToDb(currentDbClassJob?.CharacterLodestoneId ?? string.Empty,
+            currentDbClassJob?.ClassJob ?? classJob);
     }
 }

@@ -1,7 +1,6 @@
 using AutoMapper;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.Enums;
-using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.FreeCompany;
 
 namespace NetStone.Cache.Db.Resolvers;

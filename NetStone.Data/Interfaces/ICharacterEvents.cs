@@ -4,18 +4,18 @@ namespace NetStone.Data.Interfaces;
 
 public interface ICharacterEvents
 {
-    Task CharacterRefreshedAsync(CharacterDto characterDto);
+    Task CharacterRefreshedAsync(CharacterDtoV2 characterDto);
     Task CharacterRefreshedAsync(CharacterDtoV3 characterDto);
 
-    Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto characterClassJobsDto);
+    Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV2 characterClassJobsDto);
     Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV3 characterClassJobsDto);
 
-    Task CharacterMountsRefreshedAsync(CollectionDto<CharacterMountDto> characterMountDto);
+    Task CharacterMountsRefreshedAsync(CollectionDtoV2<CharacterMountDto> characterMountDto);
     Task CharacterMountsRefreshedAsync(CollectionDtoV3<CharacterMountDto> characterMountDto);
 
-    Task CharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> characterMinionDto);
+    Task CharacterMinionsRefreshedAsync(CollectionDtoV2<CharacterMinionDto> characterMinionDto);
     Task CharacterMinionsRefreshedAsync(CollectionDtoV3<CharacterMinionDto> characterMinionDto);
 
-    Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto characterAchievementDto);
+    Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV2 characterAchievementDto);
     Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV3 characterAchievementDto);
 }

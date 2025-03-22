@@ -30,7 +30,7 @@ public interface ICharacterServiceV2
     /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge);
+    public Task<CharacterDtoV2> GetCharacterAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's ClassJobs.
@@ -41,7 +41,7 @@ public interface ICharacterServiceV2
     /// </param>
     /// <returns>Character class jobs.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge);
+    public Task<CharacterClassJobOuterDtoV2> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's minions.
@@ -52,7 +52,7 @@ public interface ICharacterServiceV2
     /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDtoV2<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's mounts.
@@ -63,7 +63,7 @@ public interface ICharacterServiceV2
     /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
+    public Task<CollectionDtoV2<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a character's achievements.
@@ -75,5 +75,5 @@ public interface ICharacterServiceV2
     /// </param>
     /// <returns>Character achievements.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge);
+    Task<CharacterAchievementOuterDtoV2> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge);
 }

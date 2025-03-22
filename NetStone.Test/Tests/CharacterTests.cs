@@ -1,5 +1,5 @@
-using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
@@ -9,7 +9,6 @@ using NetStone.Common.Helpers;
 using NetStone.Model.Parseables.Character;
 using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
-using NetStone.Search.Character;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
 using Xunit.Abstractions;
@@ -23,10 +22,6 @@ namespace NetStone.Test.Tests;
 public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFixture fixture)
     : TestBed<CharacterTestsFixture>(testOutputHelper, fixture)
 {
-    private readonly CharacterClassJobsService _jobService =
-        fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
-
-    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
     private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     #region CharacterClassJobs
@@ -40,7 +35,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value.IsUnlocked))
         {
-            var classJobDb = _jobService
+            var classJobDb = CharacterClassJobsServiceV3
                 .GetCharacterClassJobs(new Dictionary<ClassJob, ClassJobEntry> { { key, classJobLodestone } }, [])
                 .FirstOrDefault();
 
@@ -51,7 +46,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
                 // actually, most definitely add test for this. it seems to falsely return conjurer for Sigyn.
             }
 
-            var classJobDto = _mapper.Map<CharacterClassJobDto>(classJobDb);
+            var classJobDto = classJobDb.ToDto();
             Assert.NotNull(classJobDto);
 
             Assert.Equal(classJobLodestone.IsJobUnlocked, classJobDto.IsJobUnlocked);
@@ -84,10 +79,10 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         foreach (var minionLodestone in minionsLodestone.Collectables)
         {
-            var minionDb = _mapper.Map<CharacterMinion>(minionLodestone);
+            var minionDb = minionLodestone.ToDbMinion(lodestoneId);
             Assert.NotNull(minionDb);
 
-            var minionDto = _mapper.Map<CharacterMinionDto>(minionDb);
+            var minionDto = minionDb.ToDto();
             Assert.NotNull(minionDb);
 
             Assert.Equal(minionLodestone.Name, minionDto.Name);
@@ -116,10 +111,10 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         foreach (var mountLodestone in mountsLodestone.Collectables)
         {
-            var mountDb = _mapper.Map<CharacterMinion>(mountLodestone);
+            var mountDb = mountLodestone.ToDbMount(lodestoneId);
             Assert.NotNull(mountDb);
 
-            var mountDto = _mapper.Map<CharacterMinionDto>(mountDb);
+            var mountDto = mountDb.ToDto();
             Assert.NotNull(mountDb);
 
             Assert.Equal(mountLodestone.Name, mountDto.Name);
@@ -139,13 +134,13 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         foreach (var achievementLodestone in achievementsLodestone.Achievements)
         {
-            var achievemntDb = _mapper.Map<CharacterAchievement>(achievementLodestone);
-            Assert.NotNull(achievemntDb);
+            var achievementDb = achievementLodestone.ToDb(lodestoneId);
+            Assert.NotNull(achievementDb);
 
-            var achievementDto = _mapper.Map<CharacterAchievementDto>(achievemntDb);
+            var achievementDto = achievementDb.ToDto();
             Assert.NotNull(achievementDto);
 
-            Assert.Equal(achievementLodestone.Id?.ToString(), achievementDto.Id);
+            Assert.Equal(achievementLodestone.Id, achievementDto.Id);
             Assert.Equal(achievementLodestone.Name, achievementDto.Name);
             Assert.Equal(achievementLodestone.DatabaseLink, achievementDto.DatabaseLink);
             Assert.Equal(achievementLodestone.TimeAchieved, achievementDto.TimeAchieved);
@@ -160,7 +155,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
     [ClassData(typeof(CharacterSearchDataGenerator))]
     public async Task ApiCharacterSearch(SearchTestData data)
     {
-        var netStoneQuery = _mapper.Map<CharacterSearchQuery>(data.Query);
+        var netStoneQuery = data.Query.ToNetStone();
         var searchResult = await _netStoneService.SearchCharacter(netStoneQuery, data.Page ?? 1);
         Assert.NotNull(searchResult);
 
@@ -185,12 +180,13 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         var characterLodestone = await _netStoneService.GetCharacter(lodestoneId);
         Assert.NotNull(characterLodestone);
 
-        var characterDb = _mapper.Map<Character>(characterLodestone);
+        var characterDb = characterLodestone.ToDb(lodestoneId);
+        characterDb.Gear = CharacterGearServiceV3.GetGear(characterLodestone.Gear, characterDb.Gear);
         Assert.NotNull(characterDb);
 
         characterDb.LodestoneId = lodestoneId; // also set manually in code
 
-        var characterDto = _mapper.Map<CharacterDtoV3>(characterDb);
+        var characterDto = characterDb.ToDto();
         Assert.NotNull(characterDto);
 
         Assert.Equal(lodestoneId, characterDto.Id);

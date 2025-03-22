@@ -220,7 +220,7 @@ namespace NetStone.Api.Controllers.V2
         /// </param>
         /// <returns>DTO containing the parsed character and some goodie properties.</returns>
         [HttpGet("{lodestoneId}")]
-        public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge)
+        public async Task<ActionResult<CharacterDtoV2>> GetAsync(string lodestoneId, int? maxAge)
         {
             try
             {
@@ -240,14 +240,14 @@ namespace NetStone.Api.Controllers.V2
         ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
         /// <remarks>
-        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDto.LastUpdated" />
+        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDtoV2.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
         ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
         ///     <paramref name="maxAge" /> applies as expected.
         /// </remarks>
         /// <returns>Character class jobs.</returns>
         [HttpGet("ClassJobs/{lodestoneId}")]
-        public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge)
+        public async Task<ActionResult<CharacterClassJobOuterDtoV2>> GetClassJobsAsync(string lodestoneId, int? maxAge)
         {
             try
             {
@@ -267,14 +267,14 @@ namespace NetStone.Api.Controllers.V2
         ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
         /// <remarks>
-        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{t}.LastUpdated" />
+        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV2{T}.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
         ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
         ///     <paramref name="maxAge" /> applies as expected.
         /// </remarks>
         /// <returns>Character minions.</returns>
         [HttpGet("Minions/{lodestoneId}")]
-        public async Task<ActionResult<CollectionDto<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
+        public async Task<ActionResult<CollectionDtoV2<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
             int? maxAge)
         {
             try
@@ -295,14 +295,14 @@ namespace NetStone.Api.Controllers.V2
         ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
         /// <remarks>
-        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{T}.LastUpdated" />
+        ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV2{T}.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
         ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
         ///     <paramref name="maxAge" /> applies as expected.
         /// </remarks>
         /// <returns>Character mounts.</returns>
         [HttpGet("Mounts/{lodestoneId}")]
-        public async Task<ActionResult<CollectionDto<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
+        public async Task<ActionResult<CollectionDtoV2<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
             int? maxAge)
         {
             try
@@ -325,14 +325,14 @@ namespace NetStone.Api.Controllers.V2
         /// </param>
         /// <remarks>
         ///     If character was never cached using <see cref="GetAsync" />,
-        ///     <see cref="CharacterAchievementOuterDto.LastUpdated" />
+        ///     <see cref="CharacterAchievementOuterDtoV2.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
         ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
         ///     <paramref name="maxAge" /> applies as expected.
         /// </remarks>
         /// <returns>Character achievements.</returns>
         [HttpGet("Achievements/{lodestoneId}")]
-        public async Task<ActionResult<CharacterAchievementOuterDto>> GetAchievementsAsync(string lodestoneId,
+        public async Task<ActionResult<CharacterAchievementOuterDtoV2>> GetAchievementsAsync(string lodestoneId,
             int? maxAge)
         {
             try

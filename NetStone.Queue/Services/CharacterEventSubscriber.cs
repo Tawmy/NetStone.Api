@@ -9,7 +9,7 @@ namespace NetStone.Queue.Services;
 internal class CharacterEventSubscriber(IServiceProvider serviceProvider, ICharacterEventService characterEventService)
     : ICharacterEventSubscriber, IHostedService
 {
-    public Task CharacterRefreshedAsync(CharacterDto characterDto)
+    public Task CharacterRefreshedAsync(CharacterDtoV2 characterDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
@@ -23,7 +23,7 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterRefreshedAsync(characterDto);
     }
 
-    public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto characterClassJobsDto)
+    public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV2 characterClassJobsDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
@@ -37,7 +37,7 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterClassJobsRefreshedAsync(characterClassJobsDto);
     }
 
-    public Task CharacterMountsRefreshedAsync(CollectionDto<CharacterMountDto> characterMountDto)
+    public Task CharacterMountsRefreshedAsync(CollectionDtoV2<CharacterMountDto> characterMountDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
@@ -51,7 +51,7 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterMountsRefreshedAsync(characterMountDto);
     }
 
-    public Task CharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> characterMinionDto)
+    public Task CharacterMinionsRefreshedAsync(CollectionDtoV2<CharacterMinionDto> characterMinionDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
@@ -65,7 +65,7 @@ internal class CharacterEventSubscriber(IServiceProvider serviceProvider, IChara
         return service.SendGetCharacterMinionsRefreshedAsync(characterMinionDto);
     }
 
-    public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto characterAchievementDto)
+    public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV2 characterAchievementDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();

@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Exceptions;
@@ -14,9 +15,8 @@ namespace NetStone.Data.Services;
 
 public class CharacterServiceV3(
     INetStoneService netStoneService,
-    ICharacterCachingService cachingService,
-    ICharacterEventService eventService,
-    IAutoMapperService mapper)
+    ICharacterCachingServiceV3 cachingService,
+    ICharacterEventService eventService)
     : ICharacterServiceV3
 {
     private static readonly ActivitySource ActivitySource = new(nameof(ICharacterServiceV3));
@@ -26,11 +26,11 @@ public class CharacterServiceV3(
         using var activity = ActivitySource.StartActivity();
         activity?.AddTag(nameof(CharacterSearchQuery), JsonSerializer.Serialize(query));
 
-        var netStoneQuery = mapper.Map<Search.Character.CharacterSearchQuery>(query);
+        var netStoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchCharacter(netStoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
-        return mapper.Map<CharacterSearchPageDto>(result);
+        return result.ToDto();
     }
 
     public async Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, bool useFallback)
@@ -43,7 +43,7 @@ public class CharacterServiceV3(
         {
             if (cachedCharacterDto.LastUpdated is null)
             {
-                throw new InvalidOperationException($"{nameof(CharacterDto.LastUpdated)} must never be null here.");
+                throw new InvalidOperationException($"{nameof(CharacterDtoV2.LastUpdated)} must never be null here.");
             }
 
             if ((DateTime.UtcNow - cachedCharacterDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))

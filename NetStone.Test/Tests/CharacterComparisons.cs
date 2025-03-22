@@ -1,4 +1,5 @@
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
@@ -23,8 +24,8 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     private readonly ICharacterEventService _characterEventService =
         fixture.GetService<ICharacterEventService>(testOutputHelper)!;
 
-    private readonly CharacterClassJobsService _classJobsService =
-        fixture.GetService<CharacterClassJobsService>(testOutputHelper)!;
+    private readonly CharacterClassJobsServiceV2 _classJobsService =
+        fixture.GetService<CharacterClassJobsServiceV2>(testOutputHelper)!;
 
     private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
 
@@ -34,9 +35,17 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterV2V3Match(string lodestoneId)
     {
-        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2) =
+            CreateServices();
 
-        characterCachingService.CacheCharacterAsync(Arg.Any<string>(), Arg.Any<LodestoneCharacter>())
+        characterCachingServiceV3.CacheCharacterAsync(Arg.Any<string>(), Arg.Any<LodestoneCharacter>())
+            .Returns(x =>
+            {
+                var db = ((LodestoneCharacter)x[1]).ToDb((string)x[0]);
+                return db.ToDto();
+            });
+
+        characterCachingServiceV2.CacheCharacterAsync(Arg.Any<string>(), Arg.Any<LodestoneCharacter>())
             .Returns(x =>
             {
                 var db = _mapper.Map<Character>((LodestoneCharacter)x[1]);
@@ -112,11 +121,22 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterClassJobsV2V3Match(string lodestoneId)
     {
-        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2) =
+            CreateServices();
 
-        characterCachingService.GetCharacterClassJobsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV3.GetCharacterClassJobsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV2.GetCharacterClassJobsAsync(Arg.Any<string>()).Returns(([], null));
 
-        characterCachingService.CacheCharacterClassJobsAsync(Arg.Any<string>(), Arg.Any<CharacterClassJob>())
+        characterCachingServiceV3.CacheCharacterClassJobsAsync(Arg.Any<string>(), Arg.Any<CharacterClassJob>())
+            .Returns(x =>
+            {
+                var db = CharacterClassJobsServiceV3.GetCharacterClassJobs(((CharacterClassJob)x[1]).ClassJobDict, [])
+                    .ToList();
+                db.ForEach(y => y.CharacterLodestoneId = (string)x[0]);
+                return db.Select(y => y.ToDto()).ToList();
+            });
+
+        characterCachingServiceV2.CacheCharacterClassJobsAsync(Arg.Any<string>(), Arg.Any<CharacterClassJob>())
             .Returns(x =>
             {
                 var db = _classJobsService.GetCharacterClassJobs(((CharacterClassJob)x[1]).ClassJobDict, []).ToList();
@@ -149,11 +169,21 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterMinionsV2V3Match(string lodestoneId)
     {
-        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2) =
+            CreateServices();
 
-        characterCachingService.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV3.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV2.GetCharacterMinionsAsync(Arg.Any<string>()).Returns(([], null));
 
-        characterCachingService.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+        characterCachingServiceV3.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y => y.ToDbMinion((string)x[0]));
+                return dbs.Select(y => y.ToDto()).ToList();
+            });
+
+
+        characterCachingServiceV2.CacheCharacterMinionsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
             .Returns(x =>
             {
                 var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
@@ -197,11 +227,20 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterMountsV2V3Match(string lodestoneId)
     {
-        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2) =
+            CreateServices();
 
-        characterCachingService.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV3.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV2.GetCharacterMountsAsync(Arg.Any<string>()).Returns(([], null));
 
-        characterCachingService.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+        characterCachingServiceV3.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
+            .Returns(x =>
+            {
+                var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y => y.ToDbMount((string)x[0]));
+                return dbs.Select(y => y.ToDto()).ToList();
+            });
+
+        characterCachingServiceV2.CacheCharacterMountsAsync(Arg.Any<string>(), Arg.Any<CharacterCollectable>())
             .Returns(x =>
             {
                 var dbs = ((CharacterCollectable)x[1]).Collectables.Select(y =>
@@ -246,11 +285,21 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
     [ClassData(typeof(CharacterTestsDataGenerator))]
     public async Task CharacterAchievementsV2V3Match(string lodestoneId)
     {
-        var (characterCachingService, characterServiceV3, characterServiceV2) = CreateServices();
+        var (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2) =
+            CreateServices();
 
-        characterCachingService.GetCharacterAchievementsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV3.GetCharacterAchievementsAsync(Arg.Any<string>()).Returns(([], null));
+        characterCachingServiceV2.GetCharacterAchievementsAsync(Arg.Any<string>()).Returns(([], null));
 
-        characterCachingService
+        characterCachingServiceV3
+            .CacheCharacterAchievementsAsync(Arg.Any<string>(), Arg.Any<IEnumerable<CharacterAchievementEntry>>())
+            .Returns(x =>
+            {
+                var dbs = ((IEnumerable<CharacterAchievementEntry>)x[1]).Select(y => y.ToDb((string)x[0]));
+                return dbs.Select(y => y.ToDto()).ToList();
+            });
+
+        characterCachingServiceV2
             .CacheCharacterAchievementsAsync(Arg.Any<string>(), Arg.Any<IEnumerable<CharacterAchievementEntry>>())
             .Returns(x =>
             {
@@ -280,17 +329,18 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         Assert.NotNull(v2.LastUpdated);
     }
 
-    private (ICharacterCachingService characterCachingService, ICharacterServiceV3 characterServiceV3,
-        ICharacterServiceV2 characterServiceV2) CreateServices()
+    private (ICharacterCachingServiceV3 characterCachingServiceV3, ICharacterCachingServiceV2 characterCachingServiceV2,
+        ICharacterServiceV3 characterServiceV3, ICharacterServiceV2 characterServiceV2) CreateServices()
     {
-        var characterCachingService = Substitute.For<ICharacterCachingService>();
+        var characterCachingServiceV3 = Substitute.For<ICharacterCachingServiceV3>();
+        var characterCachingServiceV2 = Substitute.For<ICharacterCachingServiceV2>();
 
         var characterServiceV3 =
-            new CharacterServiceV3(_netStoneService, characterCachingService, _characterEventService, _mapper);
+            new CharacterServiceV3(_netStoneService, characterCachingServiceV3, _characterEventService);
 
         var characterServiceV2 =
-            new CharacterServiceV2(_netStoneService, characterCachingService, _characterEventService, _mapper);
+            new CharacterServiceV2(_netStoneService, characterCachingServiceV2, _characterEventService, _mapper);
 
-        return (characterCachingService, characterServiceV3, characterServiceV2);
+        return (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2);
     }
 }

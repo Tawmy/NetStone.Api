@@ -11,7 +11,7 @@ namespace NetStone.Data.Services;
 
 public class CharacterServiceV2(
     INetStoneService netStoneService,
-    ICharacterCachingService cachingService,
+    ICharacterCachingServiceV2 cachingService,
     ICharacterEventService eventService,
     IAutoMapperService mapper)
     : ICharacterServiceV2
@@ -30,7 +30,7 @@ public class CharacterServiceV2(
         return mapper.Map<CharacterSearchPageDto>(result);
     }
 
-    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge)
+    public async Task<CharacterDtoV2> GetCharacterAsync(string lodestoneId, int? maxAge)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -40,14 +40,14 @@ public class CharacterServiceV2(
         {
             if (cachedCharacterDto.LastUpdated is null)
             {
-                throw new InvalidOperationException($"{nameof(CharacterDto.LastUpdated)} must never be null here.");
+                throw new InvalidOperationException($"{nameof(CharacterDtoV2.LastUpdated)} must never be null here.");
             }
 
             if ((DateTime.UtcNow - cachedCharacterDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
             {
                 // return cached character if possible
                 cachedCharacterDto = cachedCharacterDto with { Cached = true };
-                return mapper.Map<CharacterDto>(cachedCharacterDto);
+                return mapper.Map<CharacterDtoV2>(cachedCharacterDto);
             }
         }
 
@@ -57,10 +57,10 @@ public class CharacterServiceV2(
         // cache character, send to queue, and return
         cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
-        return mapper.Map<CharacterDto>(cachedCharacterDto);
+        return mapper.Map<CharacterDtoV2>(cachedCharacterDto);
     }
 
-    public async Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge)
+    public async Task<CharacterClassJobOuterDtoV2> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -74,14 +74,14 @@ public class CharacterServiceV2(
                 {
                     // if character was cached before, last time ClassJobs were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
-                    return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, lastUpdated.Value);
+                    return new CharacterClassJobOuterDtoV2(cachedClassJobsDtos, true, lastUpdated.Value);
                 }
             }
             else if (maxAge is null)
             {
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, null);
+                return new CharacterClassJobOuterDtoV2(cachedClassJobsDtos, true, null);
             }
         }
 
@@ -90,12 +90,12 @@ public class CharacterServiceV2(
 
         cachedClassJobsDtos =
             await cachingService.CacheCharacterClassJobsAsync(lodestoneId, lodestoneCharacterClassJobs);
-        var outerDto = new CharacterClassJobOuterDto(cachedClassJobsDtos, false, DateTime.UtcNow);
+        var outerDto = new CharacterClassJobOuterDtoV2(cachedClassJobsDtos, false, DateTime.UtcNow);
         _ = eventService.CharacterClassJobsRefreshedAsync(outerDto);
         return outerDto;
     }
 
-    public async Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge)
+    public async Task<CollectionDtoV2<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -109,7 +109,7 @@ public class CharacterServiceV2(
                 {
                     // if character was cached before, last time minions were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
-                    return new CollectionDto<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated.Value,
+                    return new CollectionDtoV2<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated.Value,
                         StaticValues.TotalMinions);
                 }
             }
@@ -117,7 +117,8 @@ public class CharacterServiceV2(
             {
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new CollectionDto<CharacterMinionDto>(cachedMinionsDtos, true, null, StaticValues.TotalMinions);
+                return new CollectionDtoV2<CharacterMinionDto>(cachedMinionsDtos, true, null,
+                    StaticValues.TotalMinions);
             }
         }
 
@@ -126,13 +127,13 @@ public class CharacterServiceV2(
 
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
 
-        var collectionDto = new CollectionDto<CharacterMinionDto>(cachedMinionsDtos, false, DateTime.UtcNow,
+        var collectionDto = new CollectionDtoV2<CharacterMinionDto>(cachedMinionsDtos, false, DateTime.UtcNow,
             StaticValues.TotalMinions);
         _ = eventService.CharacterMinionsRefreshedAsync(collectionDto);
         return collectionDto;
     }
 
-    public async Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge)
+    public async Task<CollectionDtoV2<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -146,7 +147,7 @@ public class CharacterServiceV2(
                 {
                     // if character was cached before, last time mounts were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
-                    return new CollectionDto<CharacterMountDto>(cachedMountsDtos, true, lastUpdated.Value,
+                    return new CollectionDtoV2<CharacterMountDto>(cachedMountsDtos, true, lastUpdated.Value,
                         StaticValues.TotalMounts);
                 }
             }
@@ -154,7 +155,7 @@ public class CharacterServiceV2(
             {
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new CollectionDto<CharacterMountDto>(cachedMountsDtos, true, null, StaticValues.TotalMounts);
+                return new CollectionDtoV2<CharacterMountDto>(cachedMountsDtos, true, null, StaticValues.TotalMounts);
             }
         }
 
@@ -164,12 +165,12 @@ public class CharacterServiceV2(
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
 
         var collectionDto =
-            new CollectionDto<CharacterMountDto>(cachedMountsDtos, false, DateTime.UtcNow, StaticValues.TotalMounts);
+            new CollectionDtoV2<CharacterMountDto>(cachedMountsDtos, false, DateTime.UtcNow, StaticValues.TotalMounts);
         _ = eventService.CharacterMountsRefreshedAsync(collectionDto);
         return collectionDto;
     }
 
-    public async Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge)
+    public async Task<CharacterAchievementOuterDtoV2> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -183,14 +184,14 @@ public class CharacterServiceV2(
                 {
                     // if character was cached before, last time achievements were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
-                    return new CharacterAchievementOuterDto(cachedAchievementsDtos, true, lastUpdated.Value);
+                    return new CharacterAchievementOuterDtoV2(cachedAchievementsDtos, true, lastUpdated.Value);
                 }
             }
             else if (maxAge is null)
             {
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new CharacterAchievementOuterDto(cachedAchievementsDtos, true, null);
+                return new CharacterAchievementOuterDtoV2(cachedAchievementsDtos, true, null);
             }
         }
 
@@ -199,7 +200,7 @@ public class CharacterServiceV2(
         cachedAchievementsDtos =
             await cachingService.CacheCharacterAchievementsAsync(lodestoneId, lodestoneAchievements);
 
-        var outerDto = new CharacterAchievementOuterDto(cachedAchievementsDtos, false, DateTime.UtcNow);
+        var outerDto = new CharacterAchievementOuterDtoV2(cachedAchievementsDtos, false, DateTime.UtcNow);
         _ = eventService.CharacterAchievementsRefreshedAsync(outerDto);
         return outerDto;
     }

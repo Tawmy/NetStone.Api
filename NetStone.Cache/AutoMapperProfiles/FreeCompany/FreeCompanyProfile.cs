@@ -31,7 +31,8 @@ public class FreeCompanyProfile : Profile
         CreateMap<Db.Models.FreeCompany, FreeCompanyDtoV3>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.CrestLayers,
-                x => x.MapFrom(y => new FreeCompanyCrestDto(y.CrestTop, y.CrestMiddle, y.CrestBottom)))
+                x => x.MapFrom(y => new FreeCompanyCrestDto
+                    { TopLayer = y.CrestTop, MiddleLayer = y.CrestMiddle, BottomLayer = y.CrestBottom }))
             .ForMember(x => x.Estate,
                 x => x.MapFrom(y =>
                     string.IsNullOrEmpty(y.EstateName) || string.IsNullOrEmpty(y.EstateGreeting)

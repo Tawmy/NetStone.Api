@@ -122,7 +122,8 @@ internal static class StartupExtensions
             x.AddEntityFrameworkCoreInstrumentation(y => y.SetDbStatementForText = true);
             x.AddSource(nameof(IAutoMapperService));
             x.AddSource(nameof(INetStoneService));
-            x.AddSource(nameof(ICharacterCachingService));
+            x.AddSource(nameof(ICharacterCachingServiceV3));
+            x.AddSource(nameof(ICharacterCachingServiceV2));
             x.AddSource(nameof(ICharacterServiceV3));
             x.AddSource(nameof(ICharacterServiceV2));
             x.AddSource(nameof(IFreeCompanyCachingService));

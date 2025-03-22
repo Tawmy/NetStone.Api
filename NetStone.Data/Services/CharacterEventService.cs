@@ -17,7 +17,7 @@ internal class CharacterEventService : ICharacterEventService
         _subscribers.Remove(subscriber);
     }
 
-    public Task CharacterRefreshedAsync(CharacterDto characterDto)
+    public Task CharacterRefreshedAsync(CharacterDtoV2 characterDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.CharacterRefreshedAsync(characterDto)));
     }
@@ -27,7 +27,7 @@ internal class CharacterEventService : ICharacterEventService
         return Task.WhenAll(_subscribers.Select(x => x.CharacterRefreshedAsync(characterDto)));
     }
 
-    public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto characterClassJobsDto)
+    public Task CharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV2 characterClassJobsDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.CharacterClassJobsRefreshedAsync(characterClassJobsDto)));
     }
@@ -37,7 +37,7 @@ internal class CharacterEventService : ICharacterEventService
         return Task.WhenAll(_subscribers.Select(x => x.CharacterClassJobsRefreshedAsync(characterClassJobsDto)));
     }
 
-    public Task CharacterMountsRefreshedAsync(CollectionDto<CharacterMountDto> characterMountDto)
+    public Task CharacterMountsRefreshedAsync(CollectionDtoV2<CharacterMountDto> characterMountDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.CharacterMountsRefreshedAsync(characterMountDto)));
     }
@@ -47,7 +47,7 @@ internal class CharacterEventService : ICharacterEventService
         return Task.WhenAll(_subscribers.Select(x => x.CharacterMountsRefreshedAsync(characterMountDto)));
     }
 
-    public Task CharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> characterMinionDto)
+    public Task CharacterMinionsRefreshedAsync(CollectionDtoV2<CharacterMinionDto> characterMinionDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.CharacterMinionsRefreshedAsync(characterMinionDto)));
     }
@@ -57,7 +57,7 @@ internal class CharacterEventService : ICharacterEventService
         return Task.WhenAll(_subscribers.Select(x => x.CharacterMinionsRefreshedAsync(characterMinionDto)));
     }
 
-    public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto characterAchievementDto)
+    public Task CharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV2 characterAchievementDto)
     {
         return Task.WhenAll(_subscribers.Select(x => x.CharacterAchievementsRefreshedAsync(characterAchievementDto)));
     }

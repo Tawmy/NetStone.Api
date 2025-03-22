@@ -6,7 +6,7 @@ using NetStone.Model.Parseables.Character.Collectable;
 
 namespace NetStone.Cache.Interfaces;
 
-public interface ICharacterCachingService
+public interface ICharacterCachingServiceV3
 {
     #region Character
 

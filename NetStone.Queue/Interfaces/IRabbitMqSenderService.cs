@@ -7,33 +7,33 @@ public interface IRabbitMqSenderService
 {
     #region Character
 
-    Task SendGetCharacterSuccessfulAsync(CharacterDto dto);
+    Task SendGetCharacterSuccessfulAsync(CharacterDtoV2 dto);
     Task SendGetCharacterSuccessfulAsync(CharacterDtoV3 dto);
-    Task SendGetCharacterRefreshedAsync(CharacterDto dto);
+    Task SendGetCharacterRefreshedAsync(CharacterDtoV2 dto);
     Task SendGetCharacterRefreshedAsync(CharacterDtoV3 dto);
     Task SendGetCharacterFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDto dto);
+    Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDtoV2 dto);
     Task SendGetCharacterClassJobsSuccessfulAsync(CharacterClassJobOuterDtoV3 dto);
-    Task SendGetCharacterClassJobsRefreshedAsync(CharacterClassJobOuterDto dto);
+    Task SendGetCharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV2 dto);
     Task SendGetCharacterClassJobsRefreshedAsync(CharacterClassJobOuterDtoV3 dto);
     Task SendGetCharacterClassJobsFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterMinionsSuccessfulAsync(CollectionDto<CharacterMinionDto> dto);
+    Task SendGetCharacterMinionsSuccessfulAsync(CollectionDtoV2<CharacterMinionDto> dto);
     Task SendGetCharacterMinionsSuccessfulAsync(CollectionDtoV3<CharacterMinionDto> dto);
-    Task SendGetCharacterMinionsRefreshedAsync(CollectionDto<CharacterMinionDto> dto);
+    Task SendGetCharacterMinionsRefreshedAsync(CollectionDtoV2<CharacterMinionDto> dto);
     Task SendGetCharacterMinionsRefreshedAsync(CollectionDtoV3<CharacterMinionDto> dto);
     Task SendGetCharacterMinionsFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterMountsSuccessfulAsync(CollectionDto<CharacterMountDto> dto);
+    Task SendGetCharacterMountsSuccessfulAsync(CollectionDtoV2<CharacterMountDto> dto);
     Task SendGetCharacterMountsSuccessfulAsync(CollectionDtoV3<CharacterMountDto> dto);
-    Task SendGetCharacterMountsRefreshedAsync(CollectionDto<CharacterMountDto> dto);
+    Task SendGetCharacterMountsRefreshedAsync(CollectionDtoV2<CharacterMountDto> dto);
     Task SendGetCharacterMountsRefreshedAsync(CollectionDtoV3<CharacterMountDto> dto);
     Task SendGetCharacterMountsFailedAsync(string lodestoneId, string error);
 
-    Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDto dto);
+    Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDtoV2 dto);
     Task SendGetCharacterAchievementsSuccessfulAsync(CharacterAchievementOuterDtoV3 dto);
-    Task SendGetCharacterAchievementsRefreshedAsync(CharacterAchievementOuterDto dto);
+    Task SendGetCharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV2 dto);
     Task SendGetCharacterAchievementsRefreshedAsync(CharacterAchievementOuterDtoV3 dto);
     Task SendGetCharacterAchievementsFailedAsync(string lodestoneId, string error);
 
