@@ -19,8 +19,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		compose.dev.yml = compose.dev.yml
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetStone", "NetStone\NetStone\NetStone.csproj", "{79419733-834B-4CA7-A9B0-056ADC0EF2AA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,9 +49,5 @@ Global
 		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{78BB1011-6342-44E5-A20C-0C583E8B69D8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{79419733-834B-4CA7-A9B0-056ADC0EF2AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{79419733-834B-4CA7-A9B0-056ADC0EF2AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{79419733-834B-4CA7-A9B0-056ADC0EF2AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{79419733-834B-4CA7-A9B0-056ADC0EF2AA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
