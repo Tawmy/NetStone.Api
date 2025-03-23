@@ -13,15 +13,15 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20250309102835_Net9Migration")]
-    partial class Net9Migration
+    [Migration("20250323135331_v3.0.0")]
+    partial class v300
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "9.0.2")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "alchemist", "arcanist", "archer", "armorer", "astrologian", "bard", "black_mage", "blacksmith", "blue_mage", "botanist", "carpenter", "conjurer", "culinarian", "dancer", "dark_knight", "dragoon", "fisher", "gladiator", "goldsmith", "gunbreaker", "lancer", "leatherworker", "machinist", "marauder", "miner", "monk", "ninja", "paladin", "pictomancer", "pugilist", "reaper", "red_mage", "rogue", "sage", "samurai", "scholar", "summoner", "thaumaturge", "viper", "warrior", "weaver", "white_mage" });
@@ -382,16 +382,16 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("class_job")
                         .HasColumnName("class_job");
 
-                    b.Property<int>("ExpCurrent")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpCurrent")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_current");
 
-                    b.Property<int>("ExpMax")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpMax")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_max");
 
-                    b.Property<int>("ExpToGo")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpToGo")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_to_go");
 
                     b.Property<bool>("IsJobUnlocked")

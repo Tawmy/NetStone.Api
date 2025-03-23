@@ -5,7 +5,7 @@
 namespace NetStone.Cache.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class Net9Migration : Migration
+    public partial class v300 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -23,6 +23,30 @@ namespace NetStone.Cache.Db.Migrations
                 .OldAnnotation("Npgsql:Enum:grand_company", "no_affiliation,maelstrom,order_of_the_twin_adder,immortal_flames")
                 .OldAnnotation("Npgsql:Enum:race", "hyur,elezen,lalafell,miqote,roegadyn,au_ra,hrothgar,viera")
                 .OldAnnotation("Npgsql:Enum:tribe", "midlander,highlander,wildwood,duskwight,plainsfolk,dunesfolk,seeker_of_the_sun,keeper_of_the_moon,sea_wolf,hellsguard,raen,xaela,helions,the_lost,rava,veena");
+
+            migrationBuilder.AlterColumn<long>(
+                name: "exp_to_go",
+                table: "character_class_jobs",
+                type: "bigint",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer");
+
+            migrationBuilder.AlterColumn<long>(
+                name: "exp_max",
+                table: "character_class_jobs",
+                type: "bigint",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer");
+
+            migrationBuilder.AlterColumn<long>(
+                name: "exp_current",
+                table: "character_class_jobs",
+                type: "bigint",
+                nullable: false,
+                oldClrType: typeof(int),
+                oldType: "integer");
         }
 
         /// <inheritdoc />
@@ -41,6 +65,30 @@ namespace NetStone.Cache.Db.Migrations
                 .OldAnnotation("Npgsql:Enum:grand_company", "immortal_flames,maelstrom,no_affiliation,order_of_the_twin_adder")
                 .OldAnnotation("Npgsql:Enum:race", "au_ra,elezen,hrothgar,hyur,lalafell,miqote,roegadyn,viera")
                 .OldAnnotation("Npgsql:Enum:tribe", "dunesfolk,duskwight,helions,hellsguard,highlander,keeper_of_the_moon,midlander,plainsfolk,raen,rava,sea_wolf,seeker_of_the_sun,the_lost,veena,wildwood,xaela");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "exp_to_go",
+                table: "character_class_jobs",
+                type: "integer",
+                nullable: false,
+                oldClrType: typeof(long),
+                oldType: "bigint");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "exp_max",
+                table: "character_class_jobs",
+                type: "integer",
+                nullable: false,
+                oldClrType: typeof(long),
+                oldType: "bigint");
+
+            migrationBuilder.AlterColumn<int>(
+                name: "exp_current",
+                table: "character_class_jobs",
+                type: "integer",
+                nullable: false,
+                oldClrType: typeof(long),
+                oldType: "bigint");
         }
     }
 }
