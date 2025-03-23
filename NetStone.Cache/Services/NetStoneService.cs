@@ -13,7 +13,7 @@ using NetStone.Search.FreeCompany;
 
 namespace NetStone.Cache.Services;
 
-internal class NetStoneService(LodestoneClient lodestoneClient) : INetStoneService
+public class NetStoneService(LodestoneClient lodestoneClient) : INetStoneService
 {
     private static readonly ActivitySource ActivitySource = new(nameof(INetStoneService));
 

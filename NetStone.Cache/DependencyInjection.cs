@@ -10,9 +10,11 @@ public static class DependencyInjection
     {
         services.AddScoped<IAutoMapperService, AutoMapperService>();
         services.AddScoped<INetStoneService, NetStoneService>();
-        services.AddTransient<ICharacterCachingService, CharacterCachingService>();
-        services.AddTransient<IFreeCompanyCachingService, FreeCompanyCachingService>();
-        services.AddTransient<CharacterGearService>();
-        services.AddTransient<CharacterClassJobsService>();
+        services.AddScoped<ICharacterCachingServiceV3, CharacterCachingServiceV3>();
+        services.AddScoped<ICharacterCachingServiceV2, CharacterCachingServiceV2>();
+        services.AddScoped<IFreeCompanyCachingServiceV3, FreeCompanyCachingServiceV3>();
+        services.AddScoped<IFreeCompanyCachingServiceV2, FreeCompanyCachingServiceV2>();
+        services.AddScoped<CharacterGearServiceV2>();
+        services.AddScoped<CharacterClassJobsServiceV2>();
     }
 }

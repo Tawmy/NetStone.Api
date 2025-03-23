@@ -1,3 +1,3 @@
 namespace NetStone.Queue.Messages;
 
-public record GetCharacterAchievementsMessage(string LodestoneId, int? MaxAge);
+public record GetCharacterAchievementsMessage(string LodestoneId, int? MaxAge, bool? UseFallback);

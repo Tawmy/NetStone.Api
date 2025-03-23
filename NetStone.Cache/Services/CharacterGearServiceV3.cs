@@ -1,4 +1,4 @@
-using NetStone.Cache.Interfaces;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Common.Enums;
 using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.Gear;
@@ -6,9 +6,10 @@ using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 
 namespace NetStone.Cache.Services;
 
-public class CharacterGearService(IAutoMapperService mapper)
+// Can currently be static, but might need DI later
+public static class CharacterGearServiceV3
 {
-    public ICollection<CharacterGear> GetGear(Model.Parseables.Character.Gear.CharacterGear gear,
+    public static ICollection<CharacterGear> GetGear(Model.Parseables.Character.Gear.CharacterGear gear,
         ICollection<CharacterGear> currentGear)
     {
         var list = new List<CharacterGear>
@@ -32,29 +33,27 @@ public class CharacterGearService(IAutoMapperService mapper)
         return list;
     }
 
-    private CharacterGear? ToGear(GearEntry? gearEntry, GearSlot slot, IEnumerable<CharacterGear> currentGear)
+    private static CharacterGear? ToGear(GearEntry? gearEntry, GearSlot slot, IEnumerable<CharacterGear> currentGear)
     {
         if (gearEntry is null)
         {
             return null;
         }
 
-        var gear = mapper.Map<CharacterGear>(gearEntry);
-        gear.Slot = slot;
+        var gear = gearEntry.ToDb(slot);
         gear.Id = currentGear.Where(x => x.Slot == slot).Select(x => x.Id).FirstOrDefault();
         return gear;
     }
 
-    private CharacterGear? ToGear(SoulcrystalEntry? gearEntry, IEnumerable<CharacterGear> currentGear)
+    private static CharacterGear? ToGear(SoulcrystalEntry? gearEntry, IEnumerable<CharacterGear> currentGear)
     {
         if (gearEntry is null)
         {
             return null;
         }
 
-        var gear = mapper.Map<CharacterGear>(gearEntry);
-        gear.Slot = GearSlot.SoulCrystal;
-        gear.Id = currentGear.Where(x => x.Slot == GearSlot.SoulCrystal).Select(x => x.Id).FirstOrDefault();
+        var gear = gearEntry.ToDb();
+        gear.Id = currentGear.Where(x => x.Slot is GearSlot.SoulCrystal).Select(x => x.Id).FirstOrDefault();
         return gear;
     }
 }

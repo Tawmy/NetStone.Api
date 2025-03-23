@@ -14,7 +14,7 @@ internal class CharacterProfile : Profile
     {
         CreateMap<LodestoneCharacter, Db.Models.Character>()
             .ForMember(x => x.ActiveClassJob, x => x.MapFrom(y => y.GetActiveClassJob()))
-            .ForMember(x => x.GrandCompany, x => x.MapFrom<GrandCompanyResolver>())
+            .ForMember(x => x.GrandCompany, x => x.MapFrom<CharacterGrandCompanyResolver>())
             .ForMember(x => x.PvpTeam, x => x.MapFrom(y => y.PvPTeam != null ? y.PvPTeam.Name : null))
             .ForMember(x => x.Race, x => x.MapFrom(y => EnumHelper.ParseFromDisplayString<Race>(y.Race)))
             .ForMember(x => x.Tribe, x => x.MapFrom(y => EnumHelper.ParseFromDisplayString<Tribe>(y.Tribe)))
@@ -23,7 +23,7 @@ internal class CharacterProfile : Profile
             .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
             .ForMember(x => x.Mounts, x => x.Ignore()); // same here
 
-        CreateMap<Db.Models.Character, CharacterDto>()
+        CreateMap<Db.Models.Character, CharacterDtoV2>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.CharacterUpdatedAt))
             .ForMember(x => x.Attributes, x => x.MapFrom<CharacterAttributeResolver>());
