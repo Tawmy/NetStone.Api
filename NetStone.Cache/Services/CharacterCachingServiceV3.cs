@@ -92,6 +92,11 @@ internal class CharacterCachingServiceV3(
                 .ToListAsync();
             mounts.ForEach(x => x.CharacterId = character.Id);
 
+            var achievements = await context.CharacterAchievements.Where(x =>
+                    x.CharacterLodestoneId == lodestoneId)
+                .ToListAsync();
+            achievements.ForEach(x => x.CharacterId = character.Id);
+
             var freeCompanyMembers = await context.FreeCompanyMembers.Where(x =>
                     x.CharacterLodestoneId == lodestoneId)
                 .ToListAsync();
