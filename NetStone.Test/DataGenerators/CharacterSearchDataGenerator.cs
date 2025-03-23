@@ -21,7 +21,7 @@ internal class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData
                 Tribe: Tribe.Xaela,
                 GrandCompany: GrandCompany.Maelstrom,
                 Language: Language.Japanese | Language.English | Language.German,
-                SortKind: SortKind.NameAtoZ),
+                SortKind: SortKindCharacter.NameAtoZ),
             1
         ));
 

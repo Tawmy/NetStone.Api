@@ -13,13 +13,13 @@ public class CharacterClassJob
 
     public required ClassJob ClassJob { get; set; }
 
-    public required bool IsJobUnlocked { get; init; }
+    public required bool IsJobUnlocked { get; set; }
 
-    public required short Level { get; init; }
+    public required short Level { get; set; }
 
-    public required int ExpCurrent { get; init; }
-    public required int ExpMax { get; init; }
-    public required int ExpToGo { get; init; }
+    public required long ExpCurrent { get; set; }
+    public required long ExpMax { get; set; }
+    public required long ExpToGo { get; set; }
 
-    public required bool IsSpecialized { get; init; }
+    public required bool IsSpecialized { get; set; }
 }

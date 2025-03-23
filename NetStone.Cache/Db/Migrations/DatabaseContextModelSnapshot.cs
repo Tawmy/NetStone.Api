@@ -379,16 +379,16 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("class_job")
                         .HasColumnName("class_job");
 
-                    b.Property<int>("ExpCurrent")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpCurrent")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_current");
 
-                    b.Property<int>("ExpMax")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpMax")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_max");
 
-                    b.Property<int>("ExpToGo")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpToGo")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_to_go");
 
                     b.Property<bool>("IsJobUnlocked")

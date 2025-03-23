@@ -20,6 +20,7 @@ internal class CharacterFreeCompanyProfile : Profile
         CreateMap<CharacterFreeCompany, CharacterFreeCompanyDto>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.IconLayers,
-                x => x.MapFrom(y => new FreeCompanyCrestDto(y.TopLayer, y.MiddleLayer, y.BottomLayer)));
+                x => x.MapFrom(y => new FreeCompanyCrestDto
+                    { TopLayer = y.TopLayer, MiddleLayer = y.MiddleLayer, BottomLayer = y.BottomLayer }));
     }
 }

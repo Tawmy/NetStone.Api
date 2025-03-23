@@ -19,7 +19,7 @@ internal class FreeCompanySearchDataGenerator : TheoryData<FreeCompanySearchTest
                        FreeCompanyFocus.Trials | FreeCompanyFocus.Raids | FreeCompanyFocus.PvP,
                 Seeking: Seeking.NotSpecified,
                 GrandCompany: GrandCompany.ImmortalFlames,
-                SortKind: SortKind.WorldZtoA),
+                SortKind: SortKindFreeCompany.DateFoundedOldest),
             1
         ));
     }

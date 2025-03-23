@@ -7,7 +7,7 @@ namespace NetStone.Data.Interfaces;
 /// <summary>
 ///     Data service for free company data.
 /// </summary>
-public interface IFreeCompanyService
+public interface IFreeCompanyServiceV2
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -31,7 +31,7 @@ public interface IFreeCompanyService
     /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyDtoV2> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a free company's members.
@@ -43,5 +43,5 @@ public interface IFreeCompanyService
     /// </param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyMembersOuterDtoV2> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
 }

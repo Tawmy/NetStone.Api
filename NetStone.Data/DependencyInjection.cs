@@ -10,10 +10,11 @@ public static class DependencyInjection
     {
         services.AddSingleton(await LodestoneClient.GetClientAsync());
 
-        services.AddTransient<ICharacterService, CharacterService>();
-        services.AddTransient<IFreeCompanyService, FreeCompanyService>();
+        services.AddScoped<ICharacterServiceV3, CharacterServiceV3>();
+        services.AddScoped<IFreeCompanyServiceV3, FreeCompanyServiceV3>();
 
-        services.AddTransient<ILegacyCharacterService, LegacyCharacterService>();
+        services.AddScoped<ICharacterServiceV2, CharacterServiceV2>();
+        services.AddScoped<IFreeCompanyServiceV2, FreeCompanyServiceV2>();
 
         services.AddSingleton<ICharacterEventService, CharacterEventService>();
         services.AddSingleton<IFreeCompanyEventService, FreeCompanyEventService>();

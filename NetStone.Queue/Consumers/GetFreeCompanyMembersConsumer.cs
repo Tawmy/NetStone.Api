@@ -6,7 +6,9 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetFreeCompanyMembersConsumer(IFreeCompanyService freeCompanyService, IRabbitMqSenderService senderService)
+public class GetFreeCompanyMembersConsumer(
+    IFreeCompanyServiceV3 freeCompanyService,
+    IRabbitMqSenderService senderService)
     : IConsumer<GetFreeCompanyMembersMessage>
 {
     public async Task Consume(ConsumeContext<GetFreeCompanyMembersMessage> context)
@@ -15,7 +17,8 @@ public class GetFreeCompanyMembersConsumer(IFreeCompanyService freeCompanyServic
 
         try
         {
-            var freeCompanyMembers = await freeCompanyService.GetFreeCompanyMembersAsync(m.LodestoneId, m.MaxAge);
+            var freeCompanyMembers = await freeCompanyService.GetFreeCompanyMembersAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? false);
             await senderService.SendGetFreeCompanyMembersSuccessfulAsync(freeCompanyMembers);
         }
         catch (NotFoundException)
