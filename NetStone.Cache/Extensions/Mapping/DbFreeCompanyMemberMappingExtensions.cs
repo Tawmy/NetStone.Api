@@ -11,7 +11,10 @@ public static class DbFreeCompanyMemberMappingExtensions
         {
             LodestoneId = source.CharacterLodestoneId,
             FreeCompanyLodestoneId = source.FreeCompanyLodestoneId,
-            CachedCharacter = source.FullCharacter?.ToDto(),
+
+            CachedCharacter = source.FullCharacter?.ToDto() is { } cachedCharacter
+                ? cachedCharacter with { Cached = true }
+                : null,
 
             Name = source.Name,
             Rank = source.Rank,

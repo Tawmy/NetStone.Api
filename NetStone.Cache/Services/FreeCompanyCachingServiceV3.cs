@@ -114,7 +114,10 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
                 newDbMember.FreeCompanyId = freeCompany.Id;
             }
 
-            if (await context.Characters.FirstOrDefaultAsync(x => x.LodestoneId == newMember.Id) is { } character)
+            if (await context.Characters.Where(x =>
+                        x.LodestoneId == newMember.Id)
+                    .Include(x => x.Attributes)
+                    .FirstOrDefaultAsync() is { } character)
             {
                 newDbMember.FullCharacterId = character.Id;
             }
@@ -134,7 +137,10 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
                 updatedDbMember.FreeCompanyId = freeCompany.Id;
             }
 
-            if (await context.Characters.FirstOrDefaultAsync(x => x.LodestoneId == updatedMember.Id) is { } character &&
+            if (await context.Characters.Where(x =>
+                        x.LodestoneId == updatedMember.Id)
+                    .Include(x => x.Attributes)
+                    .FirstOrDefaultAsync() is { } character &&
                 updatedDbMember.FullCharacterId is null)
             {
                 updatedDbMember.FullCharacterId = character.Id;
