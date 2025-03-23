@@ -34,19 +34,32 @@ internal class CharacterCachingServiceV3(
             lodestoneCharacter.ToDb(character);
             character.Gear = CharacterGearServiceV3.GetGear(lodestoneCharacter.Gear, character.Gear);
 
-            if (character.FreeCompany is not null &&
-                character.FullFreeCompany?.LodestoneId != character.FreeCompany?.LodestoneId)
+            if (character.FreeCompany is not null)
             {
-                // free company has changed, try to match to possibly existing full fc profile
-                var freeCompanyId = await context.FreeCompanies.Where(x =>
-                        x.LodestoneId == character.FreeCompany!.LodestoneId)
-                    .Select(x => x.Id)
-                    .FirstOrDefaultAsync();
-
-                if (freeCompanyId is not 0)
+                if (character.FullFreeCompany?.LodestoneId != character.FreeCompany?.LodestoneId)
                 {
-                    character.FullFreeCompanyId = freeCompanyId;
+                    // free company has changed, try to match to possibly existing full fc profile
+                    var freeCompanyId = await context.FreeCompanies.Where(x =>
+                            x.LodestoneId == character.FreeCompany!.LodestoneId)
+                        .Select(x => x.Id)
+                        .FirstOrDefaultAsync();
+
+                    if (freeCompanyId is not 0)
+                    {
+                        // character switched to different fc and it exists in the database, attach it
+                        character.FullFreeCompanyId = freeCompanyId;
+                    }
+                    else
+                    {
+                        // character switched to different fc and it exists in the database, remove existing
+                        character.FullFreeCompanyId = null;
+                    }
                 }
+            }
+            else if (character.FullFreeCompanyId is not null)
+            {
+                // character not in fc, set full free company id to cover case of user leaving 
+                character.FullFreeCompanyId = null;
             }
 
             context.Entry(character).State = EntityState.Modified;
