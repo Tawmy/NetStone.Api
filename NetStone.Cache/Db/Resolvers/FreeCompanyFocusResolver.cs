@@ -10,7 +10,7 @@ public class FreeCompanyFocusResolver : IValueResolver<LodestoneFreeCompany, Fre
     public FreeCompanyFocus Resolve(LodestoneFreeCompany source, FreeCompany destination, FreeCompanyFocus destMember,
         ResolutionContext context)
     {
-        var focus = FreeCompanyFocus.None;
+        var focus = FreeCompanyFocus.NotSpecified;
 
         if (source.Focus?.HasFocus is not true)
         {

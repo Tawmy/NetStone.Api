@@ -18,15 +18,15 @@ namespace NetStone.Cache.Db.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.8")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "gladiator", "pugilist", "marauder", "lancer", "archer", "conjurer", "thaumaturge", "carpenter", "blacksmith", "armorer", "goldsmith", "leatherworker", "weaver", "alchemist", "culinarian", "miner", "botanist", "fisher", "paladin", "monk", "warrior", "dragoon", "bard", "white_mage", "black_mage", "arcanist", "summoner", "scholar", "rogue", "ninja", "machinist", "dark_knight", "astrologian", "samurai", "red_mage", "blue_mage", "gunbreaker", "dancer", "reaper", "sage", "viper", "pictomancer" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_slot", new[] { "main_hand", "off_hand", "head", "body", "hands", "legs", "feet", "earrings", "necklace", "bracelets", "ring1", "ring2", "soul_crystal" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender", new[] { "male", "female" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "no_affiliation", "maelstrom", "order_of_the_twin_adder", "immortal_flames" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "race", new[] { "hyur", "elezen", "lalafell", "miqote", "roegadyn", "au_ra", "hrothgar", "viera" });
-            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "tribe", new[] { "midlander", "highlander", "wildwood", "duskwight", "plainsfolk", "dunesfolk", "seeker_of_the_sun", "keeper_of_the_moon", "sea_wolf", "hellsguard", "raen", "xaela", "helions", "the_lost", "rava", "veena" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "alchemist", "arcanist", "archer", "armorer", "astrologian", "bard", "black_mage", "blacksmith", "blue_mage", "botanist", "carpenter", "conjurer", "culinarian", "dancer", "dark_knight", "dragoon", "fisher", "gladiator", "goldsmith", "gunbreaker", "lancer", "leatherworker", "machinist", "marauder", "miner", "monk", "ninja", "paladin", "pictomancer", "pugilist", "reaper", "red_mage", "rogue", "sage", "samurai", "scholar", "summoner", "thaumaturge", "viper", "warrior", "weaver", "white_mage" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_slot", new[] { "body", "bracelets", "earrings", "feet", "hands", "head", "legs", "main_hand", "necklace", "off_hand", "ring1", "ring2", "soul_crystal" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender", new[] { "female", "male" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "immortal_flames", "maelstrom", "no_affiliation", "order_of_the_twin_adder" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "race", new[] { "au_ra", "elezen", "hrothgar", "hyur", "lalafell", "miqote", "roegadyn", "viera" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "tribe", new[] { "dunesfolk", "duskwight", "helions", "hellsguard", "highlander", "keeper_of_the_moon", "midlander", "plainsfolk", "raen", "rava", "sea_wolf", "seeker_of_the_sun", "the_lost", "veena", "wildwood", "xaela" });
             NpgsqlModelBuilderExtensions.UseIdentityAlwaysColumns(modelBuilder);
 
             modelBuilder.Entity("NetStone.Cache.Db.Models.Character", b =>
@@ -379,16 +379,16 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnType("class_job")
                         .HasColumnName("class_job");
 
-                    b.Property<int>("ExpCurrent")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpCurrent")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_current");
 
-                    b.Property<int>("ExpMax")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpMax")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_max");
 
-                    b.Property<int>("ExpToGo")
-                        .HasColumnType("integer")
+                    b.Property<long>("ExpToGo")
+                        .HasColumnType("bigint")
                         .HasColumnName("exp_to_go");
 
                     b.Property<bool>("IsJobUnlocked")

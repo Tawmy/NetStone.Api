@@ -5,7 +5,7 @@ using NetStone.Model.Parseables.Character;
 
 namespace NetStone.Cache.Db.Resolvers;
 
-internal class CharacterGearResolver(CharacterGearService gearService)
+internal class CharacterGearResolver(CharacterGearServiceV2 gearService)
     : IValueResolver<LodestoneCharacter, Character, ICollection<CharacterGear>>
 {
     public ICollection<CharacterGear> Resolve(LodestoneCharacter source, Character destination,

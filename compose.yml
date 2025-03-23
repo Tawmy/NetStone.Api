@@ -14,6 +14,7 @@
       interval: 5s
       timeout: 4s
       retries: 5
+
   api:
     image: netstone.api
     container_name: netstone.api
@@ -23,12 +24,19 @@
       dockerfile: NetStone.Api/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT:
+      LOGGING__LOGLEVEL__DEFAULT: Information
+      LOGGING__LOGLEVEL__ASPNETCORE: Warning
+      LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Warning
+      OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_DISABLE_URL_QUERY_REDACTION: true
       AUTH_AUDIENCE: netstone.api
       AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-      RABBITMQ_HOST: "rabbitmq://queue"
+      RABBITMQ_HOST: rabbitmq://queue
       RABBITMQ_USERNAME:
       RABBITMQ_PASSWORD:
+      METRICS_ENABLED: true
+      OTEL_ENDPOINT_URI: http://tracing:4317
+
   queue:
     image: rabbitmq:4-management
     container_name: netstone.api-queue
@@ -44,3 +52,10 @@
       RABBITMQ_DEFAULT_PASS:
     volumes:
       - rmq_data:/var/lib/rabbitmq
+  
+  tracing:
+    image: jaegertracing/all-in-one:1.67.0
+    container_name: netstone-tracing
+    restart: unless-stopped
+    volumes:
+      - tracing_tmp:/tmp
