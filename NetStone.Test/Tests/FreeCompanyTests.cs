@@ -1,4 +1,4 @@
-using NetStone.Cache.Db.Models;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
@@ -13,7 +13,6 @@ namespace NetStone.Test.Tests;
 public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTestsFixture fixture)
     : TestBed<FreeCompanyTestsFixture>(testOutputHelper, fixture)
 {
-    private readonly IAutoMapperService _mapper = fixture.GetService<IAutoMapperService>(testOutputHelper)!;
     private readonly INetStoneService _netStoneService = fixture.GetService<INetStoneService>(testOutputHelper)!;
 
     #region Free Company Members
@@ -42,12 +41,12 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
 
         foreach (var memberLodestone in membersLodestone)
         {
-            var memberDb = _mapper.Map<FreeCompanyMember>(memberLodestone);
+            var memberDb = memberLodestone.ToDb(lodestoneId);
             Assert.NotNull(memberDb);
 
             memberDb.FreeCompanyLodestoneId = lodestoneId; // also set manually in code
 
-            var memberDto = _mapper.Map<FreeCompanyMemberDto>(memberDb);
+            var memberDto = memberDb.ToDto();
             Assert.NotNull(memberDto);
 
             Assert.Equal(memberLodestone.Id, memberDto.LodestoneId);
@@ -72,10 +71,10 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
         var freeCompanyLodestone = await _netStoneService.GetFreeCompany(lodestoneId);
         Assert.NotNull(freeCompanyLodestone);
 
-        var freeCompanyDb = _mapper.Map<FreeCompany>(freeCompanyLodestone);
+        var freeCompanyDb = freeCompanyLodestone.ToDb();
         Assert.NotNull(freeCompanyDb);
 
-        var freeCompanyDto = _mapper.Map<FreeCompanyDtoV3>(freeCompanyDb);
+        var freeCompanyDto = freeCompanyDb.ToDto();
         Assert.NotNull(freeCompanyDto);
 
         Assert.Equal(freeCompanyLodestone.Name, freeCompanyDto.Name);

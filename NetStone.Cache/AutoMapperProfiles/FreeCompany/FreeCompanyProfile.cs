@@ -28,20 +28,19 @@ public class FreeCompanyProfile : Profile
             .ForMember(x => x.ImmortalFlamesProgress, x => x.MapFrom(y => y.Reputation.Flames.Progress))
             .ForMember(x => x.Members, x => x.Ignore());
 
-        CreateMap<Db.Models.FreeCompany, FreeCompanyDtoV3>()
+        CreateMap<Db.Models.FreeCompany, FreeCompanyDtoV2>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.CrestLayers,
                 x => x.MapFrom(y => new FreeCompanyCrestDto
                     { TopLayer = y.CrestTop, MiddleLayer = y.CrestMiddle, BottomLayer = y.CrestBottom }))
             .ForMember(x => x.Estate,
                 x => x.MapFrom(y =>
-                    string.IsNullOrEmpty(y.EstateName) || string.IsNullOrEmpty(y.EstateGreeting)
+                    string.IsNullOrEmpty(y.EstateName) || string.IsNullOrEmpty(y.EstateGreeting) ||
+                    string.IsNullOrEmpty(y.EstatePlot)
                         ? null
                         : new FreeCompanyEstateDto(y.EstateName, y.EstateGreeting, y.EstatePlot)))
             .ForMember(x => x.Focus, x => x.MapFrom<FreeCompanyFocusDtoResolver>())
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.FreeCompanyUpdatedAt))
             .ForMember(x => x.Reputation, x => x.MapFrom<FreeCompanyReputationResolver>());
-
-        CreateMap<FreeCompanyDtoV3, FreeCompanyDto>();
     }
 }

@@ -23,11 +23,9 @@ internal class CharacterProfile : Profile
             .ForMember(x => x.Minions, x => x.Ignore()) // why is this necessary, but ignoring ClassJobs is not?
             .ForMember(x => x.Mounts, x => x.Ignore()); // same here
 
-        CreateMap<Db.Models.Character, CharacterDtoV3>()
+        CreateMap<Db.Models.Character, CharacterDtoV2>()
             .ForMember(x => x.Id, x => x.MapFrom(y => y.LodestoneId))
             .ForMember(x => x.LastUpdated, x => x.MapFrom(y => y.CharacterUpdatedAt))
             .ForMember(x => x.Attributes, x => x.MapFrom<CharacterAttributeResolver>());
-
-        CreateMap<CharacterDtoV3, CharacterDtoV2>();
     }
 }

@@ -7,9 +7,9 @@ using NetStone.Common.Extensions;
 namespace NetStone.Cache.Db.Resolvers;
 
 public class CharacterAttributeResolver
-    : IValueResolver<Character, CharacterDtoV3, IDictionary<CharacterAttribute, int?>>
+    : IValueResolver<Character, CharacterDtoV2, IDictionary<CharacterAttribute, int?>>
 {
-    public IDictionary<CharacterAttribute, int?> Resolve(Character source, CharacterDtoV3 destination,
+    public IDictionary<CharacterAttribute, int?> Resolve(Character source, CharacterDtoV2 destination,
         IDictionary<CharacterAttribute, int?> destMember, ResolutionContext context)
     {
         var dict = new Dictionary<CharacterAttribute, int?>

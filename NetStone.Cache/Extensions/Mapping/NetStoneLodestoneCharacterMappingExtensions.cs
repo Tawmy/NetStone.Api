@@ -106,7 +106,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
         target.Attributes = source.Attributes.ToDb(target.Attributes.Id);
     }
 
-    public static GrandCompany GetGrandCompany(this LodestoneCharacter character)
+    private static GrandCompany GetGrandCompany(this LodestoneCharacter character)
     {
         return character.GrandCompanyName.ToLowerInvariant() switch
         {

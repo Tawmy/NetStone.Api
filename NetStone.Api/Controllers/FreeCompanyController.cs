@@ -135,7 +135,7 @@ namespace NetStone.Api.Controllers.V2
         /// </param>
         /// <returns>Parsed free company data.</returns>
         [HttpGet("{lodestoneId}")]
-        public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge)
+        public async Task<ActionResult<FreeCompanyDtoV2>> GetAsync(string lodestoneId, int? maxAge)
         {
             try
             {
@@ -157,13 +157,13 @@ namespace NetStone.Api.Controllers.V2
         /// </param>
         /// <remarks>
         ///     If free company was never cached using <see cref="GetAsync" />,
-        ///     <see cref="FreeCompanyMembersOuterDto.LastUpdated" />cannot be set. Its value will be null as a result. In this
+        ///     <see cref="FreeCompanyMembersOuterDtoV2.LastUpdated" />cannot be set. Its value will be null as a result. In this
         ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
         ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
         /// </remarks>
         /// <returns>Free company members.</returns>
         [HttpGet("Members/{lodestoneId}")]
-        public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge)
+        public async Task<ActionResult<FreeCompanyMembersOuterDtoV2>> GetMembersAsync(string lodestoneId, int? maxAge)
         {
             try
             {

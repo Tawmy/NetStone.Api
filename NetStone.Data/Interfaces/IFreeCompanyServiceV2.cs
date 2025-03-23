@@ -31,7 +31,7 @@ public interface IFreeCompanyServiceV2
     /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyDtoV2> GetFreeCompanyAsync(string lodestoneId, int? maxAge);
 
     /// <summary>
     ///     Get a free company's members.
@@ -43,5 +43,5 @@ public interface IFreeCompanyServiceV2
     /// </param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
+    Task<FreeCompanyMembersOuterDtoV2> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge);
 }

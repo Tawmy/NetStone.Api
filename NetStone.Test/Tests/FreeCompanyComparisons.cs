@@ -1,4 +1,5 @@
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Data.Interfaces;
@@ -27,15 +28,22 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
     [ClassData(typeof(FreeCompanyTestsDataGenerator))]
     public async Task FreeCompanyV2V3Match(string lodestoneId)
     {
-        var (fcCachingService, fcServiceV3, fcServiceV2) = CreateServices();
+        var (fcCachingServiceV3, fcCachingServiceV2, fcServiceV3, fcServiceV2) = CreateServices();
 
-        fcCachingService.CacheFreeCompanyAsync(Arg.Any<LodestoneFreeCompany>())
+        fcCachingServiceV3.CacheFreeCompanyAsync(Arg.Any<LodestoneFreeCompany>())
+            .Returns(x =>
+            {
+                var lodestoneFreeCompany = (LodestoneFreeCompany)x[0];
+                var db = lodestoneFreeCompany.ToDb();
+                return db.ToDto();
+            });
+
+        fcCachingServiceV2.CacheFreeCompanyAsync(Arg.Any<LodestoneFreeCompany>())
             .Returns(x =>
             {
                 var lodestoneFreeCompany = (LodestoneFreeCompany)x[0];
                 var db = _mapper.Map<FreeCompany>(lodestoneFreeCompany);
-                db.LodestoneId = lodestoneFreeCompany.Id;
-                return _mapper.Map<FreeCompanyDtoV3>(db);
+                return _mapper.Map<FreeCompanyDtoV2>(db);
             });
 
         var v3 = await fcServiceV3.GetFreeCompanyAsync(lodestoneId, null, false);
@@ -82,11 +90,20 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
     [ClassData(typeof(FreeCompanyTestsDataGenerator))]
     public async Task FreeCompanyMembersV2V3Match(string lodestoneId)
     {
-        var (fcCachingService, fcServiceV3, fcServiceV2) = CreateServices();
+        var (fcCachingServiceV3, fcCachingServiceV2, fcServiceV3, fcServiceV2) = CreateServices();
 
-        fcCachingService.GetFreeCompanyMembersAsync(Arg.Any<string>()).Returns(([], null));
+        fcCachingServiceV3.GetFreeCompanyMembersAsync(Arg.Any<string>()).Returns(([], null));
+        fcCachingServiceV2.GetFreeCompanyMembersAsync(Arg.Any<string>()).Returns(([], null));
 
-        fcCachingService
+        fcCachingServiceV3
+            .CacheFreeCompanyMembersAsync(Arg.Any<string>(), Arg.Any<ICollection<FreeCompanyMembersEntry>>())
+            .Returns(x =>
+            {
+                var dbs = ((ICollection<FreeCompanyMembersEntry>)x[1]).Select(y => y.ToDb((string)x[0]));
+                return dbs.Select(y => y.ToDto()).ToList();
+            });
+
+        fcCachingServiceV2
             .CacheFreeCompanyMembersAsync(Arg.Any<string>(), Arg.Any<ICollection<FreeCompanyMembersEntry>>())
             .Returns(x =>
             {
@@ -97,7 +114,7 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
                     return newDb;
                 });
 
-                return dbs.Select(_mapper.Map<FreeCompanyMemberDto>).ToList();
+                return dbs.Select(_mapper.Map<FreeCompanyMemberDtoV2>).ToList();
             });
 
         var v3 = await fcServiceV3.GetFreeCompanyMembersAsync(lodestoneId, null, false);
@@ -129,17 +146,18 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
         Assert.NotNull(v2.LastUpdated);
     }
 
-    private (IFreeCompanyCachingService fcCachingService, IFreeCompanyServiceV3 fcServiceV3,
-        IFreeCompanyServiceV2 fcServiceV2) CreateServices()
+    private (IFreeCompanyCachingServiceV3 fcCachingServiceV3, IFreeCompanyCachingServiceV2 fcCachingServiceV2,
+        IFreeCompanyServiceV3 fcServiceV3, FreeCompanyServiceV2 fcServiceV2) CreateServices()
     {
-        var fcCachingService = Substitute.For<IFreeCompanyCachingService>();
+        var fcCachingServiceV3 = Substitute.For<IFreeCompanyCachingServiceV3>();
+        var fcCachingServiceV2 = Substitute.For<IFreeCompanyCachingServiceV2>();
 
         var fcServiceV3 =
-            new FreeCompanyServiceV3(_netStoneService, fcCachingService, _freeCompanyEventService, _mapper);
+            new FreeCompanyServiceV3(_netStoneService, fcCachingServiceV3, _freeCompanyEventService);
 
         var fcServiceV2 =
-            new FreeCompanyServiceV2(_netStoneService, fcCachingService, _freeCompanyEventService, _mapper);
+            new FreeCompanyServiceV2(_netStoneService, fcCachingServiceV2, _freeCompanyEventService, _mapper);
 
-        return (fcCachingService, fcServiceV3, fcServiceV2);
+        return (fcCachingServiceV3, fcCachingServiceV2, fcServiceV3, fcServiceV2);
     }
 }

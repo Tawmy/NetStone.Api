@@ -50,7 +50,7 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
             {
                 var db = _mapper.Map<Character>((LodestoneCharacter)x[1]);
                 db.LodestoneId = (string)x[0];
-                return _mapper.Map<CharacterDtoV3>(db);
+                return _mapper.Map<CharacterDtoV2>(db);
             });
 
         var v3 = await characterServiceV3.GetCharacterAsync(lodestoneId, null, false);

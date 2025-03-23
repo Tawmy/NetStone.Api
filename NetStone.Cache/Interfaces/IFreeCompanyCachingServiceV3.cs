@@ -4,7 +4,7 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Cache.Interfaces;
 
-public interface IFreeCompanyCachingService
+public interface IFreeCompanyCachingServiceV3
 {
     #region Free Company
 
@@ -16,12 +16,12 @@ public interface IFreeCompanyCachingService
 
     #region Free Company Members
 
-    Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string freeCompanyLodestoneId,
+    Task<ICollection<FreeCompanyMemberDtoV3>> CacheFreeCompanyMembersAsync(string freeCompanyLodestoneId,
         ICollection<FreeCompanyMembersEntry> freeCompanyMembers);
 
-    Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(int id);
+    Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(int id);
 
-    Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
+    Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
         string lodestoneId);
 
     #endregion

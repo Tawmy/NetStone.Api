@@ -13,7 +13,7 @@ public class FreeCompanyMemberProfile : Profile
             .ForMember(x => x.Id, x => x.Ignore())
             .ForMember(x => x.CharacterLodestoneId, x => x.MapFrom(y => y.Id));
 
-        CreateMap<FreeCompanyMember, FreeCompanyMemberDto>()
+        CreateMap<FreeCompanyMember, FreeCompanyMemberDtoV2>()
             .ForMember(x => x.LodestoneId, x => x.MapFrom(y => y.CharacterLodestoneId))
             .ForMember(x => x.CachedCharacter, x => x.MapFrom(y => y.FullCharacter));
     }

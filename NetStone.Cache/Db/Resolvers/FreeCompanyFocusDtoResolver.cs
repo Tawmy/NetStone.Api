@@ -7,9 +7,9 @@ using NetStone.Common.Extensions;
 namespace NetStone.Cache.Db.Resolvers;
 
 public class FreeCompanyFocusDtoResolver
-    : IValueResolver<FreeCompany, FreeCompanyDtoV3, IEnumerable<FreeCompanyFocusDto>>
+    : IValueResolver<FreeCompany, FreeCompanyDtoV2, IEnumerable<FreeCompanyFocusDto>>
 {
-    public IEnumerable<FreeCompanyFocusDto> Resolve(FreeCompany source, FreeCompanyDtoV3 destination,
+    public IEnumerable<FreeCompanyFocusDto> Resolve(FreeCompany source, FreeCompanyDtoV2 destination,
         IEnumerable<FreeCompanyFocusDto> destMember, ResolutionContext context)
     {
         return Enum.GetValues<FreeCompanyFocus>().Cast<Enum>().Where(z =>

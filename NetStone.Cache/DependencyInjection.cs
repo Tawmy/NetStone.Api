@@ -12,7 +12,8 @@ public static class DependencyInjection
         services.AddScoped<INetStoneService, NetStoneService>();
         services.AddScoped<ICharacterCachingServiceV3, CharacterCachingServiceV3>();
         services.AddScoped<ICharacterCachingServiceV2, CharacterCachingServiceV2>();
-        services.AddScoped<IFreeCompanyCachingService, FreeCompanyCachingService>();
+        services.AddScoped<IFreeCompanyCachingServiceV3, FreeCompanyCachingServiceV3>();
+        services.AddScoped<IFreeCompanyCachingServiceV2, FreeCompanyCachingServiceV2>();
         services.AddScoped<CharacterGearServiceV2>();
         services.AddScoped<CharacterClassJobsServiceV2>();
     }

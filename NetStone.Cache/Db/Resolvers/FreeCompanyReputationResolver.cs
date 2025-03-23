@@ -6,9 +6,9 @@ using NetStone.Common.Enums;
 namespace NetStone.Cache.Db.Resolvers;
 
 public class FreeCompanyReputationResolver
-    : IValueResolver<FreeCompany, FreeCompanyDtoV3, IEnumerable<FreeCompanyReputationDto>>
+    : IValueResolver<FreeCompany, FreeCompanyDtoV2, IEnumerable<FreeCompanyReputationDto>>
 {
-    public IEnumerable<FreeCompanyReputationDto> Resolve(FreeCompany source, FreeCompanyDtoV3 destination,
+    public IEnumerable<FreeCompanyReputationDto> Resolve(FreeCompany source, FreeCompanyDtoV2 destination,
         IEnumerable<FreeCompanyReputationDto> destMember, ResolutionContext context)
     {
         return new List<FreeCompanyReputationDto>

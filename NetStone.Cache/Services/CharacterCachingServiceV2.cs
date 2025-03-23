@@ -21,7 +21,7 @@ internal class CharacterCachingServiceV2(
 {
     private static readonly ActivitySource ActivitySource = new(nameof(ICharacterCachingServiceV2));
 
-    public async Task<CharacterDtoV3> CacheCharacterAsync(string lodestoneId, LodestoneCharacter lodestoneCharacter)
+    public async Task<CharacterDtoV2> CacheCharacterAsync(string lodestoneId, LodestoneCharacter lodestoneCharacter)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -78,25 +78,25 @@ internal class CharacterCachingServiceV2(
             throw;
         }
 
-        return mapper.Map<CharacterDtoV3>(character);
+        return mapper.Map<CharacterDtoV2>(character);
     }
 
-    public async Task<CharacterDtoV3?> GetCharacterAsync(int id)
+    public async Task<CharacterDtoV2?> GetCharacterAsync(int id)
     {
         using var activity = ActivitySource.StartActivity();
 
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.Id == id);
-        return character is not null ? mapper.Map<CharacterDtoV3>(character) : null;
+        return character is not null ? mapper.Map<CharacterDtoV2>(character) : null;
     }
 
-    public async Task<CharacterDtoV3?> GetCharacterAsync(string lodestoneId)
+    public async Task<CharacterDtoV2?> GetCharacterAsync(string lodestoneId)
     {
         using var activity = ActivitySource.StartActivity();
 
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
             .SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
-        return character is not null ? mapper.Map<CharacterDtoV3>(character) : null;
+        return character is not null ? mapper.Map<CharacterDtoV2>(character) : null;
     }
 
     public async Task<ICollection<CharacterClassJobDto>> CacheCharacterClassJobsAsync(string lodestoneId,

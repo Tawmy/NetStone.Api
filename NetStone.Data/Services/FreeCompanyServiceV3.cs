@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Exceptions;
@@ -12,9 +13,8 @@ namespace NetStone.Data.Services;
 
 public class FreeCompanyServiceV3(
     INetStoneService netStoneService,
-    IFreeCompanyCachingService cachingService,
-    IFreeCompanyEventService eventService,
-    IAutoMapperService mapper)
+    IFreeCompanyCachingServiceV3 cachingService,
+    IFreeCompanyEventService eventService)
     : IFreeCompanyServiceV3
 {
     private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyServiceV3));
@@ -24,11 +24,11 @@ public class FreeCompanyServiceV3(
         using var activity = ActivitySource.StartActivity();
         activity?.AddTag(nameof(FreeCompanySearchQuery), JsonSerializer.Serialize(query));
 
-        var lodestoneQuery = mapper.Map<Search.FreeCompany.FreeCompanySearchQuery>(query);
+        var lodestoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchFreeCompany(lodestoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
 
-        return mapper.Map<FreeCompanySearchPageDto>(result);
+        return result.ToDto();
     }
 
     public async Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback)
@@ -41,7 +41,7 @@ public class FreeCompanyServiceV3(
         {
             if (cachedFcDto.LastUpdated is null)
             {
-                throw new InvalidOperationException($"{nameof(FreeCompanyDto.LastUpdated)} must never be null here.");
+                throw new InvalidOperationException($"{nameof(FreeCompanyDtoV2.LastUpdated)} must never be null here.");
             }
 
             if ((DateTime.UtcNow - cachedFcDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))

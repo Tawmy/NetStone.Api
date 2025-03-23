@@ -1,7 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetStone.Api.Controllers.V3;
-using NetStone.Cache.Db;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using Xunit.Microsoft.DependencyInjection;
@@ -13,9 +11,6 @@ public class FreeCompanyTestsFixture : TestBedFixture
 {
     protected override void AddServices(IServiceCollection services, IConfiguration? configuration)
     {
-        services.AddAutoMapper(typeof(FreeCompanyController).Assembly, typeof(DatabaseContext).Assembly);
-        services.AddScoped<IAutoMapperService, AutoMapperService>();
-
         services.AddSingleton<LodestoneClient>(_ =>
         {
             var clientTask = LodestoneClient.GetClientAsync();

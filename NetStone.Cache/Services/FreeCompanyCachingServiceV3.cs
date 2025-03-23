@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db;
 using NetStone.Cache.Db.Models;
+using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Model.Parseables.FreeCompany;
@@ -9,9 +10,9 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Cache.Services;
 
-public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperService mapper) : IFreeCompanyCachingService
+public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompanyCachingServiceV3
 {
-    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyCachingService));
+    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyCachingServiceV3));
 
     public async Task<FreeCompanyDtoV3> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
     {
@@ -24,12 +25,12 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
 
         if (freeCompany is not null)
         {
-            mapper.Map(lodestoneFreeCompany, freeCompany);
+            lodestoneFreeCompany.ToDb(freeCompany);
             context.Entry(freeCompany).State = EntityState.Modified;
         }
         else
         {
-            freeCompany = mapper.Map<FreeCompany>(lodestoneFreeCompany);
+            freeCompany = lodestoneFreeCompany.ToDb();
             await context.FreeCompanies.AddAsync(freeCompany);
             await context.SaveChangesAsync();
 
@@ -59,7 +60,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
             throw;
         }
 
-        return mapper.Map<FreeCompanyDtoV3>(freeCompany);
+        return freeCompany.ToDto();
     }
 
     public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(int id)
@@ -67,7 +68,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         using var activity = ActivitySource.StartActivity();
 
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.Id == id);
-        return freeCompany is not null ? mapper.Map<FreeCompanyDtoV3>(freeCompany) : null;
+        return freeCompany?.ToDto();
     }
 
     public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(string lodestoneId)
@@ -75,10 +76,10 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         using var activity = ActivitySource.StartActivity();
 
         var freeCompany = await context.FreeCompanies.SingleOrDefaultAsync(x => x.LodestoneId == lodestoneId);
-        return freeCompany is not null ? mapper.Map<FreeCompanyDtoV3>(freeCompany) : null;
+        return freeCompany?.ToDto();
     }
 
-    public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
+    public async Task<ICollection<FreeCompanyMemberDtoV3>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
         ICollection<FreeCompanyMembersEntry> members)
     {
         using var activity = ActivitySource.StartActivity();
@@ -106,9 +107,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         List<FreeCompanyMember> newDbMembers = [];
         foreach (var newMember in newMembers)
         {
-            var newDbMember = mapper.Map<FreeCompanyMember>(newMember);
-
-            newDbMember.FreeCompanyLodestoneId = fcLodestoneId;
+            var newDbMember = newMember.ToDb(fcLodestoneId);
 
             if (freeCompany is not null)
             {
@@ -128,7 +127,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         foreach (var updatedMember in updatedMembers)
         {
             var updatedDbMember = dbMembers.First(x => x.CharacterLodestoneId == updatedMember.Id);
-            mapper.Map(updatedMember, updatedDbMember);
+            updatedMember.ToDb(updatedDbMember);
 
             if (freeCompany is not null && updatedDbMember.FreeCompanyId is null)
             {
@@ -155,10 +154,10 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
         await context.SaveChangesAsync();
 
         var allDbMembers = newDbMembers.Concat(updatedDbMembers);
-        return allDbMembers.Select(mapper.Map<FreeCompanyMemberDto>).ToList();
+        return allDbMembers.Select(x => x.ToDto()).ToList();
     }
 
-    public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)>
+    public async Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)>
         GetFreeCompanyMembersAsync(int id)
     {
         using var activity = ActivitySource.StartActivity();
@@ -172,14 +171,14 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
 
         if (freeCompany is null)
         {
-            return (new List<FreeCompanyMemberDto>(), null);
+            return ([], null);
         }
 
-        var memberDtos = freeCompany.Members.Select(mapper.Map<FreeCompanyMemberDto>);
+        var memberDtos = freeCompany.Members.Select(x => x.ToDto());
         return (memberDtos.ToList(), freeCompany.FreeCompanyMembersUpdatedAt);
     }
 
-    public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
+    public async Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
         string lodestoneId)
     {
         using var activity = ActivitySource.StartActivity();
@@ -195,7 +194,7 @@ public class FreeCompanyCachingService(DatabaseContext context, IAutoMapperServi
             .Select(x => x.FreeCompanyMembersUpdatedAt)
             .FirstOrDefaultAsync();
 
-        var memberDtos = members.Select(mapper.Map<FreeCompanyMemberDto>);
+        var memberDtos = members.Select(x => x.ToDto());
         return (memberDtos.ToList(), freeCompanyUpdatedAt);
     }
 }

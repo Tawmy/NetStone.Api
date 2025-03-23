@@ -10,9 +10,9 @@ public interface ICharacterCachingServiceV2
 {
     #region Character
 
-    Task<CharacterDtoV3> CacheCharacterAsync(string lodestoneId, LodestoneCharacter character);
-    Task<CharacterDtoV3?> GetCharacterAsync(int id);
-    Task<CharacterDtoV3?> GetCharacterAsync(string lodestoneId);
+    Task<CharacterDtoV2> CacheCharacterAsync(string lodestoneId, LodestoneCharacter character);
+    Task<CharacterDtoV2?> GetCharacterAsync(int id);
+    Task<CharacterDtoV2?> GetCharacterAsync(string lodestoneId);
 
     #endregion
 

@@ -126,7 +126,7 @@ internal static class StartupExtensions
             x.AddSource(nameof(ICharacterCachingServiceV2));
             x.AddSource(nameof(ICharacterServiceV3));
             x.AddSource(nameof(ICharacterServiceV2));
-            x.AddSource(nameof(IFreeCompanyCachingService));
+            x.AddSource(nameof(IFreeCompanyCachingServiceV2));
             x.AddSource(nameof(IFreeCompanyServiceV3));
             x.AddSource(nameof(IFreeCompanyServiceV2));
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
