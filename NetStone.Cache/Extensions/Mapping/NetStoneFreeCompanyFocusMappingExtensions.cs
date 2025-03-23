@@ -6,7 +6,7 @@ public static class NetStoneFreeCompanyFocusMappingExtensions
 {
     public static FreeCompanyFocus ToEnum(this Model.Parseables.FreeCompany.FreeCompanyFocus? source)
     {
-        var focus = FreeCompanyFocus.None;
+        var focus = FreeCompanyFocus.NotSpecified;
 
         if (source?.HasFocus is not true)
         {
