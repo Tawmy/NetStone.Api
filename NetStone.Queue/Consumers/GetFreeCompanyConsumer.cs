@@ -1,4 +1,5 @@
 using MassTransit;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Queue.Interfaces;
@@ -16,7 +17,7 @@ public class GetFreeCompanyConsumer(IFreeCompanyServiceV3 freeCompanyService, IR
         try
         {
             var freeCompany = await freeCompanyService.GetFreeCompanyAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? false);
+                m.UseFallback ?? FallbackType.None);
             await senderService.SendGetFreeCompanySuccessfulAsync(freeCompany);
         }
         catch (NotFoundException)

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
@@ -33,7 +34,7 @@ public class FreeCompanyServiceV3(
         return result.ToDto();
     }
 
-    public async Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback)
+    public async Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -60,7 +61,8 @@ public class FreeCompanyServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedFcDto is not null)
+            if (cachedFcDto is not null && (useFallback is FallbackType.Any ||
+                                            (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetFreeCompanyAsync), ex.Message);
@@ -82,7 +84,7 @@ public class FreeCompanyServiceV3(
     }
 
     public async Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
-        bool useFallback)
+        FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -114,7 +116,8 @@ public class FreeCompanyServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedMembers.Any())
+            if (cachedMembers.Any() && (useFallback is FallbackType.Any ||
+                                        (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetFreeCompanyMembersAsync), ex.Message);

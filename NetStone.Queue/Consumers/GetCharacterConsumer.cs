@@ -1,4 +1,5 @@
 using MassTransit;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Queue.Interfaces;
@@ -15,7 +16,8 @@ public class GetCharacterConsumer(ICharacterServiceV3 characterService, IRabbitM
 
         try
         {
-            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge, m.UseFallback ?? false);
+            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge,
+                m.UseFallback ?? FallbackType.None);
             await senderService.SendGetCharacterSuccessfulAsync(character);
         }
         catch (NotFoundException)

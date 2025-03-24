@@ -1,4 +1,5 @@
 using MassTransit;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Queue.Interfaces;
@@ -18,7 +19,7 @@ public class GetCharacterAchievementsConsumer(
         try
         {
             var achievements = await characterService.GetCharacterAchievementsAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? false);
+                m.UseFallback ?? FallbackType.None);
             await senderService.SendGetCharacterAchievementsSuccessfulAsync(achievements);
         }
         catch (NotFoundException)

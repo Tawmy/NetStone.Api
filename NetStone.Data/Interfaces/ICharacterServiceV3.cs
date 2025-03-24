@@ -1,4 +1,5 @@
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 
@@ -28,10 +29,15 @@ public interface ICharacterServiceV3
     /// <param name="maxAge">
     ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     /// <exception cref="NotFoundException"></exception>
-    public Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, bool useFallback);
+    public Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
 
     /// <summary>
     ///     Get a character's ClassJobs.
@@ -40,11 +46,16 @@ public interface ICharacterServiceV3
     /// <param name="maxAge">
     ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Character class jobs.</returns>
     /// <exception cref="NotFoundException"></exception>
     public Task<CharacterClassJobOuterDtoV3> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge,
-        bool useFallback);
+        FallbackType useFallback);
 
     /// <summary>
     ///     Get a character's minions.
@@ -53,11 +64,16 @@ public interface ICharacterServiceV3
     /// <param name="maxAge">
     ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Character minions.</returns>
     /// <exception cref="NotFoundException"></exception>
     public Task<CollectionDtoV3<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge,
-        bool useFallback);
+        FallbackType useFallback);
 
     /// <summary>
     ///     Get a character's mounts.
@@ -66,11 +82,16 @@ public interface ICharacterServiceV3
     /// <param name="maxAge">
     ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Character mounts.</returns>
     /// <exception cref="NotFoundException"></exception>
     public Task<CollectionDtoV3<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge,
-        bool useFallback);
+        FallbackType useFallback);
 
     /// <summary>
     ///     Get a character's achievements.
@@ -80,9 +101,14 @@ public interface ICharacterServiceV3
     ///     Optional maximum age of cached achievements, in minutes. If older, they will be refreshed from the
     ///     Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Character achievements.</returns>
     /// <exception cref="NotFoundException"></exception>
     Task<CharacterAchievementOuterDtoV3> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge,
-        bool useFallback);
+        FallbackType useFallback);
 }

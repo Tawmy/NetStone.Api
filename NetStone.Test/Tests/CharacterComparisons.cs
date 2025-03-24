@@ -4,6 +4,7 @@ using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Cache.Services;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Data.Services;
@@ -54,7 +55,7 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
                 return _mapper.Map<CharacterDtoV2>(db);
             });
 
-        var v3 = await characterServiceV3.GetCharacterAsync(lodestoneId, null, false);
+        var v3 = await characterServiceV3.GetCharacterAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await characterServiceV2.GetCharacterAsync(lodestoneId, null);
@@ -145,7 +146,7 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
                 return db.Select(_mapper.Map<CharacterClassJobDto>).ToList();
             });
 
-        var v3 = await characterServiceV3.GetCharacterClassJobsAsync(lodestoneId, null, false);
+        var v3 = await characterServiceV3.GetCharacterClassJobsAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await characterServiceV2.GetCharacterClassJobsAsync(lodestoneId, null);
@@ -201,13 +202,13 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         {
             // test character has no minions
             await Assert.ThrowsAsync<NotFoundException>(() =>
-                characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, false));
+                characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, FallbackType.None));
             await Assert.ThrowsAsync<NotFoundException>(() =>
                 characterServiceV2.GetCharacterMinionsAsync(lodestoneId, null));
             return;
         }
 
-        var v3 = await characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, false);
+        var v3 = await characterServiceV3.GetCharacterMinionsAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await characterServiceV2.GetCharacterMinionsAsync(lodestoneId, null);
@@ -259,13 +260,13 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         {
             // test character has no mounts
             await Assert.ThrowsAsync<NotFoundException>(() =>
-                characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, false));
+                characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, FallbackType.None));
             await Assert.ThrowsAsync<NotFoundException>(() =>
                 characterServiceV2.GetCharacterMountsAsync(lodestoneId, null));
             return;
         }
 
-        var v3 = await characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, false);
+        var v3 = await characterServiceV3.GetCharacterMountsAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await characterServiceV2.GetCharacterMountsAsync(lodestoneId, null);
@@ -314,7 +315,7 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
                 return dbs.Select(_mapper.Map<CharacterAchievementDto>).ToList();
             });
 
-        var v3 = await characterServiceV3.GetCharacterAchievementsAsync(lodestoneId, null, false);
+        var v3 = await characterServiceV3.GetCharacterAchievementsAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await characterServiceV2.GetCharacterAchievementsAsync(lodestoneId, null);

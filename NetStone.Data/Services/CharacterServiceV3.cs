@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
@@ -35,7 +36,7 @@ public class CharacterServiceV3(
         return result.ToDto();
     }
 
-    public async Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, bool useFallback)
+    public async Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -62,7 +63,8 @@ public class CharacterServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedCharacterDto is not null)
+            if (cachedCharacterDto is not null && (useFallback is FallbackType.Any ||
+                                                   (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterAsync), ex.Message);
@@ -84,7 +86,7 @@ public class CharacterServiceV3(
     }
 
     public async Task<CharacterClassJobOuterDtoV3> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge,
-        bool useFallback)
+        FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -116,7 +118,8 @@ public class CharacterServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedClassJobsDtos.Any())
+            if (cachedClassJobsDtos.Any() && (useFallback is FallbackType.Any ||
+                                              (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterClassJobsAsync), ex.Message);
@@ -140,7 +143,7 @@ public class CharacterServiceV3(
     }
 
     public async Task<CollectionDtoV3<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge,
-        bool useFallback)
+        FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -174,7 +177,8 @@ public class CharacterServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedMinionsDtos.Any())
+            if (cachedMinionsDtos.Any() && (useFallback is FallbackType.Any ||
+                                            (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMinionsAsync), ex.Message);
@@ -199,7 +203,7 @@ public class CharacterServiceV3(
     }
 
     public async Task<CollectionDtoV3<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge,
-        bool useFallback)
+        FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -232,7 +236,8 @@ public class CharacterServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedMountsDtos.Any())
+            if (cachedMountsDtos.Any() && (useFallback is FallbackType.Any ||
+                                           (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMountsAsync), ex.Message);
@@ -257,7 +262,7 @@ public class CharacterServiceV3(
     }
 
     public async Task<CharacterAchievementOuterDtoV3> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge,
-        bool useFallback)
+        FallbackType useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -289,7 +294,8 @@ public class CharacterServiceV3(
         }
         catch (Exception ex)
         {
-            if (useFallback && cachedAchievementsDtos.Any())
+            if (cachedAchievementsDtos.Any() && (useFallback is FallbackType.Any ||
+                                                 (useFallback is FallbackType.Http && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterAchievementsAsync), ex.Message);

@@ -3,6 +3,7 @@ using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
+using NetStone.Common.Enums;
 using NetStone.Data.Interfaces;
 using NetStone.Data.Services;
 using NetStone.Model.Parseables.FreeCompany;
@@ -47,7 +48,7 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
                 return _mapper.Map<FreeCompanyDtoV2>(db);
             });
 
-        var v3 = await fcServiceV3.GetFreeCompanyAsync(lodestoneId, null, false);
+        var v3 = await fcServiceV3.GetFreeCompanyAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await fcServiceV2.GetFreeCompanyAsync(lodestoneId, null);
@@ -118,7 +119,7 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
                 return dbs.Select(_mapper.Map<FreeCompanyMemberDtoV2>).ToList();
             });
 
-        var v3 = await fcServiceV3.GetFreeCompanyMembersAsync(lodestoneId, null, false);
+        var v3 = await fcServiceV3.GetFreeCompanyMembersAsync(lodestoneId, null, FallbackType.None);
         Assert.NotNull(v3);
 
         var v2 = await fcServiceV2.GetFreeCompanyMembersAsync(lodestoneId, null);

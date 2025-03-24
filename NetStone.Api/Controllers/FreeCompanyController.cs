@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.FreeCompany;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
@@ -45,11 +46,16 @@ namespace NetStone.Api.Controllers.V3
         ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
         ///     Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <returns>Parsed free company data.</returns>
         [HttpGet("{lodestoneId}")]
         public async Task<ActionResult<FreeCompanyDtoV3>> GetAsync(string lodestoneId, int? maxAge,
-            bool useFallback = false)
+            FallbackType useFallback = FallbackType.None)
         {
             try
             {
@@ -75,11 +81,16 @@ namespace NetStone.Api.Controllers.V3
         ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
         ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
         /// </remarks>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <returns>Free company members.</returns>
         [HttpGet("Members/{lodestoneId}")]
         public async Task<ActionResult<FreeCompanyMembersOuterDtoV3>> GetMembersAsync(string lodestoneId, int? maxAge,
-            bool useFallback = false)
+            FallbackType useFallback = FallbackType.None)
         {
             try
             {
