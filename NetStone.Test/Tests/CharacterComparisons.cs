@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
@@ -335,8 +336,10 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
         var characterCachingServiceV3 = Substitute.For<ICharacterCachingServiceV3>();
         var characterCachingServiceV2 = Substitute.For<ICharacterCachingServiceV2>();
 
+        var loggerV3 = Substitute.For<ILogger<CharacterServiceV3>>();
+
         var characterServiceV3 =
-            new CharacterServiceV3(_netStoneService, characterCachingServiceV3, _characterEventService);
+            new CharacterServiceV3(_netStoneService, characterCachingServiceV3, _characterEventService, loggerV3);
 
         var characterServiceV2 =
             new CharacterServiceV2(_netStoneService, characterCachingServiceV2, _characterEventService, _mapper);

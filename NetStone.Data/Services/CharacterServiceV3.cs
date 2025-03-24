@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
@@ -16,7 +17,8 @@ namespace NetStone.Data.Services;
 public class CharacterServiceV3(
     INetStoneService netStoneService,
     ICharacterCachingServiceV3 cachingService,
-    ICharacterEventService eventService)
+    ICharacterEventService eventService,
+    ILogger<CharacterServiceV3> logger)
     : ICharacterServiceV3
 {
     private static readonly ActivitySource ActivitySource = new(nameof(ICharacterServiceV3));
@@ -62,6 +64,8 @@ public class CharacterServiceV3(
         {
             if (useFallback && cachedCharacterDto is not null)
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetCharacterAsync), ex.Message);
                 return cachedCharacterDto with { Cached = true, FallbackUsed = true, FallbackReason = ex.Message };
             }
 
@@ -114,6 +118,8 @@ public class CharacterServiceV3(
         {
             if (useFallback && cachedClassJobsDtos.Any())
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetCharacterClassJobsAsync), ex.Message);
                 return new CharacterClassJobOuterDtoV3(cachedClassJobsDtos, true, lastUpdated, true, ex.Message);
             }
 
@@ -170,6 +176,8 @@ public class CharacterServiceV3(
         {
             if (useFallback && cachedMinionsDtos.Any())
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetCharacterMinionsAsync), ex.Message);
                 return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
                     StaticValues.TotalMinions, true, ex.Message);
             }
@@ -226,6 +234,8 @@ public class CharacterServiceV3(
         {
             if (useFallback && cachedMountsDtos.Any())
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetCharacterMountsAsync), ex.Message);
                 return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
                     StaticValues.TotalMounts, true, ex.Message);
             }
@@ -281,6 +291,8 @@ public class CharacterServiceV3(
         {
             if (useFallback && cachedAchievementsDtos.Any())
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetCharacterAchievementsAsync), ex.Message);
                 return new CharacterAchievementOuterDtoV3(cachedAchievementsDtos, true, lastUpdated, true, ex.Message);
             }
 

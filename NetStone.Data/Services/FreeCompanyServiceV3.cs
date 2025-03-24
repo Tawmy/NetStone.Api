@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.FreeCompany;
@@ -14,7 +15,8 @@ namespace NetStone.Data.Services;
 public class FreeCompanyServiceV3(
     INetStoneService netStoneService,
     IFreeCompanyCachingServiceV3 cachingService,
-    IFreeCompanyEventService eventService)
+    IFreeCompanyEventService eventService,
+    ILogger<FreeCompanyServiceV3> logger)
     : IFreeCompanyServiceV3
 {
     private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyServiceV3));
@@ -60,6 +62,8 @@ public class FreeCompanyServiceV3(
         {
             if (useFallback && cachedFcDto is not null)
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetFreeCompanyAsync), ex.Message);
                 return cachedFcDto with { Cached = true, FallbackUsed = true, FallbackReason = ex.Message };
             }
 
@@ -112,6 +116,8 @@ public class FreeCompanyServiceV3(
         {
             if (useFallback && cachedMembers.Any())
             {
+                logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
+                    nameof(GetFreeCompanyMembersAsync), ex.Message);
                 return new FreeCompanyMembersOuterDtoV3(cachedMembers, true, lastUpdated, true, ex.Message);
             }
 

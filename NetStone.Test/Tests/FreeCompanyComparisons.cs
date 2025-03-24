@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using NetStone.Cache.Db.Models;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
@@ -152,8 +153,10 @@ public class FreeCompanyComparisons(ITestOutputHelper testOutputHelper, FreeComp
         var fcCachingServiceV3 = Substitute.For<IFreeCompanyCachingServiceV3>();
         var fcCachingServiceV2 = Substitute.For<IFreeCompanyCachingServiceV2>();
 
+        var loggerV3 = Substitute.For<ILogger<FreeCompanyServiceV3>>();
+
         var fcServiceV3 =
-            new FreeCompanyServiceV3(_netStoneService, fcCachingServiceV3, _freeCompanyEventService);
+            new FreeCompanyServiceV3(_netStoneService, fcCachingServiceV3, _freeCompanyEventService, loggerV3);
 
         var fcServiceV2 =
             new FreeCompanyServiceV2(_netStoneService, fcCachingServiceV2, _freeCompanyEventService, _mapper);
