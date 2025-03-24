@@ -1,4 +1,5 @@
 using MassTransit;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Data.Interfaces;
 using NetStone.Queue.Interfaces;
@@ -16,7 +17,7 @@ public class GetCharacterMountsConsumer(ICharacterServiceV3 characterService, IR
         try
         {
             var mounts = await characterService.GetCharacterMountsAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? false);
+                m.UseFallback ?? FallbackType.None);
             await senderService.SendGetCharacterMountsSuccessfulAsync(mounts);
         }
         catch (NotFoundException)

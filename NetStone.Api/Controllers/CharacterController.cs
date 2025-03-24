@@ -2,6 +2,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.Character;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
@@ -44,11 +45,16 @@ namespace NetStone.Api.Controllers.V3
         /// <param name="maxAge">
         ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <returns>DTO containing the parsed character and some goodie properties.</returns>
         [HttpGet("{lodestoneId}")]
         public async Task<ActionResult<CharacterDtoV3>> GetAsync(string lodestoneId, int? maxAge,
-            bool useFallback = false)
+            FallbackType useFallback = FallbackType.None)
         {
             try
             {
@@ -67,7 +73,12 @@ namespace NetStone.Api.Controllers.V3
         /// <param name="maxAge">
         ///     Optional maximum age of cached class jobs, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <remarks>
         ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDtoV3.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
@@ -77,7 +88,7 @@ namespace NetStone.Api.Controllers.V3
         /// <returns>Character class jobs.</returns>
         [HttpGet("ClassJobs/{lodestoneId}")]
         public async Task<ActionResult<CharacterClassJobOuterDtoV3>> GetClassJobsAsync(string lodestoneId, int? maxAge,
-            bool useFallback = false)
+            FallbackType useFallback = FallbackType.None)
         {
             try
             {
@@ -96,7 +107,12 @@ namespace NetStone.Api.Controllers.V3
         /// <param name="maxAge">
         ///     Optional maximum age of cached minions, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <remarks>
         ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV3{t}.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
@@ -106,7 +122,7 @@ namespace NetStone.Api.Controllers.V3
         /// <returns>Character minions.</returns>
         [HttpGet("Minions/{lodestoneId}")]
         public async Task<ActionResult<CollectionDtoV3<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
-            int? maxAge, bool useFallback = false)
+            int? maxAge, FallbackType useFallback = FallbackType.None)
         {
             try
             {
@@ -125,7 +141,12 @@ namespace NetStone.Api.Controllers.V3
         /// <param name="maxAge">
         ///     Optional maximum age of cached mounts, in minutes. If older, they will be refreshed from the Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <remarks>
         ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV3{T}.LastUpdated" />
         ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
@@ -135,7 +156,7 @@ namespace NetStone.Api.Controllers.V3
         /// <returns>Character mounts.</returns>
         [HttpGet("Mounts/{lodestoneId}")]
         public async Task<ActionResult<CollectionDtoV3<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
-            int? maxAge, bool useFallback = false)
+            int? maxAge, FallbackType useFallback = FallbackType.None)
         {
             try
             {
@@ -155,7 +176,12 @@ namespace NetStone.Api.Controllers.V3
         ///     Optional maximum age of cached achievements, in minutes. If older, they will be refreshed from the
         ///     Lodestone.
         /// </param>
-        /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+        /// <param name="useFallback">
+        ///     API may return cached data if Lodestone unavailable or parsing failed.
+        ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+        ///     and to Any to handle any exception including errors in the parser.
+        ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+        /// </param>
         /// <remarks>
         ///     If character was never cached using <see cref="GetAsync" />,
         ///     <see cref="CharacterAchievementOuterDtoV3.LastUpdated" />
@@ -166,7 +192,7 @@ namespace NetStone.Api.Controllers.V3
         /// <returns>Character achievements.</returns>
         [HttpGet("Achievements/{lodestoneId}")]
         public async Task<ActionResult<CharacterAchievementOuterDtoV3>> GetAchievementsAsync(string lodestoneId,
-            int? maxAge, bool useFallback = false)
+            int? maxAge, FallbackType useFallback = FallbackType.None)
         {
             try
             {

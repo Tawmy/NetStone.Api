@@ -1,4 +1,5 @@
 using NetStone.Common.DTOs.FreeCompany;
+using NetStone.Common.Enums;
 using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 
@@ -29,10 +30,15 @@ public interface IFreeCompanyServiceV3
     ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
     ///     Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, bool useFallback);
+    Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
 
     /// <summary>
     ///     Get a free company's members.
@@ -42,8 +48,14 @@ public interface IFreeCompanyServiceV3
     ///     Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
     ///     Lodestone.
     /// </param>
-    /// <param name="useFallback">If true, API will return cached data if Lodestone unavailable or parsing failed.</param>
+    /// <param name="useFallback">
+    ///     API may return cached data if Lodestone unavailable or parsing failed.
+    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    ///     and to Any to handle any exception including errors in the parser.
+    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// </param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException"></exception>
-    Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge, bool useFallback);
+    Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
+        FallbackType useFallback);
 }
