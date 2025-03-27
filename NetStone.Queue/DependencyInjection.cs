@@ -21,6 +21,8 @@ public static class DependencyInjection
 
         services.AddMassTransit(x =>
         {
+            x.DisableUsageTelemetry();
+
             x.AddConsumer<GetCharacterConsumer>();
             x.AddConsumer<GetCharacterClassJobsConsumer>();
             x.AddConsumer<GetCharacterMinionsConsumer>();
