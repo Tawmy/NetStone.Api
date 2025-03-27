@@ -4,6 +4,7 @@ using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.Extensions;
@@ -129,6 +130,7 @@ internal static class StartupExtensions
             x.AddSource(nameof(IFreeCompanyCachingServiceV2));
             x.AddSource(nameof(IFreeCompanyServiceV3));
             x.AddSource(nameof(IFreeCompanyServiceV2));
+            x.AddSource(GetMappingExtensionsClassNames());
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
         }).ConfigureResource(x => x.AddService(serviceName));
 
@@ -139,5 +141,17 @@ internal static class StartupExtensions
         });
 
         return true;
+    }
+
+    private static string[] GetMappingExtensionsClassNames()
+    {
+        return Assembly
+            .GetAssembly(typeof(DependencyInjection))?
+            .GetTypes()
+            .Where(x => x.Namespace is not null &&
+                        x.Namespace.StartsWith("NetStone.Cache.Extensions.Mapping") &&
+                        x.ReflectedType is null)
+            .Select(x => x.Name)
+            .ToArray() ?? [];
     }
 }

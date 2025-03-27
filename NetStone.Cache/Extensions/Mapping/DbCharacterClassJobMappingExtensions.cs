@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.Character;
 
@@ -5,8 +6,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class DbCharacterClassJobMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(DbCharacterClassJobMappingExtensions));
+
     public static void ToDb(this CharacterClassJob source, CharacterClassJob target)
     {
+        using var activity = ActivitySource.StartActivity();
+
         target.ClassJob = source.ClassJob;
         target.IsJobUnlocked = source.IsJobUnlocked;
         target.Level = source.Level;
@@ -18,6 +23,8 @@ public static class DbCharacterClassJobMappingExtensions
 
     public static CharacterClassJobDto ToDto(this CharacterClassJob source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new CharacterClassJobDto
         {
             ClassJob = source.ClassJob,

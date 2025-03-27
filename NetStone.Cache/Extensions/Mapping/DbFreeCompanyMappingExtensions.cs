@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;
@@ -7,8 +8,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class DbFreeCompanyMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(DbFreeCompanyMappingExtensions));
+
     public static FreeCompanyDtoV3 ToDto(this FreeCompany source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new FreeCompanyDtoV3
         {
             Name = source.Name,

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Model.Parseables.Search.FreeCompany;
 using ActiveTimes = NetStone.Common.Enums.ActiveTimes;
@@ -7,8 +8,13 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneFreeCompanySearchEntryMappingExtensions
 {
+    private static readonly ActivitySource
+        ActivitySource = new(nameof(NetStoneFreeCompanySearchEntryMappingExtensions));
+
     public static FreeCompanySearchPageResultDto ToDto(this FreeCompanySearchEntry source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new FreeCompanySearchPageResultDto
         {
             Name = source.Name,

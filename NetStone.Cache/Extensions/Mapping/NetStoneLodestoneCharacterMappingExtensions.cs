@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.Enums;
 using NetStone.Common.Helpers;
@@ -7,8 +8,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneLodestoneCharacterMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(NetStoneLodestoneCharacterMappingExtensions));
+
     public static Character ToDb(this LodestoneCharacter source, string lodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new Character
         {
             LodestoneId = lodestoneId,

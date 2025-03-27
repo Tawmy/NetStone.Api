@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.Character;
 
@@ -5,8 +6,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class DbCharacterMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(DbCharacterMappingExtensions));
+
     public static CharacterDtoV3 ToDto(this Character character)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new CharacterDtoV3
         {
             Id = character.LodestoneId,

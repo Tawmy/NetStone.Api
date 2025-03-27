@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
@@ -6,8 +7,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneLodestoneFreeCompanyMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(NetStoneLodestoneFreeCompanyMappingExtensions));
+
     public static FreeCompany ToDb(this LodestoneFreeCompany source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new FreeCompany
         {
             LodestoneId = source.Id,

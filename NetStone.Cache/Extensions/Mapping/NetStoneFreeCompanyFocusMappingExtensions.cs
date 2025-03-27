@@ -1,11 +1,16 @@
+using System.Diagnostics;
 using NetStone.Common.Enums;
 
 namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneFreeCompanyFocusMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(NetStoneFreeCompanyFocusMappingExtensions));
+
     public static FreeCompanyFocus ToEnum(this Model.Parseables.FreeCompany.FreeCompanyFocus? source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         var focus = FreeCompanyFocus.NotSpecified;
 
         if (source?.HasFocus is not true)

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Search.FreeCompany;
 using NetStone.StaticData;
 using FreeCompanySearchQuery = NetStone.Common.Queries.FreeCompanySearchQuery;
@@ -6,8 +7,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class FreeCompanySearchQueryMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(FreeCompanySearchQueryMappingExtensions));
+
     public static Search.FreeCompany.FreeCompanySearchQuery ToNetStone(this FreeCompanySearchQuery source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new Search.FreeCompany.FreeCompanySearchQuery
         {
             Name = source.Name,

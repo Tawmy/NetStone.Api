@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Common.Enums;
 using NetStone.Model.Parseables.Character.Gear;
 using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
@@ -6,9 +7,13 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneGearEntryMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(NetStoneGearEntryMappingExtensions));
+
     /// <remarks>Attach this directly to the character so FK is set by EF</remarks>
     public static CharacterGear ToDb(this GearEntry source, GearSlot slot)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new CharacterGear
         {
             CharacterId = 0, // set automatically by EF
