@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using NetStone.Cache;
@@ -180,5 +181,18 @@ internal static class StartupExtensions
                         x.ReflectedType is null)
             .Select(x => x.Name)
             .ToArray() ?? [];
+    }
+
+    public static void UseHealthChecks(this WebApplication app)
+    {
+        app.MapHealthChecks("/health").RequireAuthorization();
+
+        app.MapHealthChecks("/health/db", new HealthCheckOptions
+                { Predicate = check => check.Name.Equals(nameof(DatabaseContext), StringComparison.OrdinalIgnoreCase) })
+            .RequireAuthorization();
+
+        app.MapHealthChecks("/health/cert", new HealthCheckOptions
+                { Predicate = check => check.Name.Equals("cert", StringComparison.OrdinalIgnoreCase) })
+            .RequireAuthorization();
     }
 }

@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using NetStone.Api;
 using NetStone.Api.Components;
 using NetStone.Api.Extensions;
+using NetStone.Api.HealthChecks;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
@@ -22,6 +23,10 @@ var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
 builder.Services.AddDataProtection(builder.Configuration);
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<DatabaseContext>()
+    .AddCheck<DataProtectionCertificateHealthCheck>("cert");
 
 builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
@@ -74,6 +79,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHealthChecks();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
