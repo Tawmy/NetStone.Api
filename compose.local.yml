@@ -1,9 +1,16 @@
 services:
+  db:
+    labels:
+      - dev.orbstack.domains=db.api.netstone.local
+
   api:
     environment:
       LOGGING__LOGLEVEL__DEFAULT: Debug
       LOGGING__LOGLEVEL__ASPNETCORE: Debug
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Debug
+      DATA_PROTECTION_CERTIFICATE: /mnt/cert/netstone-api
+    volumes:
+      - /Users/tawmy/Desktop/netstone-api/cert:/mnt/cert
     labels:
       - dev.orbstack.domains=api.netstone.local
 

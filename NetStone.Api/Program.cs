@@ -21,6 +21,8 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext)
 var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddDataProtection(builder.Configuration);
+
 builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
