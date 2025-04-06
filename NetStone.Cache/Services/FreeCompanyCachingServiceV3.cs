@@ -104,6 +104,13 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
             !members.Select(y =>
                 y.Id).Contains(x.CharacterLodestoneId));
 
+        // queue full characters here once to avoid one db call per member
+        var existingFullCharacters = await context.Characters.Where(x =>
+                newMembers.Select(y => y.Id).Contains(x.LodestoneId) ||
+                updatedMembers.Select(y => y.Id).Contains(x.LodestoneId))
+            .Include(x => x.Attributes)
+            .ToListAsync();
+
         List<FreeCompanyMember> newDbMembers = [];
         foreach (var newMember in newMembers)
         {
@@ -114,10 +121,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
                 newDbMember.FreeCompanyId = freeCompany.Id;
             }
 
-            if (await context.Characters.Where(x =>
-                        x.LodestoneId == newMember.Id)
-                    .Include(x => x.Attributes)
-                    .FirstOrDefaultAsync() is { } character)
+            if (existingFullCharacters.FirstOrDefault(x => x.LodestoneId == newMember.Id) is { } character)
             {
                 newDbMember.FullCharacterId = character.Id;
             }
@@ -137,10 +141,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
                 updatedDbMember.FreeCompanyId = freeCompany.Id;
             }
 
-            if (await context.Characters.Where(x =>
-                        x.LodestoneId == updatedMember.Id)
-                    .Include(x => x.Attributes)
-                    .FirstOrDefaultAsync() is { } character &&
+            if (existingFullCharacters.FirstOrDefault(x => x.LodestoneId == updatedMember.Id) is { } character &&
                 updatedDbMember.FullCharacterId is null)
             {
                 updatedDbMember.FullCharacterId = character.Id;
