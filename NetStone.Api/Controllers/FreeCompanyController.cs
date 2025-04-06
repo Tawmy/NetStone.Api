@@ -114,6 +114,7 @@ namespace NetStone.Api.Controllers.V2
     [ApiController]
     [Authorize]
     [ApiVersion(2)]
+    [Obsolete("This API version is deprecated. Please use version 3 instead.")]
     public class FreeCompanyController(IFreeCompanyServiceV2 freeCompanyService) : ControllerBase
     {
         /// <summary>

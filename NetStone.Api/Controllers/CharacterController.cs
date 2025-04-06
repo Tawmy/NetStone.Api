@@ -173,6 +173,7 @@ namespace NetStone.Api.Controllers.V2
     [Route("[controller]")]
     [Authorize]
     [ApiVersion(2)]
+    [Obsolete("This API version is deprecated. Please use version 3 instead.")]
     public class CharacterController(ICharacterServiceV2 characterService) : ControllerBase
     {
         /// <summary>
