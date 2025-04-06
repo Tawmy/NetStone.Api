@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using NetStone.Api;
 using NetStone.Api.Components;
+using NetStone.Api.ExceptionHandlers;
 using NetStone.Api.Extensions;
 using NetStone.Api.HealthChecks;
 using NetStone.Cache;
@@ -35,6 +36,9 @@ builder.Services.AddQueueServices(builder.Configuration);
 var metricsActive = builder.AddOtelMetrics(builder.Configuration);
 var tracingActive = builder.AddOtelTracing(builder.Configuration);
 
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
+
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -68,6 +72,7 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseExceptionHandler();
 app.MapControllers();
 
 if (metricsActive)

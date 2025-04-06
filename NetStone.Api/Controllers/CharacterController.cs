@@ -28,14 +28,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CharacterSearchPageDto>> SearchAsync(CharacterSearchQuery query,
             int page = 1)
         {
-            try
-            {
-                return await characterService.SearchCharacterAsync(query, page);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.SearchCharacterAsync(query, page);
         }
 
         /// <summary>
@@ -56,14 +49,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CharacterDtoV3>> GetAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -90,14 +76,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CharacterClassJobOuterDtoV3>> GetClassJobsAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -124,14 +103,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CollectionDtoV3<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -158,14 +130,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CollectionDtoV3<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -194,14 +159,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CharacterAchievementOuterDtoV3>> GetAchievementsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
         }
     }
 }
