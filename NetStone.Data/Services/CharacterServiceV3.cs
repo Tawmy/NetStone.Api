@@ -315,6 +315,9 @@ public class CharacterServiceV3(
 
     private async Task<List<CharacterAchievementEntry>> RetrieveAllAchievementsAsync(string lodestoneId)
     {
+        // do not retrieve pages in parallel, it tends to run into rate limit
+        // see V2 service for reference on how it used to be implemented
+
         if (await netStoneService.GetCharacterAchievement(lodestoneId) is not { } page1)
         {
             throw new NotFoundException();
