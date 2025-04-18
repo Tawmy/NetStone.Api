@@ -79,6 +79,19 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
+        if (string.IsNullOrWhiteSpace(lodestoneCharacter.Name))
+        {
+            if (cachedCharacterDto is not null && useFallback is FallbackType.Any)
+            {
+                return cachedCharacterDto with
+                {
+                    Cached = true, FallbackUsed = true, FallbackReason = nameof(ParsingFailedException)
+                };
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         // cache character, send to queue, and return
         cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
@@ -132,6 +145,17 @@ public class CharacterServiceV3(
         if (lodestoneCharacterClassJobs is null)
         {
             throw new NotFoundException();
+        }
+
+        if (string.IsNullOrWhiteSpace(lodestoneCharacterClassJobs.Alchemist.Name))
+        {
+            if (cachedClassJobsDtos.Any() && useFallback is FallbackType.Any)
+            {
+                return new CharacterClassJobOuterDtoV3(cachedClassJobsDtos, true, lastUpdated, true,
+                    nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
         }
 
         cachedClassJobsDtos = await cachingService.CacheCharacterClassJobsAsync(lodestoneId,
@@ -300,6 +324,17 @@ public class CharacterServiceV3(
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterAchievementsAsync), ex.Message);
                 return new CharacterAchievementOuterDtoV3(cachedAchievementsDtos, true, lastUpdated, true, ex.Message);
+            }
+
+            if (ex is FormatException)
+            {
+                if (cachedAchievementsDtos.Any() && useFallback is FallbackType.Any)
+                {
+                    return new CharacterAchievementOuterDtoV3(cachedAchievementsDtos, true, lastUpdated, true,
+                        ex.Message);
+                }
+
+                throw new ParsingFailedException(lodestoneId);
             }
 
             throw;

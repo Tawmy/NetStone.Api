@@ -46,6 +46,9 @@ namespace NetStone.Api.Controllers.V3
         /// </param>
         /// <returns>DTO containing the parsed character and some goodie properties.</returns>
         [HttpGet("{lodestoneId}")]
+        [ProducesResponseType<CharacterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterDtoV3>> GetAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
@@ -73,6 +76,9 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character class jobs.</returns>
         [HttpGet("ClassJobs/{lodestoneId}")]
+        [ProducesResponseType<CharacterClassJobOuterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterClassJobOuterDtoV3>> GetClassJobsAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
@@ -100,6 +106,9 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character minions.</returns>
         [HttpGet("Minions/{lodestoneId}")]
+        [ProducesResponseType<CollectionDtoV3<CharacterMinionDto>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CollectionDtoV3<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
@@ -127,6 +136,9 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character mounts.</returns>
         [HttpGet("Mounts/{lodestoneId}")]
+        [ProducesResponseType<CollectionDtoV3<CharacterMountDto>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CollectionDtoV3<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
@@ -156,6 +168,9 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character achievements.</returns>
         [HttpGet("Achievements/{lodestoneId}")]
+        [ProducesResponseType<CharacterAchievementOuterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterAchievementOuterDtoV3>> GetAchievementsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
