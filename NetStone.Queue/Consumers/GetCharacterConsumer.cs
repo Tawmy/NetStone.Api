@@ -27,7 +27,6 @@ public class GetCharacterConsumer(ICharacterServiceV3 characterService, IRabbitM
         catch (Exception e)
         {
             await senderService.SendGetCharacterFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

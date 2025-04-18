@@ -27,7 +27,6 @@ public class GetFreeCompanyConsumer(IFreeCompanyServiceV3 freeCompanyService, IR
         catch (Exception e)
         {
             await senderService.SendGetFreeCompanyFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

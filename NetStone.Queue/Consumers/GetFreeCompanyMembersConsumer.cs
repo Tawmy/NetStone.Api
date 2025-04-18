@@ -29,7 +29,6 @@ public class GetFreeCompanyMembersConsumer(
         catch (Exception e)
         {
             await senderService.SendGetFreeCompanyMembersFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

@@ -123,10 +123,9 @@ internal class CharacterCachingServiceV3(
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception e)
+        catch
         {
             await transaction.RollbackAsync();
-            Console.WriteLine(e);
             throw;
         }
 
