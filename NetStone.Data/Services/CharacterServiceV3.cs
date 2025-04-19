@@ -218,6 +218,19 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
+        if (!lodestoneMinions.Collectables.Any() && cachedMinionsDtos.Any())
+        {
+            // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
+            // we cannot always throw when no minions are returned, as new character might actually have none
+            if (useFallback is FallbackType.Any)
+            {
+                return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
+                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
 
         var collectionDto = new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, false, DateTime.UtcNow,
@@ -275,6 +288,19 @@ public class CharacterServiceV3(
         if (lodestoneMounts is null)
         {
             throw new NotFoundException();
+        }
+
+        if (!lodestoneMounts.Collectables.Any() && cachedMountsDtos.Any())
+        {
+            // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
+            // we cannot always throw when no mounts are returned, as new character might actually have none
+            if (useFallback is FallbackType.Any)
+            {
+                return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
+                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
         }
 
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
