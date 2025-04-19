@@ -10,9 +10,11 @@ services:
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Debug
       DATA_PROTECTION_CERTIFICATE: /mnt/cert/netstone-api
     volumes:
-      - /Users/tawmy/Desktop/netstone-api/cert:/mnt/cert
+      - /Users/tawmy/Desktop/cert/netstone-api:/mnt/cert
     labels:
       - dev.orbstack.domains=api.netstone.local
+    ports:
+      - "12345:8080"
 
   queue:
     labels:
