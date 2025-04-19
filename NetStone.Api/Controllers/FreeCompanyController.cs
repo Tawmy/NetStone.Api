@@ -21,7 +21,7 @@ namespace NetStone.Api.Controllers.V3
         /// <summary>
         ///     Search for free company with provided search query.
         /// </summary>
-        /// <param name="query">Search query, Name and World are needed.</param>
+        /// <param name="query">Search query, Name, and World are needed.</param>
         /// <param name="page">Which page of the paginated results to return.</param>
         /// <returns>Results returned from Lodestone.</returns>
         [HttpPost("Search")]
@@ -54,6 +54,9 @@ namespace NetStone.Api.Controllers.V3
         /// </param>
         /// <returns>Parsed free company data.</returns>
         [HttpGet("{lodestoneId}")]
+        [ProducesResponseType<FreeCompanyDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<FreeCompanyDtoV3>> GetAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
@@ -89,6 +92,9 @@ namespace NetStone.Api.Controllers.V3
         /// </param>
         /// <returns>Free company members.</returns>
         [HttpGet("Members/{lodestoneId}")]
+        [ProducesResponseType<FreeCompanyDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<FreeCompanyMembersOuterDtoV3>> GetMembersAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
@@ -120,7 +126,7 @@ namespace NetStone.Api.Controllers.V2
         /// <summary>
         ///     Search for free company with provided search query.
         /// </summary>
-        /// <param name="query">Search query, Name and World are needed.</param>
+        /// <param name="query">Search query, Name, and World are needed.</param>
         /// <param name="page">Which page of the paginated results to return.</param>
         /// <returns>Results returned from Lodestone.</returns>
         [HttpPost("Search")]

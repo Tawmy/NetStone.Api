@@ -77,6 +77,19 @@ public class FreeCompanyServiceV3(
             throw new NotFoundException();
         }
 
+        if (string.IsNullOrWhiteSpace(lodestoneFc.Name))
+        {
+            if (cachedFcDto is not null && useFallback is FallbackType.Any)
+            {
+                return cachedFcDto with
+                {
+                    Cached = true, FallbackUsed = true, FallbackReason = nameof(ParsingFailedException)
+                };
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         // cache fc and return
         cachedFcDto = await cachingService.CacheFreeCompanyAsync(lodestoneFc);
         _ = eventService.FreeCompanyRefreshedAsync(cachedFcDto);
@@ -122,6 +135,11 @@ public class FreeCompanyServiceV3(
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetFreeCompanyMembersAsync), ex.Message);
                 return new FreeCompanyMembersOuterDtoV3(cachedMembers, true, lastUpdated, true, ex.Message);
+            }
+
+            if (ex is FormatException)
+            {
+                throw new ParsingFailedException(lodestoneId);
             }
 
             throw;
