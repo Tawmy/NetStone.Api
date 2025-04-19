@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="netstone-api@localhost" uuid="26f126f7-c0a0-4aa0-8628-008a130eed77">
+    <data-source source="LOCAL" name="netstone-api@db.api.netstone.local" uuid="26f126f7-c0a0-4aa0-8628-008a130eed77">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
-      <jdbc-url>jdbc:postgresql://localhost:5432/netstone-api</jdbc-url>
+      <jdbc-url>jdbc:postgresql://db.api.netstone.local:5432/netstone-api</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
