@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Model.Parseables.FreeCompany.Members;
 
@@ -5,8 +6,13 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class NetStoneFreeCompanyMembersEntryMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource =
+        new(nameof(NetStoneFreeCompanyMembersEntryMappingExtensions));
+
     public static FreeCompanyMember ToDb(this FreeCompanyMembersEntry source, string freeCompanyLodestoneId)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new FreeCompanyMember
         {
             CharacterLodestoneId = source.Id,
@@ -24,6 +30,8 @@ public static class NetStoneFreeCompanyMembersEntryMappingExtensions
 
     public static void ToDb(this FreeCompanyMembersEntry source, FreeCompanyMember target)
     {
+        using var activity = ActivitySource.StartActivity();
+
         target.Name = source.Name;
         target.Rank = source.Rank;
         target.RankIcon = source.RankIcon?.ToString();

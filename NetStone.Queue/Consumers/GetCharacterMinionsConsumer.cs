@@ -27,7 +27,6 @@ public class GetCharacterMinionsConsumer(ICharacterServiceV3 characterService, I
         catch (Exception e)
         {
             await senderService.SendGetCharacterMinionsFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

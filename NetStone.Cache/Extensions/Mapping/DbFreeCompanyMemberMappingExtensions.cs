@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.FreeCompany;
 
@@ -5,8 +6,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class DbFreeCompanyMemberMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(DbFreeCompanyMemberMappingExtensions));
+
     public static FreeCompanyMemberDtoV3 ToDto(this FreeCompanyMember source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new FreeCompanyMemberDtoV3
         {
             LodestoneId = source.CharacterLodestoneId,

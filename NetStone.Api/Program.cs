@@ -2,6 +2,7 @@ using System.Text.Json.Serialization;
 using NetStone.Api;
 using NetStone.Api.Components;
 using NetStone.Api.Extensions;
+using NetStone.Api.HealthChecks;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
@@ -21,12 +22,21 @@ builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext)
 var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);
 builder.Services.AddDbContext<DatabaseContext>();
+builder.Services.AddDataProtection(builder.Configuration);
+
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<DatabaseContext>()
+    .AddCheck<DataProtectionCertificateHealthCheck>("cert");
+
 builder.Services.AddCacheServices();
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
 var metricsActive = builder.AddOtelMetrics(builder.Configuration);
 var tracingActive = builder.AddOtelTracing(builder.Configuration);
+
+builder.Services.AddProblemDetails();
+builder.Services.AddExceptionHandler<ExceptionHandler>();
 
 builder.Services.AddControllers().AddJsonOptions(x =>
 {
@@ -59,8 +69,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error", true);
 }
 
-app.UseHttpsRedirection();
-
+app.UseExceptionHandler();
 app.MapControllers();
 
 if (metricsActive)
@@ -72,6 +81,7 @@ app.UseStaticFiles();
 app.UseAntiforgery();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHealthChecks();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 

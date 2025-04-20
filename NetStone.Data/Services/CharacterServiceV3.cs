@@ -79,6 +79,19 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
+        if (string.IsNullOrWhiteSpace(lodestoneCharacter.Name))
+        {
+            if (cachedCharacterDto is not null && useFallback is FallbackType.Any)
+            {
+                return cachedCharacterDto with
+                {
+                    Cached = true, FallbackUsed = true, FallbackReason = nameof(ParsingFailedException)
+                };
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         // cache character, send to queue, and return
         cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
@@ -132,6 +145,17 @@ public class CharacterServiceV3(
         if (lodestoneCharacterClassJobs is null)
         {
             throw new NotFoundException();
+        }
+
+        if (string.IsNullOrWhiteSpace(lodestoneCharacterClassJobs.Alchemist.Name))
+        {
+            if (cachedClassJobsDtos.Any() && useFallback is FallbackType.Any)
+            {
+                return new CharacterClassJobOuterDtoV3(cachedClassJobsDtos, true, lastUpdated, true,
+                    nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
         }
 
         cachedClassJobsDtos = await cachingService.CacheCharacterClassJobsAsync(lodestoneId,
@@ -194,6 +218,19 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
+        if (!lodestoneMinions.Collectables.Any() && cachedMinionsDtos.Any())
+        {
+            // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
+            // we cannot always throw when no minions are returned, as new character might actually have none
+            if (useFallback is FallbackType.Any)
+            {
+                return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
+                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
 
         var collectionDto = new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, false, DateTime.UtcNow,
@@ -253,6 +290,19 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
+        if (!lodestoneMounts.Collectables.Any() && cachedMountsDtos.Any())
+        {
+            // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
+            // we cannot always throw when no mounts are returned, as new character might actually have none
+            if (useFallback is FallbackType.Any)
+            {
+                return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
+                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+            }
+
+            throw new ParsingFailedException(lodestoneId);
+        }
+
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
 
         var collectionDto = new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, false, DateTime.UtcNow,
@@ -302,6 +352,17 @@ public class CharacterServiceV3(
                 return new CharacterAchievementOuterDtoV3(cachedAchievementsDtos, true, lastUpdated, true, ex.Message);
             }
 
+            if (ex is FormatException)
+            {
+                if (cachedAchievementsDtos.Any() && useFallback is FallbackType.Any)
+                {
+                    return new CharacterAchievementOuterDtoV3(cachedAchievementsDtos, true, lastUpdated, true,
+                        ex.Message);
+                }
+
+                throw new ParsingFailedException(lodestoneId);
+            }
+
             throw;
         }
 
@@ -315,6 +376,9 @@ public class CharacterServiceV3(
 
     private async Task<List<CharacterAchievementEntry>> RetrieveAllAchievementsAsync(string lodestoneId)
     {
+        // do not retrieve pages in parallel, it tends to run into rate limit
+        // see V2 service for reference on how it used to be implemented
+
         if (await netStoneService.GetCharacterAchievement(lodestoneId) is not { } page1)
         {
             throw new NotFoundException();

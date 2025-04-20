@@ -29,7 +29,6 @@ public class GetCharacterAchievementsConsumer(
         catch (Exception e)
         {
             await senderService.SendGetCharacterAchievementsFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

@@ -27,7 +27,6 @@ public class GetCharacterMountsConsumer(ICharacterServiceV3 characterService, IR
         catch (Exception e)
         {
             await senderService.SendGetCharacterMountsFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

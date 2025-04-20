@@ -27,7 +27,6 @@ public class GetCharacterClassJobsConsumer(ICharacterServiceV3 characterService,
         catch (Exception e)
         {
             await senderService.SendGetCharacterClassJobsFailedAsync(m.LodestoneId, e.ToString());
-            Console.WriteLine(e);
             throw;
         }
     }

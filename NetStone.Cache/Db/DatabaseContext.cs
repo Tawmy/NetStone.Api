@@ -1,4 +1,5 @@
 using EntityFramework.Exceptions.PostgreSQL;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.Enums;
@@ -6,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Infrastructure;
 
 namespace NetStone.Cache.Db;
 
-public class DatabaseContext : DbContext
+public class DatabaseContext : DbContext, IDataProtectionKeyContext
 {
     public DatabaseContext()
     {
@@ -47,6 +48,8 @@ public class DatabaseContext : DbContext
     }
 
     #region DbSets
+
+    public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
 
     internal DbSet<Character> Characters => Set<Character>();
     internal DbSet<CharacterFreeCompany> CharacterFreeCompanies => Set<CharacterFreeCompany>();

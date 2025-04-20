@@ -1,9 +1,13 @@
 using System.Data;
 using System.Reflection;
+using System.Security.Cryptography.X509Certificates;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.Extensions;
@@ -24,8 +28,8 @@ internal static class StartupExtensions
         services.AddApiVersioning(x =>
             {
                 x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-                x.DefaultApiVersion = new ApiVersion(2);
-                x.AssumeDefaultVersionWhenUnspecified = true; // assume V2 if request is sent without version
+                x.DefaultApiVersion = new ApiVersion(3);
+                x.AssumeDefaultVersionWhenUnspecified = true; // assume V3 if request is sent without version
                 x.ReportApiVersions = true; // respond with supported versions in response header
             })
             .AddMvc()
@@ -129,6 +133,7 @@ internal static class StartupExtensions
             x.AddSource(nameof(IFreeCompanyCachingServiceV2));
             x.AddSource(nameof(IFreeCompanyServiceV3));
             x.AddSource(nameof(IFreeCompanyServiceV2));
+            x.AddSource(GetMappingExtensionsClassNames());
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
         }).ConfigureResource(x => x.AddService(serviceName));
 
@@ -139,5 +144,55 @@ internal static class StartupExtensions
         });
 
         return true;
+    }
+
+    public static void AddDataProtection(this IServiceCollection services, IConfiguration configuration)
+    {
+        var certificatePath = configuration.GetGuardedConfiguration(EnvironmentVariables.DataProtectionCertificate);
+        var certificate = X509Certificate2.CreateFromPemFile($"{certificatePath}.pem", $"{certificatePath}.key");
+
+        X509Certificate2[] decryptionCertificates;
+        if (configuration[EnvironmentVariables.DataProtectionCertificateAlt] is { } certificateAltPath)
+        {
+            // alternative certificate for decryption provided, use both
+            var certificateAlt = X509Certificate2.CreateFromPemFile(
+                $"{certificateAltPath}.pem", $"{certificateAltPath}.key");
+            decryptionCertificates = [certificate, certificateAlt];
+        }
+        else
+        {
+            // only one certificate provided
+            decryptionCertificates = [certificate];
+        }
+
+        services.AddDataProtection()
+            .PersistKeysToDbContext<DatabaseContext>()
+            .ProtectKeysWithCertificate(certificate)
+            .UnprotectKeysWithAnyCertificate(decryptionCertificates.ToArray());
+    }
+
+    private static string[] GetMappingExtensionsClassNames()
+    {
+        return Assembly
+            .GetAssembly(typeof(DependencyInjection))?
+            .GetTypes()
+            .Where(x => x.Namespace is not null &&
+                        x.Namespace.StartsWith("NetStone.Cache.Extensions.Mapping") &&
+                        x.ReflectedType is null)
+            .Select(x => x.Name)
+            .ToArray() ?? [];
+    }
+
+    public static void UseHealthChecks(this WebApplication app)
+    {
+        app.MapHealthChecks("/health").RequireAuthorization();
+
+        app.MapHealthChecks("/health/db", new HealthCheckOptions
+                { Predicate = check => check.Name.Equals(nameof(DatabaseContext), StringComparison.OrdinalIgnoreCase) })
+            .RequireAuthorization();
+
+        app.MapHealthChecks("/health/cert", new HealthCheckOptions
+                { Predicate = check => check.Name.Equals("cert", StringComparison.OrdinalIgnoreCase) })
+            .RequireAuthorization();
     }
 }

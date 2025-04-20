@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using NetStone.Search.Character;
 using NetStone.StaticData;
 using CharacterSearchQuery = NetStone.Common.Queries.CharacterSearchQuery;
@@ -6,8 +7,12 @@ namespace NetStone.Cache.Extensions.Mapping;
 
 public static class CharacterSearchQueryMappingExtensions
 {
+    private static readonly ActivitySource ActivitySource = new(nameof(CharacterSearchQueryMappingExtensions));
+
     public static Search.Character.CharacterSearchQuery ToNetStone(this CharacterSearchQuery source)
     {
+        using var activity = ActivitySource.StartActivity();
+
         return new Search.Character.CharacterSearchQuery
         {
             CharacterName = source.CharacterName,

@@ -37,7 +37,9 @@ public interface IFreeCompanyServiceV3
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Parsed free company data.</returns>
-    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
+    /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
+    /// <exception cref="ParsingFailedException">Thrown if parsing failed (usually if Lodestone under maintenance)</exception>
     Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
 
     /// <summary>
@@ -55,7 +57,9 @@ public interface IFreeCompanyServiceV3
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
-    /// <exception cref="NotFoundException"></exception>
+    /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
+    /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
+    /// <exception cref="ParsingFailedException">Thrown if parsing failed (usually if Lodestone under maintenance)</exception>
     Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 }

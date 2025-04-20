@@ -19,8 +19,8 @@ public partial class Home
             new Part("NetStone", "https://github.com/xivapi/NetStone", "Lodestone Parser", "XIVAPI",
                 "https://github.com/xivapi"),
             new Part("NetStone API", null, "API and Caching for NetStone", "Tawmy", "https://tawmy.dev"),
-            new Part("NetStone API Client", "https://github.com/Tawmy/NetStone.Api.Client",
-                ".NET client for NetStone API", "Tawmy", "https://tawmy.dev")
+            new Part("NetStone API SDK", "https://github.com/Tawmy/NetStone.Api.Sdk",
+                ".NET SDK for NetStone API", "Tawmy", "https://tawmy.dev")
         ];
     }
 

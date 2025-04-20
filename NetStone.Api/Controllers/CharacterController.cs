@@ -28,14 +28,7 @@ namespace NetStone.Api.Controllers.V3
         public async Task<ActionResult<CharacterSearchPageDto>> SearchAsync(CharacterSearchQuery query,
             int page = 1)
         {
-            try
-            {
-                return await characterService.SearchCharacterAsync(query, page);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.SearchCharacterAsync(query, page);
         }
 
         /// <summary>
@@ -53,17 +46,13 @@ namespace NetStone.Api.Controllers.V3
         /// </param>
         /// <returns>DTO containing the parsed character and some goodie properties.</returns>
         [HttpGet("{lodestoneId}")]
+        [ProducesResponseType<CharacterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterDtoV3>> GetAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -87,17 +76,13 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character class jobs.</returns>
         [HttpGet("ClassJobs/{lodestoneId}")]
+        [ProducesResponseType<CharacterClassJobOuterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterClassJobOuterDtoV3>> GetClassJobsAsync(string lodestoneId, int? maxAge,
             FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -121,17 +106,13 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character minions.</returns>
         [HttpGet("Minions/{lodestoneId}")]
+        [ProducesResponseType<CollectionDtoV3<CharacterMinionDto>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CollectionDtoV3<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -155,17 +136,13 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character mounts.</returns>
         [HttpGet("Mounts/{lodestoneId}")]
+        [ProducesResponseType<CollectionDtoV3<CharacterMountDto>>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CollectionDtoV3<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
         }
 
         /// <summary>
@@ -191,17 +168,13 @@ namespace NetStone.Api.Controllers.V3
         /// </remarks>
         /// <returns>Character achievements.</returns>
         [HttpGet("Achievements/{lodestoneId}")]
+        [ProducesResponseType<CharacterAchievementOuterDtoV3>(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
         public async Task<ActionResult<CharacterAchievementOuterDtoV3>> GetAchievementsAsync(string lodestoneId,
             int? maxAge, FallbackType useFallback = FallbackType.None)
         {
-            try
-            {
-                return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
-            }
-            catch (NotFoundException)
-            {
-                return NotFound();
-            }
+            return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
         }
     }
 }
@@ -215,6 +188,7 @@ namespace NetStone.Api.Controllers.V2
     [Route("[controller]")]
     [Authorize]
     [ApiVersion(2)]
+    [Obsolete("This API version is deprecated. Please use version 3 instead.")]
     public class CharacterController(ICharacterServiceV2 characterService) : ControllerBase
     {
         /// <summary>

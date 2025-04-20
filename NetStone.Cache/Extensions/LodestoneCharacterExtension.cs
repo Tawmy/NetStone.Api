@@ -15,7 +15,7 @@ public static class LodestoneCharacterExtension
     {
         if (string.IsNullOrWhiteSpace(character.ActiveClassJobIcon))
         {
-            throw new InvalidDataException(nameof(character.ActiveClassJobIcon));
+            throw new ArgumentException("active class job icon is null or empty", nameof(character));
         }
 
         return character.ActiveClassJobIcon switch

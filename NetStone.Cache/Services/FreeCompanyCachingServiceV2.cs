@@ -53,10 +53,9 @@ public class FreeCompanyCachingServiceV2(DatabaseContext context, IAutoMapperSer
             await context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception e)
+        catch
         {
             await transaction.RollbackAsync();
-            Console.WriteLine(e);
             throw;
         }
 
