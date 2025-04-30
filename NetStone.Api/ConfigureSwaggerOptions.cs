@@ -56,7 +56,7 @@ internal class ConfigureSwaggerOptions(
                 description.GroupName,
                 new OpenApiInfo
                 {
-                    Title = $"NetStone API {version.ToVersionString()}",
+                    Title = $"NetStone API {version.ToString(3)}",
                     Version = description.ApiVersion.ToString()
                 });
         }
