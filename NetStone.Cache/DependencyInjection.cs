@@ -9,7 +9,7 @@ public static class DependencyInjection
     public static void AddCacheServices(this IServiceCollection services)
     {
         services.AddScoped<INetStoneService, NetStoneService>();
-        services.AddScoped<ICharacterCachingServiceV3, CharacterCachingServiceV3>();
-        services.AddScoped<IFreeCompanyCachingServiceV3, FreeCompanyCachingServiceV3>();
+        services.AddScoped<ICharacterCachingService, CharacterCachingService>();
+        services.AddScoped<IFreeCompanyCachingService, FreeCompanyCachingService>();
     }
 }

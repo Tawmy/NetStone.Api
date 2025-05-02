@@ -35,7 +35,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
 
         foreach (var (key, classJobLodestone) in classJobsLodestone.ClassJobDict.Where(x => x.Value.IsUnlocked))
         {
-            var classJobDb = CharacterClassJobsServiceV3
+            var classJobDb = CharacterClassJobsService
                 .GetCharacterClassJobs(new Dictionary<ClassJob, ClassJobEntry> { { key, classJobLodestone } }, [])
                 .FirstOrDefault();
 
@@ -181,7 +181,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.NotNull(characterLodestone);
 
         var characterDb = characterLodestone.ToDb(lodestoneId);
-        characterDb.Gear = CharacterGearServiceV3.GetGear(characterLodestone.Gear, characterDb.Gear);
+        characterDb.Gear = CharacterGearService.GetGear(characterLodestone.Gear, characterDb.Gear);
         Assert.NotNull(characterDb);
 
         characterDb.LodestoneId = lodestoneId; // also set manually in code
@@ -253,7 +253,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         CompareAttributes(characterLodestone.Attributes, characterDto);
     }
 
-    private static void CompareGear(CharacterGear gearLodestone, CharacterDtoV3 characterDto)
+    private static void CompareGear(CharacterGear gearLodestone, CharacterDto characterDto)
     {
         var gearLodestoneDict = new Dictionary<GearSlot, GearEntry>();
         gearLodestoneDict.AddIfValueNotNull(GearSlot.MainHand, gearLodestone.Mainhand);
@@ -299,7 +299,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         }
     }
 
-    private static void CompareAttributes(CharacterAttributes attributes, CharacterDtoV3 characterDto)
+    private static void CompareAttributes(CharacterAttributes attributes, CharacterDto characterDto)
     {
         Assert.Equal(attributes.Strength, characterDto.Attributes[CharacterAttribute.Strength]);
         Assert.Equal(attributes.Dexterity, characterDto.Attributes[CharacterAttribute.Dexterity]);

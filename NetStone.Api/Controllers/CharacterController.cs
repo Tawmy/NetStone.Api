@@ -6,7 +6,7 @@ using NetStone.Common.Enums;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
 
-namespace NetStone.Api.Controllers.V3;
+namespace NetStone.Api.Controllers;
 
 /// <summary>
 ///     Character controller. Parses Lodestone for Character data and caches it, then returns it as DTOs.
@@ -15,7 +15,7 @@ namespace NetStone.Api.Controllers.V3;
 [Route("[controller]")]
 [Authorize]
 [ApiVersion(3)]
-public class CharacterController(ICharacterServiceV3 characterService) : ControllerBase
+public class CharacterController(ICharacterService characterService) : ControllerBase
 {
     /// <summary>
     ///     Search for character with provided search query.
@@ -45,10 +45,10 @@ public class CharacterController(ICharacterServiceV3 characterService) : Control
     /// </param>
     /// <returns>DTO containing the parsed character and some goodie properties.</returns>
     [HttpGet("{lodestoneId}")]
-    [ProducesResponseType<CharacterDtoV3>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CharacterDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CharacterDtoV3>> GetAsync(string lodestoneId, int? maxAge,
+    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
@@ -68,17 +68,17 @@ public class CharacterController(ICharacterServiceV3 characterService) : Control
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDtoV3.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CharacterClassJobOuterDto.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character class jobs.</returns>
     [HttpGet("ClassJobs/{lodestoneId}")]
-    [ProducesResponseType<CharacterClassJobOuterDtoV3>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CharacterClassJobOuterDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CharacterClassJobOuterDtoV3>> GetClassJobsAsync(string lodestoneId, int? maxAge,
+    public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
@@ -98,17 +98,17 @@ public class CharacterController(ICharacterServiceV3 characterService) : Control
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV3{t}.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{T}.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character minions.</returns>
     [HttpGet("Minions/{lodestoneId}")]
-    [ProducesResponseType<CollectionDtoV3<CharacterMinionDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CollectionDto<CharacterMinionDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CollectionDtoV3<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
+    public async Task<ActionResult<CollectionDto<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
@@ -128,17 +128,17 @@ public class CharacterController(ICharacterServiceV3 characterService) : Control
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <remarks>
-    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDtoV3{T}.LastUpdated" />
+    ///     If character was never cached using <see cref="GetAsync" />, <see cref="CollectionDto{T}.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character mounts.</returns>
     [HttpGet("Mounts/{lodestoneId}")]
-    [ProducesResponseType<CollectionDtoV3<CharacterMountDto>>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CollectionDto<CharacterMountDto>>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CollectionDtoV3<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
+    public async Task<ActionResult<CollectionDto<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
@@ -160,17 +160,17 @@ public class CharacterController(ICharacterServiceV3 characterService) : Control
     /// </param>
     /// <remarks>
     ///     If character was never cached using <see cref="GetAsync" />,
-    ///     <see cref="CharacterAchievementOuterDtoV3.LastUpdated" />
+    ///     <see cref="CharacterAchievementOuterDto.LastUpdated" />
     ///     cannot be set. Its value will be null as a result. In this case, if <paramref name="maxAge" /> is set to ANY value,
     ///     the data will be refreshed. If Character was cached at least once and the value can be saved,
     ///     <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <returns>Character achievements.</returns>
     [HttpGet("Achievements/{lodestoneId}")]
-    [ProducesResponseType<CharacterAchievementOuterDtoV3>(StatusCodes.Status200OK)]
+    [ProducesResponseType<CharacterAchievementOuterDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CharacterAchievementOuterDtoV3>> GetAchievementsAsync(string lodestoneId,
+    public async Task<ActionResult<CharacterAchievementOuterDto>> GetAchievementsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);

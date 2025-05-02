@@ -7,7 +7,7 @@ using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
 
-namespace NetStone.Api.Controllers.V3;
+namespace NetStone.Api.Controllers;
 
 /// <summary>
 ///     Free Company controller. Parses Lodestone for Free Company data.
@@ -16,7 +16,7 @@ namespace NetStone.Api.Controllers.V3;
 [ApiController]
 [Authorize]
 [ApiVersion(3)]
-public class FreeCompanyController(IFreeCompanyServiceV3 freeCompanyService) : ControllerBase
+public class FreeCompanyController(IFreeCompanyService freeCompanyService) : ControllerBase
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -54,10 +54,10 @@ public class FreeCompanyController(IFreeCompanyServiceV3 freeCompanyService) : C
     /// </param>
     /// <returns>Parsed free company data.</returns>
     [HttpGet("{lodestoneId}")]
-    [ProducesResponseType<FreeCompanyDtoV3>(StatusCodes.Status200OK)]
+    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<FreeCompanyDtoV3>> GetAsync(string lodestoneId, int? maxAge,
+    public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
         try
@@ -80,7 +80,7 @@ public class FreeCompanyController(IFreeCompanyServiceV3 freeCompanyService) : C
     /// </param>
     /// <remarks>
     ///     If free company was never cached using <see cref="GetAsync" />,
-    ///     <see cref="FreeCompanyMembersOuterDtoV3.LastUpdated" />cannot be set. Its value will be null as a result. In this
+    ///     <see cref="FreeCompanyMembersOuterDto.LastUpdated" />cannot be set. Its value will be null as a result. In this
     ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
     ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
     /// </remarks>
@@ -92,10 +92,10 @@ public class FreeCompanyController(IFreeCompanyServiceV3 freeCompanyService) : C
     /// </param>
     /// <returns>Free company members.</returns>
     [HttpGet("Members/{lodestoneId}")]
-    [ProducesResponseType<FreeCompanyDtoV3>(StatusCodes.Status200OK)]
+    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<FreeCompanyMembersOuterDtoV3>> GetMembersAsync(string lodestoneId, int? maxAge,
+    public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
         try

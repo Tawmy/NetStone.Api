@@ -10,14 +10,14 @@ public class FreeCompanyEventSubscriber(
     IServiceProvider serviceProvider,
     IFreeCompanyEventService freeCompanyEventService) : IFreeCompanyEventSubscriber, IHostedService
 {
-    public Task FreeCompanyRefreshedAsync(FreeCompanyDtoV3 freeCompanyDto)
+    public Task FreeCompanyRefreshedAsync(FreeCompanyDto freeCompanyDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();
         return service.SendGetFreeCompanyRefreshedAsync(freeCompanyDto);
     }
 
-    public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDtoV3 freeCompanyMemberDto)
+    public Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto freeCompanyMemberDto)
     {
         using var scope = serviceProvider.CreateScope();
         var service = scope.ServiceProvider.GetRequiredService<IRabbitMqSenderService>();

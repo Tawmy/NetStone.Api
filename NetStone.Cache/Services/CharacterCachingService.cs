@@ -12,13 +12,13 @@ using CharacterClassJob = NetStone.Model.Parseables.Character.ClassJob.Character
 
 namespace NetStone.Cache.Services;
 
-internal class CharacterCachingServiceV3(
+internal class CharacterCachingService(
     DatabaseContext context)
-    : ICharacterCachingServiceV3
+    : ICharacterCachingService
 {
-    private static readonly ActivitySource ActivitySource = new(nameof(ICharacterCachingServiceV3));
+    private static readonly ActivitySource ActivitySource = new(nameof(ICharacterCachingService));
 
-    public async Task<CharacterDtoV3> CacheCharacterAsync(string lodestoneId, LodestoneCharacter lodestoneCharacter)
+    public async Task<CharacterDto> CacheCharacterAsync(string lodestoneId, LodestoneCharacter lodestoneCharacter)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -32,7 +32,7 @@ internal class CharacterCachingServiceV3(
         if (character is not null)
         {
             lodestoneCharacter.ToDb(character);
-            character.Gear = CharacterGearServiceV3.GetGear(lodestoneCharacter.Gear, character.Gear);
+            character.Gear = CharacterGearService.GetGear(lodestoneCharacter.Gear, character.Gear);
 
             if (character.FreeCompany is not null)
             {
@@ -67,7 +67,7 @@ internal class CharacterCachingServiceV3(
         else
         {
             character = lodestoneCharacter.ToDb(lodestoneId);
-            character.Gear = CharacterGearServiceV3.GetGear(lodestoneCharacter.Gear, []);
+            character.Gear = CharacterGearService.GetGear(lodestoneCharacter.Gear, []);
 
             // rely on EF to set FK for free company
             character.FreeCompany = lodestoneCharacter.FreeCompany?.ToDb();
@@ -132,7 +132,7 @@ internal class CharacterCachingServiceV3(
         return character.ToDto();
     }
 
-    public async Task<CharacterDtoV3?> GetCharacterAsync(int id)
+    public async Task<CharacterDto?> GetCharacterAsync(int id)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -141,7 +141,7 @@ internal class CharacterCachingServiceV3(
         return character?.ToDto();
     }
 
-    public async Task<CharacterDtoV3?> GetCharacterAsync(string lodestoneId)
+    public async Task<CharacterDto?> GetCharacterAsync(string lodestoneId)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -161,7 +161,7 @@ internal class CharacterCachingServiceV3(
                 x.CharacterLodestoneId == lodestoneId)
             .ToListAsync();
 
-        dbClassJobs = CharacterClassJobsServiceV3.GetCharacterClassJobs(lodestoneClassJobs.ClassJobDict, dbClassJobs)
+        dbClassJobs = CharacterClassJobsService.GetCharacterClassJobs(lodestoneClassJobs.ClassJobDict, dbClassJobs)
             .ToList();
 
         if (character is not null)

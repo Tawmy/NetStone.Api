@@ -4,6 +4,6 @@ namespace NetStone.Data.Interfaces;
 
 public interface IFreeCompanyEvents
 {
-    Task FreeCompanyRefreshedAsync(FreeCompanyDtoV3 freeCompanyDto);
-    Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDtoV3 freeCompanyMemberDto);
+    Task FreeCompanyRefreshedAsync(FreeCompanyDto freeCompanyDto);
+    Task FreeCompanyMembersRefreshedAsync(FreeCompanyMembersOuterDto freeCompanyMemberDto);
 }

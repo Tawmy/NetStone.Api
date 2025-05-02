@@ -7,7 +7,7 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetFreeCompanyConsumer(IFreeCompanyServiceV3 freeCompanyService, IRabbitMqSenderService senderService)
+public class GetFreeCompanyConsumer(IFreeCompanyService freeCompanyService, IRabbitMqSenderService senderService)
     : IConsumer<GetFreeCompanyMessage>
 {
     public async Task Consume(ConsumeContext<GetFreeCompanyMessage> context)

@@ -8,7 +8,7 @@ namespace NetStone.Data.Interfaces;
 /// <summary>
 ///     Data service for character data.
 /// </summary>
-public interface ICharacterServiceV3
+public interface ICharacterService
 {
     /// <summary>
     ///     Search for character with provided search query.
@@ -40,7 +40,7 @@ public interface ICharacterServiceV3
     /// <exception cref="InvalidOperationException">Thrown if last updated field not set, indicates bug.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    public Task<CharacterDtoV3> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
+    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
 
     /// <summary>
     ///     Get a character's ClassJobs.
@@ -59,7 +59,7 @@ public interface ICharacterServiceV3
     /// <exception cref="NotFoundException">Thrown if character not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    public Task<CharacterClassJobOuterDtoV3> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge,
+    public Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 
     /// <summary>
@@ -79,7 +79,7 @@ public interface ICharacterServiceV3
     /// <exception cref="NotFoundException">Thrown if character not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    public Task<CollectionDtoV3<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge,
+    public Task<CollectionDto<CharacterMinionDto>> GetCharacterMinionsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 
     /// <summary>
@@ -99,7 +99,7 @@ public interface ICharacterServiceV3
     /// <exception cref="NotFoundException">Thrown if character not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    public Task<CollectionDtoV3<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge,
+    public Task<CollectionDto<CharacterMountDto>> GetCharacterMountsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 
     /// <summary>
@@ -120,6 +120,6 @@ public interface ICharacterServiceV3
     /// <exception cref="NotFoundException">Thrown if character not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    Task<CharacterAchievementOuterDtoV3> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge,
+    Task<CharacterAchievementOuterDto> GetCharacterAchievementsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 }

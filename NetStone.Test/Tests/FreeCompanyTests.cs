@@ -144,7 +144,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             freeCompanyDto.Reputation.Single(x => x.GrandCompany == GrandCompany.ImmortalFlames).Progress);
     }
 
-    private static void CompareFocus(LodestoneFreeCompany freeCompanyLodestone, FreeCompanyDtoV3 freeCompanyDto)
+    private static void CompareFocus(LodestoneFreeCompany freeCompanyLodestone, FreeCompanyDto freeCompanyDto)
     {
         if (freeCompanyLodestone.Focus?.HasFocus is not true)
         {
