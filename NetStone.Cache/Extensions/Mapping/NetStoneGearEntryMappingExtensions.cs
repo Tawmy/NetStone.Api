@@ -35,7 +35,7 @@ public static class NetStoneGearEntryMappingExtensions
             Materia2 = source.Materia.ElementAtOrDefault(1),
             Materia3 = source.Materia.ElementAtOrDefault(2),
             Materia4 = source.Materia.ElementAtOrDefault(3),
-            Materia5 = source.Materia.ElementAtOrDefault(4),
+            Materia5 = source.Materia.ElementAtOrDefault(4)
         };
     }
 }

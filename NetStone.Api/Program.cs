@@ -85,7 +85,7 @@ app.UseHealthChecks();
 
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
-app.Logger.LogInformation("NetStone API, version {v}", version.ToVersionString());
+app.Logger.LogInformation("NetStone API, version {v}", version.ToString(3));
 
 if (metricsActive)
 {

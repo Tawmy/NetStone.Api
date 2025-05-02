@@ -282,12 +282,19 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
             Assert.Equal(gearPieceLodestone.IsHq, gearPieceDto.IsHq);
             Assert.Equal(gearPieceLodestone.StrippedItemName, gearPieceDto.StrippedItemName);
             Assert.Equal(gearPieceLodestone.GlamourDatabaseLink?.ToString(), gearPieceDto.GlamourDatabaseLink);
-            Assert.Equal(gearPieceLodestone.GlamourName, gearPieceDto.GlamourName);
-            Assert.Equal(gearPieceLodestone.CreatorName, gearPieceDto.CreatorName);
+            Assert.True(TargetNullIfSourceEmpty(gearPieceLodestone.GlamourName, gearPieceDto.GlamourName));
+            Assert.True(TargetNullIfSourceEmpty(gearPieceLodestone.CreatorName, gearPieceDto.CreatorName));
 
             foreach (var materiaLodestone in gearPieceLodestone.Materia)
             {
                 Assert.Contains(materiaLodestone, gearPieceDto.Materia);
+            }
+
+            continue;
+
+            bool TargetNullIfSourceEmpty(string? source, string? target)
+            {
+                return string.IsNullOrEmpty(source) ? target is null : target == source;
             }
         }
     }
