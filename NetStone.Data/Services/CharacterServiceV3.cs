@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
+using NetStone.Cache.Extensions;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Cache.Interfaces;
 using NetStone.Common.DTOs.Character;
@@ -80,7 +81,7 @@ public class CharacterServiceV3(
             throw new NotFoundException();
         }
 
-        if (string.IsNullOrWhiteSpace(lodestoneCharacter.Name))
+        if (!lodestoneCharacter.IsFullyPublic())
         {
             if (cachedCharacterDto is not null && useFallback is FallbackType.Any)
             {

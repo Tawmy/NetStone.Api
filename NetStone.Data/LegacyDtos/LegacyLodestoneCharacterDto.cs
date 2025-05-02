@@ -16,7 +16,7 @@ public class LegacyLodestoneCharacterDto
 
     /// <summary>
     ///     Active job. Not included in <see cref="LodestoneCharacter" /> and thus implemented through
-    ///     <see cref="LodestoneCharacterExtension.GetActiveClassJob" />.
+    ///     <see cref="LodestoneCharacterExtensions.GetActiveClassJob" />.
     /// </summary>
     public required ClassJob ActiveClassJob { get; set; }
 }
