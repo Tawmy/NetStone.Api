@@ -14,9 +14,6 @@ public static class DependencyInjection
         services.AddScoped<ICharacterServiceV3, CharacterServiceV3>();
         services.AddScoped<IFreeCompanyServiceV3, FreeCompanyServiceV3>();
 
-        services.AddScoped<ICharacterServiceV2, CharacterServiceV2>();
-        services.AddScoped<IFreeCompanyServiceV2, FreeCompanyServiceV2>();
-
         services.AddSingleton<ICharacterEventService, CharacterEventService>();
         services.AddSingleton<IFreeCompanyEventService, FreeCompanyEventService>();
     }

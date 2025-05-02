@@ -8,16 +8,12 @@ using NetStone.Cache.Db;
 using NetStone.Common.Extensions;
 using NetStone.Data;
 using NetStone.Queue;
-using DependencyInjection = NetStone.Data.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.ConfigureSwagger();
-
-builder.Services.AddAutoMapper(typeof(Program).Assembly, typeof(DatabaseContext).Assembly,
-    typeof(DependencyInjection).Assembly);
 
 var version = typeof(Program).Assembly.GetName().Version!;
 builder.Services.AddSingleton(version);

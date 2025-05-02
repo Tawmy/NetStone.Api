@@ -44,7 +44,7 @@ public class FreeCompanyServiceV3(
         {
             if (cachedFcDto.LastUpdated is null)
             {
-                throw new InvalidOperationException($"{nameof(FreeCompanyDtoV2.LastUpdated)} must never be null here.");
+                throw new InvalidOperationException($"{nameof(FreeCompanyDtoV3.LastUpdated)} must never be null here.");
             }
 
             if ((DateTime.UtcNow - cachedFcDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))

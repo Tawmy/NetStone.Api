@@ -48,7 +48,7 @@ public class CharacterServiceV3(
         {
             if (cachedCharacterDto.LastUpdated is null)
             {
-                throw new InvalidOperationException($"{nameof(CharacterDtoV2.LastUpdated)} must never be null here.");
+                throw new InvalidOperationException($"{nameof(CharacterDtoV3.LastUpdated)} must never be null here.");
             }
 
             if ((DateTime.UtcNow - cachedCharacterDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
@@ -380,7 +380,6 @@ public class CharacterServiceV3(
     private async Task<List<CharacterAchievementEntry>> RetrieveAllAchievementsAsync(string lodestoneId)
     {
         // do not retrieve pages in parallel, it tends to run into rate limit
-        // see V2 service for reference on how it used to be implemented
 
         if (await netStoneService.GetCharacterAchievement(lodestoneId) is not { } page1)
         {
