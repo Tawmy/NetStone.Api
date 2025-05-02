@@ -339,11 +339,13 @@ public class CharacterComparisons(ITestOutputHelper testOutputHelper, CharacterC
 
         var loggerV3 = Substitute.For<ILogger<CharacterServiceV3>>();
 
-        var characterServiceV3 =
-            new CharacterServiceV3(_netStoneService, characterCachingServiceV3, _characterEventService, loggerV3);
+        var characterData = Substitute.For<CollectionDataService>();
 
-        var characterServiceV2 =
-            new CharacterServiceV2(_netStoneService, characterCachingServiceV2, _characterEventService, _mapper);
+        var characterServiceV3 = new CharacterServiceV3(_netStoneService, characterCachingServiceV3,
+            _characterEventService, characterData, loggerV3);
+
+        var characterServiceV2 = new CharacterServiceV2(_netStoneService, characterCachingServiceV2,
+            _characterEventService, characterData, _mapper);
 
         return (characterCachingServiceV3, characterCachingServiceV2, characterServiceV3, characterServiceV2);
     }

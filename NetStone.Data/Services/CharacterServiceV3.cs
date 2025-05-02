@@ -19,6 +19,7 @@ public class CharacterServiceV3(
     INetStoneService netStoneService,
     ICharacterCachingServiceV3 cachingService,
     ICharacterEventService eventService,
+    CollectionDataService collectionData,
     ILogger<CharacterServiceV3> logger)
     : ICharacterServiceV3
 {
@@ -182,7 +183,7 @@ public class CharacterServiceV3(
                     // if character was cached before, last time minions were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
                     return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated.Value,
-                        StaticValues.TotalMinions);
+                        await collectionData.GetTotalMinionsAsync());
                 }
             }
             else if (maxAge is null)
@@ -190,7 +191,7 @@ public class CharacterServiceV3(
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
                 return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, null,
-                    StaticValues.TotalMinions);
+                    await collectionData.GetTotalMinionsAsync());
             }
         }
 
@@ -207,7 +208,7 @@ public class CharacterServiceV3(
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMinionsAsync), ex.Message);
                 return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
-                    StaticValues.TotalMinions, true, ex.Message);
+                    await collectionData.GetTotalMinionsAsync(), true, ex.Message);
             }
 
             throw;
@@ -225,7 +226,7 @@ public class CharacterServiceV3(
             if (useFallback is FallbackType.Any)
             {
                 return new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
-                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+                    await collectionData.GetTotalMinionsAsync(), true, nameof(ParsingFailedException));
             }
 
             throw new ParsingFailedException(lodestoneId);
@@ -234,7 +235,7 @@ public class CharacterServiceV3(
         cachedMinionsDtos = await cachingService.CacheCharacterMinionsAsync(lodestoneId, lodestoneMinions);
 
         var collectionDto = new CollectionDtoV3<CharacterMinionDto>(cachedMinionsDtos, false, DateTime.UtcNow,
-            StaticValues.TotalMinions);
+            await collectionData.GetTotalMinionsAsync());
         _ = eventService.CharacterMinionsRefreshedAsync(collectionDto);
         return collectionDto;
     }
@@ -255,14 +256,15 @@ public class CharacterServiceV3(
                     // if character was cached before, last time mounts were cached can be saved.
                     // If cache is not older than the max age submitted, return cache.
                     return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated.Value,
-                        StaticValues.TotalMounts);
+                        await collectionData.GetTotalMountsAsync());
                 }
             }
             else if (maxAge is null)
             {
                 // Character was never cached, so LastUpdated value cannot be saved.
                 // If no max age given, return. If any max age value given, refresh.
-                return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, null, StaticValues.TotalMounts);
+                return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, null,
+                    await collectionData.GetTotalMountsAsync());
             }
         }
 
@@ -279,7 +281,7 @@ public class CharacterServiceV3(
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMountsAsync), ex.Message);
                 return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
-                    StaticValues.TotalMounts, true, ex.Message);
+                    await collectionData.GetTotalMountsAsync(), true, ex.Message);
             }
 
             throw;
@@ -297,7 +299,7 @@ public class CharacterServiceV3(
             if (useFallback is FallbackType.Any)
             {
                 return new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
-                    StaticValues.TotalMinions, true, nameof(ParsingFailedException));
+                    await collectionData.GetTotalMountsAsync(), true, nameof(ParsingFailedException));
             }
 
             throw new ParsingFailedException(lodestoneId);
@@ -306,7 +308,7 @@ public class CharacterServiceV3(
         cachedMountsDtos = await cachingService.CacheCharacterMountsAsync(lodestoneId, lodestoneMounts);
 
         var collectionDto = new CollectionDtoV3<CharacterMountDto>(cachedMountsDtos, false, DateTime.UtcNow,
-            StaticValues.TotalMounts);
+            await collectionData.GetTotalMountsAsync());
         _ = eventService.CharacterMountsRefreshedAsync(collectionDto);
         return collectionDto;
     }

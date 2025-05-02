@@ -9,6 +9,7 @@ public static class DependencyInjection
     public static async Task AddDataServices(this IServiceCollection services)
     {
         services.AddSingleton(await LodestoneClient.GetClientAsync());
+        services.AddSingleton<CollectionDataService>();
 
         services.AddScoped<ICharacterServiceV3, CharacterServiceV3>();
         services.AddScoped<IFreeCompanyServiceV3, FreeCompanyServiceV3>();

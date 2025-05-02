@@ -28,6 +28,8 @@
       LOGGING__LOGLEVEL__ASPNETCORE: Warning
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Warning
       OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_DISABLE_URL_QUERY_REDACTION: true
+      FFXIV_TOTAL_MINIONS: 531 # values taken from ffxiv collect (https://ffxivcollect.com)
+      FFXIV_TOTAL_MOUNTS: 305 # values taken from ffxiv collect (https://ffxivcollect.com)
       AUTH_AUDIENCE: netstone-api
       AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
