@@ -43,6 +43,16 @@ public interface ICharacterService
     public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
 
     /// <summary>
+    ///     Get character with the given name and home world from cache.
+    /// </summary>
+    /// <param name="name">Character name. Must be exact match, but is case insensitive.</param>
+    /// <param name="world">Home World, case insensitive.</param>
+    /// <returns>DTO containing the character and some goodie properties.</returns>
+    /// <exception cref="NotFoundException">Thrown if character not cached.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if last updated field not set, indicates bug.</exception>
+    public Task<CharacterDto> GetCharacterByNameAsync(string name, string world);
+
+    /// <summary>
     ///     Get a character's ClassJobs.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Use <see cref="SearchCharacterAsync" /> first if unknown.</param>

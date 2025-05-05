@@ -31,6 +31,8 @@ public class CharacterService(
         using var activity = ActivitySource.StartActivity();
         activity?.AddTag(nameof(CharacterSearchQuery), JsonSerializer.Serialize(query));
 
+        throw new Exception("bla bla");
+
         var netStoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchCharacter(netStoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
@@ -98,6 +100,25 @@ public class CharacterService(
         cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
         return cachedCharacterDto;
+    }
+
+    public async Task<CharacterDto> GetCharacterByNameAsync(string name, string world)
+    {
+        using var activity = ActivitySource.StartActivity();
+
+        var cachedCharacterDto = await cachingService.GetCharacterAsync(name, world);
+
+        if (cachedCharacterDto is null)
+        {
+            throw new NotFoundException();
+        }
+
+        if (cachedCharacterDto.LastUpdated is null)
+        {
+            throw new InvalidOperationException($"{nameof(CharacterDto.LastUpdated)} must never be null here.");
+        }
+
+        return cachedCharacterDto with { Cached = true };
     }
 
     public async Task<CharacterClassJobOuterDto> GetCharacterClassJobsAsync(string lodestoneId, int? maxAge,

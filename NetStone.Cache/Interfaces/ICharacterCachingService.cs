@@ -13,6 +13,7 @@ public interface ICharacterCachingService
     Task<CharacterDto> CacheCharacterAsync(string lodestoneId, LodestoneCharacter character);
     Task<CharacterDto?> GetCharacterAsync(int id);
     Task<CharacterDto?> GetCharacterAsync(string lodestoneId);
+    Task<CharacterDto?> GetCharacterAsync(string name, string world);
 
     #endregion
 

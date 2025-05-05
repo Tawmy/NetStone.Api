@@ -150,6 +150,19 @@ internal class CharacterCachingService(
         return character?.ToDto();
     }
 
+    public async Task<CharacterDto?> GetCharacterAsync(string name, string world)
+    {
+        using var activity = ActivitySource.StartActivity();
+
+        var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
+            .Where(b => // case insensitive search with ILIKE
+                EF.Functions.ILike(b.Name, name) &&
+                EF.Functions.ILike(b.Server, world))
+            .SingleOrDefaultAsync();
+
+        return character?.ToDto();
+    }
+
     public async Task<ICollection<CharacterClassJobDto>> CacheCharacterClassJobsAsync(string lodestoneId,
         CharacterClassJob lodestoneClassJobs)
     {
