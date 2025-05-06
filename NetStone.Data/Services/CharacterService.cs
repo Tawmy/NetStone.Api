@@ -31,8 +31,6 @@ public class CharacterService(
         using var activity = ActivitySource.StartActivity();
         activity?.AddTag(nameof(CharacterSearchQuery), JsonSerializer.Serialize(query));
 
-        throw new Exception("bla bla");
-
         var netStoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchCharacter(netStoneQuery, page);
         if (result is not { HasResults: true }) throw new NotFoundException();
