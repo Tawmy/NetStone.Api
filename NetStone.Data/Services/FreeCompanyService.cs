@@ -96,6 +96,25 @@ public class FreeCompanyService(
         return cachedFcDto;
     }
 
+    public async Task<FreeCompanyDto> GetFreeCompanyByNameAsync(string name, string world)
+    {
+        using var activity = ActivitySource.StartActivity();
+
+        var cachedFcDto = await cachingService.GetFreeCompanyAsync(name, world);
+
+        if (cachedFcDto is null)
+        {
+            throw new NotFoundException();
+        }
+
+        if (cachedFcDto.LastUpdated is null)
+        {
+            throw new InvalidOperationException($"{nameof(cachedFcDto.LastUpdated)} must never be null here.");
+        }
+
+        return cachedFcDto with { Cached = true };
+    }
+
     public async Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback)
     {

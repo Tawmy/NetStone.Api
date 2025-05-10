@@ -78,6 +78,19 @@ public class FreeCompanyCachingService(DatabaseContext context) : IFreeCompanyCa
         return freeCompany?.ToDto();
     }
 
+    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string name, string world)
+    {
+        using var activity = ActivitySource.StartActivity();
+
+        var freeCompany = await context.FreeCompanies
+            .Where(x => // case insensitive search with ILIKE
+                EF.Functions.ILike(x.Name, name) &&
+                EF.Functions.ILike(x.World, world))
+            .SingleOrDefaultAsync();
+
+        return freeCompany?.ToDto();
+    }
+
     public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
         ICollection<FreeCompanyMembersEntry> members)
     {

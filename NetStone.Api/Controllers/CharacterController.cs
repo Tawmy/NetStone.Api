@@ -31,20 +31,6 @@ public class CharacterController(ICharacterService characterService) : Controlle
     }
 
     /// <summary>
-    ///     Get character with the given name and home world <b>from cache</b>.
-    /// </summary>
-    /// <param name="name">Character name. Must be exact match, but is case insensitive.</param>
-    /// <param name="world">Home World, case insensitive.</param>
-    /// <returns>DTO containing the character and some goodie properties.</returns>
-    [HttpGet("ByName/{name}/{world}")]
-    [ProducesResponseType<CharacterDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<CharacterDto>> GetByNameAsync(string name, string world)
-    {
-        return await characterService.GetCharacterByNameAsync(name, world);
-    }
-
-    /// <summary>
     ///     Get character with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone character ID. Use Search endpoint first if unknown.</param>
@@ -66,6 +52,20 @@ public class CharacterController(ICharacterService characterService) : Controlle
         FallbackType useFallback = FallbackType.None)
     {
         return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
+    }
+
+    /// <summary>
+    ///     Get character with the given name and home world <b>from cache</b>.
+    /// </summary>
+    /// <param name="name">Character name. Must be exact match, but is case insensitive.</param>
+    /// <param name="world">Home World, case insensitive.</param>
+    /// <returns>DTO containing the character and some goodie properties.</returns>
+    [HttpGet("ByName/{name}/{world}")]
+    [ProducesResponseType<CharacterDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<CharacterDto>> GetByNameAsync(string name, string world)
+    {
+        return await characterService.GetCharacterByNameAsync(name, world);
     }
 
     /// <summary>

@@ -71,6 +71,20 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     }
 
     /// <summary>
+    ///     Get free company with the given name and world <b>from cache</b>.
+    /// </summary>
+    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
+    /// <param name="world">World, case insensitive.</param>
+    /// <returns>DTO containing the free company and some goodie properties.</returns>
+    [HttpGet("ByName/{name}/{world}")]
+    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string name, string world)
+    {
+        return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
+    }
+
+    /// <summary>
     ///     Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>

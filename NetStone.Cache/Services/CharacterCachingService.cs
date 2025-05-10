@@ -155,9 +155,9 @@ internal class CharacterCachingService(
         using var activity = ActivitySource.StartActivity();
 
         var character = await context.Characters.IncludeBasic().Include(x => x.FullFreeCompany)
-            .Where(b => // case insensitive search with ILIKE
-                EF.Functions.ILike(b.Name, name) &&
-                EF.Functions.ILike(b.Server, world))
+            .Where(x => // case insensitive search with ILIKE
+                EF.Functions.ILike(x.Name, name) &&
+                EF.Functions.ILike(x.Server, world))
             .SingleOrDefaultAsync();
 
         return character?.ToDto();

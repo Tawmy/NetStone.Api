@@ -11,6 +11,7 @@ public interface IFreeCompanyCachingService
     Task<FreeCompanyDto> CacheFreeCompanyAsync(LodestoneFreeCompany freeCompany);
     Task<FreeCompanyDto?> GetFreeCompanyAsync(int id);
     Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId);
+    Task<FreeCompanyDto?> GetFreeCompanyAsync(string name, string world);
 
     #endregion
 
