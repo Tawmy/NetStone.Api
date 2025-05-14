@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NetStone.Common.DTOs.Character;
 using NetStone.Common.Enums;
+using NetStone.Common.Exceptions;
 using NetStone.Common.Queries;
 using NetStone.Data.Interfaces;
 
@@ -27,7 +28,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CharacterSearchPageDto>> SearchAsync(CharacterSearchQuery query,
         int page = 1)
     {
-        return await characterService.SearchCharacterAsync(query, page);
+        try
+        {
+            return await characterService.SearchCharacterAsync(query, page);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -51,7 +59,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
-        return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
+        try
+        {
+            return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -65,7 +80,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<CharacterDto>> GetByNameAsync(string name, string world)
     {
-        return await characterService.GetCharacterByNameAsync(name, world);
+        try
+        {
+            return await characterService.GetCharacterByNameAsync(name, world);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -95,7 +117,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback = FallbackType.None)
     {
-        return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
+        try
+        {
+            return await characterService.GetCharacterClassJobsAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -125,7 +154,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CollectionDto<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
-        return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
+        try
+        {
+            return await characterService.GetCharacterMinionsAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -155,7 +191,14 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CollectionDto<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
-        return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
+        try
+        {
+            return await characterService.GetCharacterMountsAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
@@ -187,6 +230,13 @@ public class CharacterController(ICharacterService characterService) : Controlle
     public async Task<ActionResult<CharacterAchievementOuterDto>> GetAchievementsAsync(string lodestoneId,
         int? maxAge, FallbackType useFallback = FallbackType.None)
     {
-        return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
+        try
+        {
+            return await characterService.GetCharacterAchievementsAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 }

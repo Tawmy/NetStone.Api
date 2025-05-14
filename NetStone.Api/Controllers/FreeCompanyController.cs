@@ -81,7 +81,14 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string name, string world)
     {
-        return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
+        try
+        {
+            return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
 
     /// <summary>
