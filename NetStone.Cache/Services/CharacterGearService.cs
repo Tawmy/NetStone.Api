@@ -7,7 +7,7 @@ using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 namespace NetStone.Cache.Services;
 
 // Can currently be static, but might need DI later
-public static class CharacterGearServiceV3
+public static class CharacterGearService
 {
     public static ICollection<CharacterGear> GetGear(Model.Parseables.Character.Gear.CharacterGear gear,
         ICollection<CharacterGear> currentGear)

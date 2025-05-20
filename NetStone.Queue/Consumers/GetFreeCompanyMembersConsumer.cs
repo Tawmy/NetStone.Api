@@ -8,7 +8,7 @@ using NetStone.Queue.Messages;
 namespace NetStone.Queue.Consumers;
 
 public class GetFreeCompanyMembersConsumer(
-    IFreeCompanyServiceV3 freeCompanyService,
+    IFreeCompanyService freeCompanyService,
     IRabbitMqSenderService senderService)
     : IConsumer<GetFreeCompanyMembersMessage>
 {

@@ -23,13 +23,13 @@ public partial class Demo : ComponentBase
     ///     Character service for data retrieval
     /// </summary>
     [Inject]
-    public ICharacterServiceV3 CharacterService { get; set; } = default!;
+    public ICharacterService CharacterService { get; set; } = default!;
 
     /// <summary>
     ///     Free Company service for data retrieval
     /// </summary>
     [Inject]
-    public IFreeCompanyServiceV3 FreeCompanyService { get; set; } = default!;
+    public IFreeCompanyService FreeCompanyService { get; set; } = default!;
 
     private async Task CharacterProfileAsync()
     {

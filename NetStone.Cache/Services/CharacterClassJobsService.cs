@@ -7,7 +7,7 @@ using CharacterClassJob = NetStone.Cache.Db.Models.CharacterClassJob;
 namespace NetStone.Cache.Services;
 
 // Can currently be static, but might need DI later
-public static class CharacterClassJobsServiceV3
+public static class CharacterClassJobsService
 {
     public static ICollection<CharacterClassJob> GetCharacterClassJobs(
         IReadOnlyDictionary<ClassJob, ClassJobEntry> lodestoneClassJobs,

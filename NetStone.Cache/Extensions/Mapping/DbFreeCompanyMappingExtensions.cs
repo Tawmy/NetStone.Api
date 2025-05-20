@@ -10,11 +10,11 @@ public static class DbFreeCompanyMappingExtensions
 {
     private static readonly ActivitySource ActivitySource = new(nameof(DbFreeCompanyMappingExtensions));
 
-    public static FreeCompanyDtoV3 ToDto(this FreeCompany source)
+    public static FreeCompanyDto ToDto(this FreeCompany source)
     {
         using var activity = ActivitySource.StartActivity();
 
-        return new FreeCompanyDtoV3
+        return new FreeCompanyDto
         {
             Name = source.Name,
             Id = source.LodestoneId,

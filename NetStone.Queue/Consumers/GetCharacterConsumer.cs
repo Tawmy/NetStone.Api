@@ -7,7 +7,7 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetCharacterConsumer(ICharacterServiceV3 characterService, IRabbitMqSenderService senderService)
+public class GetCharacterConsumer(ICharacterService characterService, IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterMessage>
 {
     public async Task Consume(ConsumeContext<GetCharacterMessage> context)

@@ -8,7 +8,7 @@ using NetStone.Queue.Messages;
 namespace NetStone.Queue.Consumers;
 
 public class GetCharacterAchievementsConsumer(
-    ICharacterServiceV3 characterService,
+    ICharacterService characterService,
     IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterAchievementsMessage>
 {

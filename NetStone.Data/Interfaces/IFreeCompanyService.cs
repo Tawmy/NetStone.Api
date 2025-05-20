@@ -8,7 +8,7 @@ namespace NetStone.Data.Interfaces;
 /// <summary>
 ///     Data service for free company data.
 /// </summary>
-public interface IFreeCompanyServiceV3
+public interface IFreeCompanyService
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -23,9 +23,9 @@ public interface IFreeCompanyServiceV3
     Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page);
 
     /// <summary>
-    ///     Get character with the given ID from the Lodestone.
+    ///     Get free company with the given ID from the Lodestone.
     /// </summary>
-    /// <param name="lodestoneId">Lodestone character ID. Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
+    /// <param name="lodestoneId">Lodestone free company ID. Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
     /// <param name="maxAge">
     ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
     ///     Lodestone.
@@ -40,7 +40,17 @@ public interface IFreeCompanyServiceV3
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (usually if Lodestone under maintenance)</exception>
-    Task<FreeCompanyDtoV3> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
+    Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackType useFallback);
+
+    /// <summary>
+    ///     Get free company with the given name and home world from cache.
+    /// </summary>
+    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
+    /// <param name="world">Home World, case insensitive.</param>
+    /// <returns>DTO containing the free company and some goodie properties.</returns>
+    /// <exception cref="NotFoundException">Thrown if free company not cached.</exception>
+    /// <exception cref="InvalidOperationException">Thrown if last updated field not set, indicates bug.</exception>
+    public Task<FreeCompanyDto> GetFreeCompanyByNameAsync(string name, string world);
 
     /// <summary>
     ///     Get a free company's members.
@@ -60,6 +70,6 @@ public interface IFreeCompanyServiceV3
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (usually if Lodestone under maintenance)</exception>
-    Task<FreeCompanyMembersOuterDtoV3> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
+    Task<FreeCompanyMembersOuterDto> GetFreeCompanyMembersAsync(string lodestoneId, int? maxAge,
         FallbackType useFallback);
 }

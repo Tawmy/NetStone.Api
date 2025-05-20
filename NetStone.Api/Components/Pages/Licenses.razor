@@ -1,0 +1,32 @@
+@page "/libs"
+
+<h1>Libraries</h1>
+
+<QuickGrid Items="Libraries.AsQueryable()">
+    <TemplateColumn Title="Library">
+        <a href="@context.Url">@context.Name</a>
+    </TemplateColumn>
+    <PropertyColumn Property="@(x => x.License)"/>
+</QuickGrid>
+
+<div class="ms">
+    <div>Built on top of .NET and many Microsoft libraries</div>
+    <div class="sm">All licensed under the MIT License</div>
+</div>
+
+@code {
+
+    private static IEnumerable<Library> Libraries =>
+    [
+        new("ASP.NET API Versioning", "https://github.com/dotnet/aspnet-api-versioning", "MIT"),
+        new("EFCore.NamingConventions", "https://github.com/efcore/EFCore.NamingConventions", "Apache-2.0"),
+        new("efcore.pg", "https://github.com/npgsql/efcore.pg", "PostgreSQL license"),
+        new("MassTransit", "https://github.com/MassTransit/MassTransit", "Apache-2.0"),
+        new("NetStone", "https://github.com/xivapi/NetStone", "MIT"),
+        new("NSubstitute", "https://github.com/nsubstitute/NSubstitute", "BSD-2-Clause"),
+        new("OpenTelemetry", "https://github.com/open-telemetry/opentelemetry-dotnet-contrib", "Apache-2.0"),
+        new("Swashbuckle.AspNetCore", "https://github.com/domaindrivendev/Swashbuckle.AspNetCore", "MIT"),
+        new("xunit", "https://github.com/xunit/xunit", "Apache-2.0")
+    ];
+
+}

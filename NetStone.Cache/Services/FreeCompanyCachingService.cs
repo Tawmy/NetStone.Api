@@ -10,11 +10,11 @@ using NetStone.Model.Parseables.FreeCompany.Members;
 
 namespace NetStone.Cache.Services;
 
-public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompanyCachingServiceV3
+public class FreeCompanyCachingService(DatabaseContext context) : IFreeCompanyCachingService
 {
-    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyCachingServiceV3));
+    private static readonly ActivitySource ActivitySource = new(nameof(IFreeCompanyCachingService));
 
-    public async Task<FreeCompanyDtoV3> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
+    public async Task<FreeCompanyDto> CacheFreeCompanyAsync(LodestoneFreeCompany lodestoneFreeCompany)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -62,7 +62,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
         return freeCompany.ToDto();
     }
 
-    public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(int id)
+    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(int id)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -70,7 +70,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
         return freeCompany?.ToDto();
     }
 
-    public async Task<FreeCompanyDtoV3?> GetFreeCompanyAsync(string lodestoneId)
+    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string lodestoneId)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -78,7 +78,20 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
         return freeCompany?.ToDto();
     }
 
-    public async Task<ICollection<FreeCompanyMemberDtoV3>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
+    public async Task<FreeCompanyDto?> GetFreeCompanyAsync(string name, string world)
+    {
+        using var activity = ActivitySource.StartActivity();
+
+        var freeCompany = await context.FreeCompanies
+            .Where(x => // case insensitive search with ILIKE
+                EF.Functions.ILike(x.Name, name) &&
+                EF.Functions.ILike(x.World, world))
+            .SingleOrDefaultAsync();
+
+        return freeCompany?.ToDto();
+    }
+
+    public async Task<ICollection<FreeCompanyMemberDto>> CacheFreeCompanyMembersAsync(string fcLodestoneId,
         ICollection<FreeCompanyMembersEntry> members)
     {
         using var activity = ActivitySource.StartActivity();
@@ -163,7 +176,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
         return allDbMembers.Select(x => x.ToDto()).ToList();
     }
 
-    public async Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)>
+    public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)>
         GetFreeCompanyMembersAsync(int id)
     {
         using var activity = ActivitySource.StartActivity();
@@ -184,7 +197,7 @@ public class FreeCompanyCachingServiceV3(DatabaseContext context) : IFreeCompany
         return (memberDtos.ToList(), freeCompany.FreeCompanyMembersUpdatedAt);
     }
 
-    public async Task<(ICollection<FreeCompanyMemberDtoV3> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
+    public async Task<(ICollection<FreeCompanyMemberDto> members, DateTime? lastUpdated)> GetFreeCompanyMembersAsync(
         string lodestoneId)
     {
         using var activity = ActivitySource.StartActivity();
