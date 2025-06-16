@@ -166,6 +166,12 @@ public class FreeCompanyService(
 
         if (lodestoneMembersOuter is null || !lodestoneMembersOuter.HasResults || !lodestoneMembersOuter.Members.Any())
         {
+            if (cachedMembers.Any())
+            {
+                // members have been cached before, throw appropriate error
+                throw new ParsingFailedException(lodestoneId);
+            }
+
             throw new NotFoundException();
         }
 
