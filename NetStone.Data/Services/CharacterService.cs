@@ -33,7 +33,16 @@ public class CharacterService(
 
         var netStoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchCharacter(netStoneQuery, page);
-        if (result is not { HasResults: true }) throw new NotFoundException();
+        if (result is not { HasResults: true })
+        {
+            throw new NotFoundException();
+        }
+
+        if (!result.Results.Any())
+        {
+            // parser returns HasResults true, but zero results during maintenance
+            throw new ParsingFailedException(JsonSerializer.Serialize(query));
+        }
 
         return result.ToDto();
     }
