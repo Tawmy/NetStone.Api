@@ -29,7 +29,16 @@ public class FreeCompanyService(
 
         var lodestoneQuery = query.ToNetStone();
         var result = await netStoneService.SearchFreeCompany(lodestoneQuery, page);
-        if (result is not { HasResults: true }) throw new NotFoundException();
+        if (result is not { HasResults: true })
+        {
+            throw new NotFoundException();
+        }
+
+        if (!result.Results.Any())
+        {
+            // parser returns HasResults true, but zero results during maintenance
+            throw new ParsingFailedException(JsonSerializer.Serialize(query));
+        }
 
         return result.ToDto();
     }
@@ -166,6 +175,12 @@ public class FreeCompanyService(
 
         if (lodestoneMembersOuter is null || !lodestoneMembersOuter.HasResults || !lodestoneMembersOuter.Members.Any())
         {
+            if (cachedMembers.Any())
+            {
+                // members have been cached before, throw appropriate error
+                throw new ParsingFailedException(lodestoneId);
+            }
+
             throw new NotFoundException();
         }
 
