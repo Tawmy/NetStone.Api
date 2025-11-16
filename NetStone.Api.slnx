@@ -1,0 +1,13 @@
+<Solution>
+    <Folder Name="/Solution Items/">
+        <File Path="compose.dev.yml"/>
+        <File Path="compose.local.yml"/>
+        <File Path="compose.yml"/>
+    </Folder>
+    <Project Path="NetStone.Api/NetStone.Api.csproj"/>
+    <Project Path="NetStone.Cache/NetStone.Cache.csproj"/>
+    <Project Path="NetStone.Common/NetStone.Common/NetStone.Common.csproj"/>
+    <Project Path="NetStone.Data/NetStone.Data.csproj"/>
+    <Project Path="NetStone.Queue/NetStone.Queue.csproj"/>
+    <Project Path="NetStone.Test/NetStone.Test.csproj"/>
+</Solution>
