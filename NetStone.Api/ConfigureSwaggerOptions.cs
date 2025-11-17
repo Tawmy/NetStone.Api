@@ -12,6 +12,8 @@ internal class ConfigureSwaggerOptions(
     Version version)
     : IConfigureNamedOptions<SwaggerGenOptions>
 {
+    private const string SecurityScheme = "Keycloak";
+
     /// <summary>
     ///     Configure each API discovered for Swagger Documentation
     /// </summary>
@@ -23,7 +25,7 @@ internal class ConfigureSwaggerOptions(
         var tokenUrl = Path.Combine(authority, "protocol/openid-connect/token");
 
         // Add Keycloak auth to Swagger UI
-        options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
+        options.AddSecurityDefinition(SecurityScheme, new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OAuth2,
             Flows = new OpenApiOAuthFlows
@@ -43,7 +45,7 @@ internal class ConfigureSwaggerOptions(
                     Reference = new OpenApiReference
                     {
                         Type = ReferenceType.SecurityScheme,
-                        Id = "Keycloak"
+                        Id = SecurityScheme
                     }
                 },
                 Array.Empty<string>()

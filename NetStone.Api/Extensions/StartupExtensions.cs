@@ -123,7 +123,7 @@ internal static class StartupExtensions
         {
             x.AddAspNetCoreInstrumentation(y => y.RecordException = true);
             x.AddHttpClientInstrumentation(y => y.RecordException = true);
-            x.AddEntityFrameworkCoreInstrumentation(y => y.SetDbStatementForText = true);
+            x.AddEntityFrameworkCoreInstrumentation();
             x.AddSource(nameof(IAutoMapperService));
             x.AddSource(nameof(INetStoneService));
             x.AddSource(nameof(ICharacterCachingService));
