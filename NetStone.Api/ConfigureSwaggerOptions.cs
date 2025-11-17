@@ -1,6 +1,6 @@
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NetStone.Common.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -37,19 +37,9 @@ internal class ConfigureSwaggerOptions(
             }
         });
 
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        options.AddSecurityRequirement(x => new OpenApiSecurityRequirement
         {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = SecurityScheme
-                    }
-                },
-                Array.Empty<string>()
-            }
+            { new OpenApiSecuritySchemeReference(SecurityScheme, x), [] }
         });
 
         foreach (var description in provider.ApiVersionDescriptions)
