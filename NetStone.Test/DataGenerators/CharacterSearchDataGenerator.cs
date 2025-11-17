@@ -3,7 +3,7 @@ using NetStone.Common.Queries;
 
 namespace NetStone.Test.DataGenerators;
 
-internal class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData>
+internal sealed class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData>
 {
     public CharacterSearchDataGenerator()
     {

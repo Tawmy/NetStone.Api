@@ -1,6 +1,6 @@
 namespace NetStone.Test.DataGenerators;
 
-internal class FreeCompanyTestsDataGenerator : TheoryData<string>
+internal sealed class FreeCompanyTestsDataGenerator : TheoryData<string>
 {
     public FreeCompanyTestsDataGenerator()
     {
