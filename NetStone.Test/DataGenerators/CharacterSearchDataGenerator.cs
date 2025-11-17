@@ -58,7 +58,7 @@ internal sealed class CharacterSearchDataGenerator : TheoryData<CharacterSearchT
         Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx", "Phoenix", Tribe: Tribe.Xaela,
-                GrandCompany: GrandCompany.Maelstrom),
+                GrandCompany: GrandCompany.Maelstrom, Language: Language.German),
             1
         ));
     }
