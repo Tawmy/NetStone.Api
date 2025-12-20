@@ -31,9 +31,10 @@
       FFXIV_TOTAL_MINIONS: 531 # values taken from ffxiv collect (https://ffxivcollect.com)
       FFXIV_TOTAL_MOUNTS: 305 # values taken from ffxiv collect (https://ffxivcollect.com)
       AUTH_AUDIENCE: netstone-api
-      AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
+      AUTH_AUTHORITY: https://ffxiv.id/realms/eorzea
+      SWAGGER_SCOPES: netstone-api
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-      RABBITMQ_HOST: rabbitmq://queue
+      # RABBITMQ_HOST: rabbitmq://queue
       RABBITMQ_USERNAME:
       RABBITMQ_PASSWORD:
       METRICS_ENABLED: true

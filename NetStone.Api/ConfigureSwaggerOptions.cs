@@ -21,6 +21,10 @@ internal class ConfigureSwaggerOptions(
     {
         // Get environment variables for Swagger auth
         var authority = configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
+        var scopes = configuration[EnvironmentVariables.SwaggerScopes] ?? string.Empty;
+
+        var scopesDict = scopes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)
+            .ToDictionary(x => x, _ => "Enable me!");
 
         var tokenUrl = Path.Combine(authority, "protocol/openid-connect/token");
 
@@ -32,7 +36,8 @@ internal class ConfigureSwaggerOptions(
             {
                 ClientCredentials = new OpenApiOAuthFlow
                 {
-                    TokenUrl = new Uri(tokenUrl)
+                    TokenUrl = new Uri(tokenUrl),
+                    Scopes = scopesDict
                 }
             }
         });

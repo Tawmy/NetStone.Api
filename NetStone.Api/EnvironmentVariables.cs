@@ -16,6 +16,11 @@ internal static class EnvironmentVariables
     public const string AuthAuthority = "AUTH_AUTHORITY";
 
     /// <summary>
+    ///     Scopes to be sent during client credentials authentication through Swagger UI.
+    /// </summary>
+    public const string SwaggerScopes = "SWAGGER_SCOPES";
+
+    /// <summary>
     ///     If true, Prometheus metrics data will be available through the /metrics endpoint.
     /// </summary>
     public const string MetricsEnabled = "METRICS_ENABLED";
