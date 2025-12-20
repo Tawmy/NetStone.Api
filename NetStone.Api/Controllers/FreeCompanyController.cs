@@ -15,7 +15,7 @@ namespace NetStone.Api.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-[ApiVersion(3)]
+[ApiVersion(4)]
 public class FreeCompanyController(IFreeCompanyService freeCompanyService) : ControllerBase
 {
     /// <summary>
@@ -71,27 +71,6 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     }
 
     /// <summary>
-    ///     Get free company with the given name and world <b>from cache</b>.
-    /// </summary>
-    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
-    /// <param name="world">World, case insensitive.</param>
-    /// <returns>DTO containing the free company and some goodie properties.</returns>
-    [HttpGet("ByName/{name}/{world}")]
-    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string name, string world)
-    {
-        try
-        {
-            return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
-    /// <summary>
     ///     Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>
@@ -112,7 +91,7 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
-    [HttpGet("Members/{lodestoneId}")]
+    [HttpGet("{lodestoneId}/Members")]
     [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
@@ -122,6 +101,27 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
         try
         {
             return await freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    /// <summary>
+    ///     Get free company with the given name and world <b>FROM CACHE</b>.
+    /// </summary>
+    /// <param name="world">World, case insensitive.</param>
+    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
+    /// <returns>DTO containing the free company and some goodie properties.</returns>
+    [HttpGet("{world}/{name}")]
+    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string world, string name)
+    {
+        try
+        {
+            return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
         }
         catch (NotFoundException)
         {

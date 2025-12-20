@@ -28,8 +28,8 @@ internal static class StartupExtensions
         services.AddApiVersioning(x =>
             {
                 x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-                x.DefaultApiVersion = new ApiVersion(3);
-                x.AssumeDefaultVersionWhenUnspecified = true; // assume V3 if request is sent without version
+                x.DefaultApiVersion = new ApiVersion(4);
+                x.AssumeDefaultVersionWhenUnspecified = true; // assume V4 if request is sent without version
                 x.ReportApiVersions = true; // respond with supported versions in response header
             })
             .AddMvc()
