@@ -3,7 +3,7 @@ using NetStone.Common.Queries;
 
 namespace NetStone.Test.DataGenerators;
 
-internal class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData>
+internal sealed class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData>
 {
     public CharacterSearchDataGenerator()
     {
@@ -58,7 +58,7 @@ internal class CharacterSearchDataGenerator : TheoryData<CharacterSearchTestData
         Add(new CharacterSearchTestData
         (
             new CharacterSearchQuery("Alyx", "Phoenix", Tribe: Tribe.Xaela,
-                GrandCompany: GrandCompany.Maelstrom),
+                GrandCompany: GrandCompany.Maelstrom, Language: Language.German),
             1
         ));
     }

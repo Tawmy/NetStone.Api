@@ -11,7 +11,6 @@ using NetStone.Model.Parseables.Character.ClassJob;
 using NetStone.Model.Parseables.Character.Gear;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
-using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 using CharacterAttributes = NetStone.Model.Parseables.Character.CharacterAttributes;
 using CharacterGear = NetStone.Model.Parseables.Character.Gear.CharacterGear;

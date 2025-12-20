@@ -1,6 +1,6 @@
 using Asp.Versioning.ApiExplorer;
 using Microsoft.Extensions.Options;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using NetStone.Common.Extensions;
 using Swashbuckle.AspNetCore.SwaggerGen;
 
@@ -12,6 +12,8 @@ internal class ConfigureSwaggerOptions(
     Version version)
     : IConfigureNamedOptions<SwaggerGenOptions>
 {
+    private const string SecurityScheme = "Keycloak";
+
     /// <summary>
     ///     Configure each API discovered for Swagger Documentation
     /// </summary>
@@ -23,7 +25,7 @@ internal class ConfigureSwaggerOptions(
         var tokenUrl = Path.Combine(authority, "protocol/openid-connect/token");
 
         // Add Keycloak auth to Swagger UI
-        options.AddSecurityDefinition("Keycloak", new OpenApiSecurityScheme
+        options.AddSecurityDefinition(SecurityScheme, new OpenApiSecurityScheme
         {
             Type = SecuritySchemeType.OAuth2,
             Flows = new OpenApiOAuthFlows
@@ -35,19 +37,9 @@ internal class ConfigureSwaggerOptions(
             }
         });
 
-        options.AddSecurityRequirement(new OpenApiSecurityRequirement
+        options.AddSecurityRequirement(x => new OpenApiSecurityRequirement
         {
-            {
-                new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference
-                    {
-                        Type = ReferenceType.SecurityScheme,
-                        Id = "Keycloak"
-                    }
-                },
-                Array.Empty<string>()
-            }
+            { new OpenApiSecuritySchemeReference(SecurityScheme, x), [] }
         });
 
         foreach (var description in provider.ApiVersionDescriptions)
