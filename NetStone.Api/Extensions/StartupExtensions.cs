@@ -127,8 +127,10 @@ internal static class StartupExtensions
             x.AddSource(nameof(IAutoMapperService));
             x.AddSource(nameof(INetStoneService));
             x.AddSource(nameof(ICharacterCachingService));
-            x.AddSource(nameof(ICharacterService));
-            x.AddSource(nameof(IFreeCompanyService));
+            x.AddSource(nameof(ICharacterServiceV4));
+            x.AddSource(nameof(IFreeCompanyServiceV4));
+            x.AddSource(nameof(ICharacterServiceV3));
+            x.AddSource(nameof(IFreeCompanyServiceV3));
             x.AddSource(GetMappingExtensionsClassNames());
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
         }).ConfigureResource(x => x.AddService(serviceName));

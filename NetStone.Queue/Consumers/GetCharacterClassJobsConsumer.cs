@@ -7,7 +7,7 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetCharacterClassJobsConsumer(ICharacterService characterService, IRabbitMqSenderService senderService)
+public class GetCharacterClassJobsConsumer(ICharacterServiceV4 characterService, IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterClassJobsMessage>
 {
     public async Task Consume(ConsumeContext<GetCharacterClassJobsMessage> context)
@@ -17,7 +17,7 @@ public class GetCharacterClassJobsConsumer(ICharacterService characterService, I
         try
         {
             var classJobs = await characterService.GetCharacterClassJobsAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? FallbackType.None);
+                m.UseFallback ?? FallbackTypeV4.None);
             await senderService.SendGetCharacterClassJobsSuccessfulAsync(classJobs);
         }
         catch (NotFoundException)

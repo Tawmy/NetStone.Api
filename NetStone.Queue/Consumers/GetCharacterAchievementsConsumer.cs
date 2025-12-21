@@ -8,7 +8,7 @@ using NetStone.Queue.Messages;
 namespace NetStone.Queue.Consumers;
 
 public class GetCharacterAchievementsConsumer(
-    ICharacterService characterService,
+    ICharacterServiceV4 characterService,
     IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterAchievementsMessage>
 {
@@ -19,7 +19,7 @@ public class GetCharacterAchievementsConsumer(
         try
         {
             var achievements = await characterService.GetCharacterAchievementsAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? FallbackType.None);
+                m.UseFallback ?? FallbackTypeV4.None);
             await senderService.SendGetCharacterAchievementsSuccessfulAsync(achievements);
         }
         catch (NotFoundException)

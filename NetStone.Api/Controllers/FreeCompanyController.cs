@@ -16,7 +16,7 @@ namespace NetStone.Api.Controllers;
 [ApiController]
 [Authorize]
 [ApiVersion(4)]
-public class FreeCompanyController(IFreeCompanyService freeCompanyService) : ControllerBase
+public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : ControllerBase
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -58,7 +58,7 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV4 useFallback = FallbackTypeV4.None)
     {
         try
         {
@@ -96,7 +96,7 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV4 useFallback = FallbackTypeV4.None)
     {
         try
         {

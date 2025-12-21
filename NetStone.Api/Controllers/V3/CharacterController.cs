@@ -17,7 +17,7 @@ namespace NetStone.Api.Controllers.V3;
 [Authorize]
 [ApiVersion(3)]
 [Obsolete("This API version is deprecated. Please use version 4 instead.")]
-public class CharacterController(ICharacterService characterService) : ControllerBase
+public class CharacterController(ICharacterServiceV3 characterService) : ControllerBase
 {
     /// <summary>
     ///     Search for character with provided search query.
@@ -58,7 +58,7 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV3 useFallback = FallbackTypeV3.None)
     {
         try
         {
@@ -116,7 +116,7 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CharacterClassJobOuterDto>> GetClassJobsAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV3 useFallback = FallbackTypeV3.None)
     {
         try
         {
@@ -153,7 +153,7 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CollectionDto<CharacterMinionDto>>> GetMinionsAsync(string lodestoneId,
-        int? maxAge, FallbackType useFallback = FallbackType.None)
+        int? maxAge, FallbackTypeV3 useFallback = FallbackTypeV3.None)
     {
         try
         {
@@ -190,7 +190,7 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CollectionDto<CharacterMountDto>>> GetMountsAsync(string lodestoneId,
-        int? maxAge, FallbackType useFallback = FallbackType.None)
+        int? maxAge, FallbackTypeV3 useFallback = FallbackTypeV3.None)
     {
         try
         {
@@ -229,7 +229,7 @@ public class CharacterController(ICharacterService characterService) : Controlle
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<CharacterAchievementOuterDto>> GetAchievementsAsync(string lodestoneId,
-        int? maxAge, FallbackType useFallback = FallbackType.None)
+        int? maxAge, FallbackTypeV3 useFallback = FallbackTypeV3.None)
     {
         try
         {
