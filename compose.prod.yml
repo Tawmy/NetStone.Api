@@ -9,7 +9,7 @@ services:
       - default
       - reverse-proxy
     labels:
-      caddy: netstone.tawmy.dev
+      caddy: netstone.eorzea.online
       caddy.reverse_proxy: "{{upstreams 8080}}"
 
 networks:
