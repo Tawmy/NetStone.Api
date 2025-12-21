@@ -70,8 +70,8 @@ public class FreeCompanyService(
         }
         catch (Exception ex)
         {
-            if (cachedFcDto is not null && (useFallback is FallbackType.Any ||
-                                            (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedFcDto is not null && (useFallback.HasFlag(FallbackType.Any) ||
+                                            (useFallback.HasFlag(FallbackType.Http) && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetFreeCompanyAsync), ex.Message);
@@ -88,7 +88,7 @@ public class FreeCompanyService(
 
         if (string.IsNullOrWhiteSpace(lodestoneFc.Name))
         {
-            if (cachedFcDto is not null && useFallback is FallbackType.Any)
+            if (cachedFcDto is not null && (useFallback & (FallbackType.LodestoneUnavailable | FallbackType.Any)) != 0)
             {
                 return cachedFcDto with
                 {
@@ -157,8 +157,8 @@ public class FreeCompanyService(
         }
         catch (Exception ex)
         {
-            if (cachedMembers.Any() && (useFallback is FallbackType.Any ||
-                                        (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedMembers.Any() && (useFallback.HasFlag(FallbackType.Any) ||
+                                        (useFallback.HasFlag(FallbackType.Http) && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetFreeCompanyMembersAsync), ex.Message);

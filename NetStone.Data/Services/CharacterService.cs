@@ -74,8 +74,9 @@ public class CharacterService(
         }
         catch (Exception ex)
         {
-            if (cachedCharacterDto is not null && (useFallback is FallbackType.Any ||
-                                                   (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedCharacterDto is not null && (useFallback.HasFlag(FallbackType.Any) ||
+                                                   (useFallback.HasFlag(FallbackType.Http) &&
+                                                    ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterAsync), ex.Message);
@@ -92,7 +93,8 @@ public class CharacterService(
 
         if (!lodestoneCharacter.IsFullyPublic())
         {
-            if (cachedCharacterDto is not null && useFallback is FallbackType.Any)
+            // TODO test this during Lodestone maintenance. Can distinction between Maintenance and private profile be made?
+            if (cachedCharacterDto is not null && (useFallback & (FallbackType.ProfilePrivate | FallbackType.Any)) != 0)
             {
                 return cachedCharacterDto with
                 {
@@ -161,8 +163,8 @@ public class CharacterService(
         }
         catch (Exception ex)
         {
-            if (cachedClassJobsDtos.Any() && (useFallback is FallbackType.Any ||
-                                              (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedClassJobsDtos.Any() && (useFallback.HasFlag(FallbackType.Any) ||
+                                              (useFallback.HasFlag(FallbackType.Http) && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterClassJobsAsync), ex.Message);
@@ -179,7 +181,8 @@ public class CharacterService(
 
         if (string.IsNullOrWhiteSpace(lodestoneCharacterClassJobs.Alchemist.Name))
         {
-            if (cachedClassJobsDtos.Any() && useFallback is FallbackType.Any)
+            if (cachedClassJobsDtos.Any() &&
+                (useFallback & (FallbackType.LodestoneUnavailable | FallbackType.Any)) != 0)
             {
                 return new CharacterClassJobOuterDto(cachedClassJobsDtos, true, lastUpdated, true,
                     nameof(ParsingFailedException));
@@ -231,8 +234,8 @@ public class CharacterService(
         }
         catch (Exception ex)
         {
-            if (cachedMinionsDtos.Any() && (useFallback is FallbackType.Any ||
-                                            (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedMinionsDtos.Any() && (useFallback.HasFlag(FallbackType.Any) ||
+                                            (useFallback.HasFlag(FallbackType.Http) && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMinionsAsync), ex.Message);
@@ -252,7 +255,7 @@ public class CharacterService(
         {
             // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
             // we cannot always throw when no minions are returned, as new character might actually have none
-            if (useFallback is FallbackType.Any)
+            if ((useFallback & (FallbackType.LodestoneUnavailable | FallbackType.Any)) != 0)
             {
                 return new CollectionDto<CharacterMinionDto>(cachedMinionsDtos, true, lastUpdated,
                     await collectionData.GetTotalMinionsAsync(), true, nameof(ParsingFailedException));
@@ -304,8 +307,8 @@ public class CharacterService(
         }
         catch (Exception ex)
         {
-            if (cachedMountsDtos.Any() && (useFallback is FallbackType.Any ||
-                                           (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedMountsDtos.Any() && (useFallback.HasFlag(FallbackType.Any) ||
+                                           (useFallback.HasFlag(FallbackType.Http) && ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterMountsAsync), ex.Message);
@@ -325,7 +328,7 @@ public class CharacterService(
         {
             // no minions returned, but minions were cached before -> Lodestone under maintenance or profile private
             // we cannot always throw when no mounts are returned, as new character might actually have none
-            if (useFallback is FallbackType.Any)
+            if ((useFallback & (FallbackType.LodestoneUnavailable | FallbackType.Any)) != 0)
             {
                 return new CollectionDto<CharacterMountDto>(cachedMountsDtos, true, lastUpdated,
                     await collectionData.GetTotalMountsAsync(), true, nameof(ParsingFailedException));
@@ -375,8 +378,9 @@ public class CharacterService(
         }
         catch (Exception ex)
         {
-            if (cachedAchievementsDtos.Any() && (useFallback is FallbackType.Any ||
-                                                 (useFallback is FallbackType.Http && ex is HttpRequestException)))
+            if (cachedAchievementsDtos.Any() && (useFallback.HasFlag(FallbackType.Any) ||
+                                                 (useFallback.HasFlag(FallbackType.Http) &&
+                                                  ex is HttpRequestException)))
             {
                 logger.LogWarning("Fallback used for ID {id} in {method}: {msg}", lodestoneId,
                     nameof(GetCharacterAchievementsAsync), ex.Message);
@@ -385,7 +389,8 @@ public class CharacterService(
 
             if (ex is FormatException)
             {
-                if (cachedAchievementsDtos.Any() && useFallback is FallbackType.Any)
+                if (cachedAchievementsDtos.Any() &&
+                    (useFallback & (FallbackType.LodestoneUnavailable | FallbackType.Any)) != 0)
                 {
                     return new CharacterAchievementOuterDto(cachedAchievementsDtos, true, lastUpdated, true,
                         ex.Message);
