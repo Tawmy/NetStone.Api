@@ -1,4 +1,5 @@
 services:
   api:
+    image: ghcr.io/tawmy/netstone.api:main
     labels:
       caddy: netstone.staging.eorzea.online
