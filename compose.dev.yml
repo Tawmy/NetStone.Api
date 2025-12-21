@@ -4,6 +4,7 @@ services:
       - default
   
   api:
+    image: ghcr.io/tawmy/netstone.api:main
     depends_on:
       db:
         condition: service_healthy
@@ -15,9 +16,9 @@ services:
       - /root/cert/netstone-api:/mnt/cert
     networks:
       - default
-      - caddy
+      - reverse-proxy
     labels:
-      caddy: api.netstone.tawmy.dev
+      caddy: netstone.tawmy.dev
       caddy.reverse_proxy: "{{upstreams 8080}}"
   
   queue:
@@ -27,7 +28,7 @@ services:
       caddy.reverse_proxy: "{{upstreams 15672}}"
     networks:
       - default
-      - caddy
+      - reverse-proxy
   
   tracing:
     labels:
@@ -36,16 +37,16 @@ services:
       caddy.reverse_proxy: "{{upstreams 16686}}"
     networks:
       - default
-      - caddy
+      - reverse-proxy
 
 networks:
-  caddy:
+  reverse-proxy:
     external: true
 
 volumes:
-  postgres_data:
+  api_data:
     name: netstone-api-db
   rmq_data:
     name: netstone-api-queue
   tracing_tmp:
-    name: tracing-tmp
+    name: netstone-api-tracing-tmp

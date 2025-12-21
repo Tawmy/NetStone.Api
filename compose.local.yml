@@ -4,6 +4,10 @@ services:
       - dev.orbstack.domains=db.api.netstone.local
 
   api:
+    image: netstone.api
+    build:
+      context: .
+      dockerfile: NetStone.Api/Dockerfile
     environment:
       LOGGING__LOGLEVEL__DEFAULT: Debug
       LOGGING__LOGLEVEL__ASPNETCORE: Debug
@@ -26,9 +30,9 @@ services:
       - dev.orbstack.http-port=16686
 
 volumes:
-  postgres_data:
+  api_data:
     name: netstone-api-db
   rmq_data:
     name: netstone-api-queue
   tracing_tmp:
-    name: netstone-tracing-tmp
+    name: netstone-api-tracing-tmp
