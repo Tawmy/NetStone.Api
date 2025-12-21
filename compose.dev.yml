@@ -8,8 +8,6 @@ services:
     depends_on:
       db:
         condition: service_healthy
-      queue:
-        condition: service_healthy
     environment:
       DATA_PROTECTION_CERTIFICATE: /mnt/cert/data-protection
     volumes:
@@ -20,24 +18,6 @@ services:
     labels:
       caddy: netstone.tawmy.dev
       caddy.reverse_proxy: "{{upstreams 8080}}"
-  
-  queue:
-    labels:
-      caddy: queue.netstone.tawmy.dev
-      caddy.basic_auth.wsYZs7PMxNUwnxWRaDYRW9b28pjYk4dW: ${RABBITMQ_PASSWORD_HASHED}
-      caddy.reverse_proxy: "{{upstreams 15672}}"
-    networks:
-      - default
-      - reverse-proxy
-  
-  tracing:
-    labels:
-      caddy: tracing.netstone.tawmy.dev
-      caddy.basic_auth.xBsJjxJgVAxVeurUXLqvJYqsVoBfogmt: ${TRACING_PASSWORD_HASHED} # 1password entry has instructions
-      caddy.reverse_proxy: "{{upstreams 16686}}"
-    networks:
-      - default
-      - reverse-proxy
 
 networks:
   reverse-proxy:
@@ -46,7 +26,3 @@ networks:
 volumes:
   api_data:
     name: netstone-api-db
-  rmq_data:
-    name: netstone-api-queue
-  tracing_tmp:
-    name: netstone-api-tracing-tmp

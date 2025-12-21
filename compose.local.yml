@@ -19,20 +19,6 @@ services:
     labels:
       - dev.orbstack.domains=api.netstone.local
 
-  queue:
-    labels:
-      - dev.orbstack.domains=rabbitmq.local
-      - dev.orbstack.http-port=15672
-  
-  tracing:
-    labels:
-      - dev.orbstack.domains=tracing.netstone.local
-      - dev.orbstack.http-port=16686
-
 volumes:
   api_data:
     name: netstone-api-db
-  rmq_data:
-    name: netstone-api-queue
-  tracing_tmp:
-    name: netstone-api-tracing-tmp

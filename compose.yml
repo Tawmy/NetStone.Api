@@ -31,31 +31,4 @@
       AUTH_AUTHORITY: https://ffxiv.id/realms/eorzea
       SWAGGER_SCOPES: netstone-api
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-      RABBITMQ_HOST: rabbitmq://queue
-      RABBITMQ_USERNAME:
-      RABBITMQ_PASSWORD:
       METRICS_ENABLED: true
-      OTEL_ENDPOINT_URI: http://tracing:4317
-
-  queue:
-    image: rabbitmq:4-management
-    container_name: netstone-api-queue
-    hostname: netstone-api-queue
-    restart: unless-stopped
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    environment:
-      RABBITMQ_DEFAULT_USER:
-      RABBITMQ_DEFAULT_PASS:
-    volumes:
-      - rmq_data:/var/lib/rabbitmq
-  
-  tracing:
-    image: jaegertracing/all-in-one:1.76.0
-    container_name: netstone-api-tracing
-    restart: unless-stopped
-    volumes:
-      - tracing_tmp:/tmp
