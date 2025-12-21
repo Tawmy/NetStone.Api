@@ -23,18 +23,18 @@ public partial class Demo : ComponentBase
     ///     Character service for data retrieval
     /// </summary>
     [Inject]
-    public ICharacterService CharacterService { get; set; } = default!;
+    public ICharacterServiceV4 CharacterService { get; set; } = default!;
 
     /// <summary>
     ///     Free Company service for data retrieval
     /// </summary>
     [Inject]
-    public IFreeCompanyService FreeCompanyService { get; set; } = default!;
+    public IFreeCompanyServiceV4 FreeCompanyService { get; set; } = default!;
 
     private async Task CharacterProfileAsync()
     {
         _placeholder = $"Retrieving profile for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterAsync(CharacterLodestoneId, null, FallbackType.Any);
+        var result = await CharacterService.GetCharacterAsync(CharacterLodestoneId, null, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -42,7 +42,7 @@ public partial class Demo : ComponentBase
     private async Task CharacterClassJobsAsync()
     {
         _placeholder = $"Retrieving jobs for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterClassJobsAsync(CharacterLodestoneId, null, FallbackType.Any);
+        var result = await CharacterService.GetCharacterClassJobsAsync(CharacterLodestoneId, null, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -50,7 +50,7 @@ public partial class Demo : ComponentBase
     private async Task CharacterMinionsAsync()
     {
         _placeholder = $"Retrieving minions for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterMinionsAsync(CharacterLodestoneId, null, FallbackType.Any);
+        var result = await CharacterService.GetCharacterMinionsAsync(CharacterLodestoneId, null, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -58,7 +58,7 @@ public partial class Demo : ComponentBase
     private async Task CharacterMountsAsync()
     {
         _placeholder = $"Retrieving mounts for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterMountsAsync(CharacterLodestoneId, null, FallbackType.Any);
+        var result = await CharacterService.GetCharacterMountsAsync(CharacterLodestoneId, null, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -66,7 +66,8 @@ public partial class Demo : ComponentBase
     private async Task CharacterAchievementsAsync()
     {
         _placeholder = $"Retrieving achievements for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterAchievementsAsync(CharacterLodestoneId, null, FallbackType.Any);
+        var result = await CharacterService.GetCharacterAchievementsAsync(CharacterLodestoneId, null,
+            FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -78,7 +79,7 @@ public partial class Demo : ComponentBase
     private async Task FreeCompanyProfileAsync()
     {
         _placeholder = $"Retrieving profile for Dust Bunnies (DUST) on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await FreeCompanyService.GetFreeCompanyAsync(FreeCompanyLodestoneId, null, FallbackType.Any);
+        var result = await FreeCompanyService.GetFreeCompanyAsync(FreeCompanyLodestoneId, null, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }
@@ -86,8 +87,8 @@ public partial class Demo : ComponentBase
     private async Task FreeCompanyMembersAsync()
     {
         _placeholder = $"Retrieving members for Dust Bunnies (DUST) on Phoenix (ID {CharacterLodestoneId})...";
-        var result =
-            await FreeCompanyService.GetFreeCompanyMembersAsync(FreeCompanyLodestoneId, null, FallbackType.Any);
+        var result = await FreeCompanyService.GetFreeCompanyMembersAsync(FreeCompanyLodestoneId, null,
+            FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }

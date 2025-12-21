@@ -15,8 +15,8 @@ namespace NetStone.Api.Controllers;
 [Route("[controller]")]
 [ApiController]
 [Authorize]
-[ApiVersion(3)]
-public class FreeCompanyController(IFreeCompanyService freeCompanyService) : ControllerBase
+[ApiVersion(4)]
+public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : ControllerBase
 {
     /// <summary>
     ///     Search for free company with provided search query.
@@ -58,32 +58,11 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<FreeCompanyDto>> GetAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV4 useFallback = FallbackTypeV4.None)
     {
         try
         {
             return await freeCompanyService.GetFreeCompanyAsync(lodestoneId, maxAge, useFallback);
-        }
-        catch (NotFoundException)
-        {
-            return NotFound();
-        }
-    }
-
-    /// <summary>
-    ///     Get free company with the given name and world <b>from cache</b>.
-    /// </summary>
-    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
-    /// <param name="world">World, case insensitive.</param>
-    /// <returns>DTO containing the free company and some goodie properties.</returns>
-    [HttpGet("ByName/{name}/{world}")]
-    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string name, string world)
-    {
-        try
-        {
-            return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
         }
         catch (NotFoundException)
         {
@@ -112,16 +91,37 @@ public class FreeCompanyController(IFreeCompanyService freeCompanyService) : Con
     ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
-    [HttpGet("Members/{lodestoneId}")]
+    [HttpGet("{lodestoneId}/Members")]
     [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
     public async Task<ActionResult<FreeCompanyMembersOuterDto>> GetMembersAsync(string lodestoneId, int? maxAge,
-        FallbackType useFallback = FallbackType.None)
+        FallbackTypeV4 useFallback = FallbackTypeV4.None)
     {
         try
         {
             return await freeCompanyService.GetFreeCompanyMembersAsync(lodestoneId, maxAge, useFallback);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+
+    /// <summary>
+    ///     Get free company with the given name and world <b>FROM CACHE</b>.
+    /// </summary>
+    /// <param name="world">World, case insensitive.</param>
+    /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
+    /// <returns>DTO containing the free company and some goodie properties.</returns>
+    [HttpGet("{world}/{name}")]
+    [ProducesResponseType<FreeCompanyDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<FreeCompanyDto>> GetByNameAsync(string world, string name)
+    {
+        try
+        {
+            return await freeCompanyService.GetFreeCompanyByNameAsync(name, world);
         }
         catch (NotFoundException)
         {

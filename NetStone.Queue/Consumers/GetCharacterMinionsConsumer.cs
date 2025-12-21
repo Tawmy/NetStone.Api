@@ -7,7 +7,7 @@ using NetStone.Queue.Messages;
 
 namespace NetStone.Queue.Consumers;
 
-public class GetCharacterMinionsConsumer(ICharacterService characterService, IRabbitMqSenderService senderService)
+public class GetCharacterMinionsConsumer(ICharacterServiceV4 characterService, IRabbitMqSenderService senderService)
     : IConsumer<GetCharacterMinionsMessage>
 {
     public async Task Consume(ConsumeContext<GetCharacterMinionsMessage> context)
@@ -17,7 +17,7 @@ public class GetCharacterMinionsConsumer(ICharacterService characterService, IRa
         try
         {
             var minions = await characterService.GetCharacterMinionsAsync(m.LodestoneId, m.MaxAge,
-                m.UseFallback ?? FallbackType.None);
+                m.UseFallback ?? FallbackTypeV4.None);
             await senderService.SendGetCharacterMinionsSuccessfulAsync(minions);
         }
         catch (NotFoundException)

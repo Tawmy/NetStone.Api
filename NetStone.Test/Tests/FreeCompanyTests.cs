@@ -5,7 +5,6 @@ using NetStone.Common.Enums;
 using NetStone.Model.Parseables.FreeCompany;
 using NetStone.Test.DataGenerators;
 using NetStone.Test.Fixtures;
-using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 namespace NetStone.Test.Tests;

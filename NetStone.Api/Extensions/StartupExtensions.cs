@@ -28,8 +28,8 @@ internal static class StartupExtensions
         services.AddApiVersioning(x =>
             {
                 x.ApiVersionReader = new HeaderApiVersionReader("X-API-Version"); // read version from request headers
-                x.DefaultApiVersion = new ApiVersion(3);
-                x.AssumeDefaultVersionWhenUnspecified = true; // assume V3 if request is sent without version
+                x.DefaultApiVersion = new ApiVersion(4);
+                x.AssumeDefaultVersionWhenUnspecified = true; // assume V4 if request is sent without version
                 x.ReportApiVersions = true; // respond with supported versions in response header
             })
             .AddMvc()
@@ -123,12 +123,14 @@ internal static class StartupExtensions
         {
             x.AddAspNetCoreInstrumentation(y => y.RecordException = true);
             x.AddHttpClientInstrumentation(y => y.RecordException = true);
-            x.AddEntityFrameworkCoreInstrumentation(y => y.SetDbStatementForText = true);
+            x.AddEntityFrameworkCoreInstrumentation();
             x.AddSource(nameof(IAutoMapperService));
             x.AddSource(nameof(INetStoneService));
             x.AddSource(nameof(ICharacterCachingService));
-            x.AddSource(nameof(ICharacterService));
-            x.AddSource(nameof(IFreeCompanyService));
+            x.AddSource(nameof(ICharacterServiceV4));
+            x.AddSource(nameof(IFreeCompanyServiceV4));
+            x.AddSource(nameof(ICharacterServiceV3));
+            x.AddSource(nameof(IFreeCompanyServiceV3));
             x.AddSource(GetMappingExtensionsClassNames());
             x.AddOtlpExporter(y => y.Endpoint = new Uri(otelUri));
         }).ConfigureResource(x => x.AddService(serviceName));

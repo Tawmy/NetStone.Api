@@ -1,10 +1,10 @@
 ﻿services:
   db:
-    image: postgres:16.4-alpine
-    container_name: netstone.api-postgres
+    image: postgres:18
+    container_name: netstone-api-db
     restart: unless-stopped
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - api_data:/var/lib/postgresql
     environment:
       - POSTGRES_DB=netstone-api
       - POSTGRES_USER=netstone-api
@@ -16,48 +16,20 @@
       retries: 5
 
   api:
-    image: netstone.api
-    container_name: netstone.api
+    image: ghcr.io/tawmy/netstone.api:4.0.0
+    container_name: netstone-api
     restart: unless-stopped
-    build:
-      context: .
-      dockerfile: NetStone.Api/Dockerfile
     environment:
       ASPNETCORE_ENVIRONMENT:
       LOGGING__LOGLEVEL__DEFAULT: Information
       LOGGING__LOGLEVEL__ASPNETCORE: Warning
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Warning
       OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_DISABLE_URL_QUERY_REDACTION: true
-      FFXIV_TOTAL_MINIONS: 531 # values taken from ffxiv collect (https://ffxivcollect.com)
-      FFXIV_TOTAL_MOUNTS: 305 # values taken from ffxiv collect (https://ffxivcollect.com)
+      FFXIV_TOTAL_MINIONS: 559 # values taken from ffxiv collect (https://ffxivcollect.com)
+      FFXIV_TOTAL_MOUNTS: 329 # values taken from ffxiv collect (https://ffxivcollect.com)
+      DATA_PROTECTION_CERTIFICATE: /mnt/cert/data-protection
       AUTH_AUDIENCE: netstone-api
-      AUTH_AUTHORITY: https://auth.tawmy.dev/realms/xiv
+      AUTH_AUTHORITY: https://ffxiv.id/realms/eorzea
+      SWAGGER_SCOPES: netstone-api
       CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
-      RABBITMQ_HOST: rabbitmq://queue
-      RABBITMQ_USERNAME:
-      RABBITMQ_PASSWORD:
       METRICS_ENABLED: true
-      OTEL_ENDPOINT_URI: http://tracing:4317
-
-  queue:
-    image: rabbitmq:4-management
-    container_name: netstone.api-queue
-    hostname: netstone-api-queue
-    restart: unless-stopped
-    healthcheck:
-      test: rabbitmq-diagnostics -q ping
-      interval: 10s
-      timeout: 5s
-      retries: 3
-    environment:
-      RABBITMQ_DEFAULT_USER:
-      RABBITMQ_DEFAULT_PASS:
-    volumes:
-      - rmq_data:/var/lib/rabbitmq
-  
-  tracing:
-    image: jaegertracing/all-in-one:1.67.0
-    container_name: netstone-tracing
-    restart: unless-stopped
-    volumes:
-      - tracing_tmp:/tmp

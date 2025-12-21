@@ -3,7 +3,7 @@ using NetStone.Common.Queries;
 
 namespace NetStone.Test.DataGenerators;
 
-internal class FreeCompanySearchDataGenerator : TheoryData<FreeCompanySearchTestData>
+internal sealed class FreeCompanySearchDataGenerator : TheoryData<FreeCompanySearchTestData>
 {
     public FreeCompanySearchDataGenerator()
     {
