@@ -1,11 +1,8 @@
 services:
   api:
-    image: ghcr.io/tawmy/netstone.api:main
     depends_on:
       db:
         condition: service_healthy
-    environment:
-      AUTH_AUTHORITY: https://dev.ffxiv.id/realms/eorzea
     volumes:
       - /opt/certificates/netstone-api:/mnt/cert
     networks:

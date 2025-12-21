@@ -1,0 +1,4 @@
+services:
+  api:
+    labels:
+      caddy: netstone.staging.eorzea.online
