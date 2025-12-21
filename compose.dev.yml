@@ -10,8 +10,9 @@ services:
         condition: service_healthy
     environment:
       DATA_PROTECTION_CERTIFICATE: /mnt/cert/data-protection
+      AUTH_AUTHORITY: https://dev.ffxiv.id/realms/eorzea
     volumes:
-      - /root/cert/netstone-api:/mnt/cert
+      - /opt/certificates/netstone-api:/mnt/cert
     networks:
       - default
       - reverse-proxy
