@@ -1,10 +1,10 @@
 ﻿services:
   db:
-    image: postgres:16.4-alpine
+    image: postgres:18
     container_name: netstone-api-db
     restart: unless-stopped
     volumes:
-      - api_data:/var/lib/postgresql/data
+      - api_data:/var/lib/postgresql
     environment:
       - POSTGRES_DB=netstone-api
       - POSTGRES_USER=netstone-api
