@@ -16,7 +16,7 @@
       retries: 5
 
   api:
-    image: ghcr.io/tawmy/netstone.api:4.0.0
+    image: ghcr.io/tawmy/netstone.api:4.0.1
     container_name: netstone-api
     restart: unless-stopped
     environment:
