@@ -38,12 +38,12 @@ internal class CharacterCachingService(DatabaseContext context, IS3Service s3, I
             var bucket = config.GetGuardedConfiguration(EnvironmentVariables.S3BucketName);
             avatarS3 = await s3.ReuploadAsync(bucket, $"avatar_{lodestoneId}_{Guid.CreateVersion7()}.jpg",
                 lodestoneCharacter.Avatar ??
-                throw new ArgumentNullException(nameof(lodestoneCharacter), nameof(lodestoneCharacter.Avatar)), 
+                throw new ArgumentNullException(nameof(lodestoneCharacter), nameof(lodestoneCharacter.Avatar)),
                 character?.AvatarS3, ct);
 
             portraitS3 = await s3.ReuploadAsync(bucket, $"portrait_{lodestoneId}_{Guid.CreateVersion7()}.jpg",
                 lodestoneCharacter.Portrait ??
-                throw new ArgumentNullException(nameof(lodestoneCharacter), nameof(lodestoneCharacter.Portrait)), 
+                throw new ArgumentNullException(nameof(lodestoneCharacter), nameof(lodestoneCharacter.Portrait)),
                 character?.PortraitS3, ct);
         }
 
