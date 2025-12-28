@@ -34,7 +34,7 @@ public partial class Demo : ComponentBase
     private async Task CharacterProfileAsync()
     {
         _placeholder = $"Retrieving profile for Alyx Bergen on Phoenix (ID {CharacterLodestoneId})...";
-        var result = await CharacterService.GetCharacterAsync(CharacterLodestoneId, null, FallbackTypeV4.Any);
+        var result = await CharacterService.GetCharacterAsync(CharacterLodestoneId, null, false, FallbackTypeV4.Any);
         _result = JsonSerializer.Serialize(result, SerOptions);
         _placeholder = null;
     }

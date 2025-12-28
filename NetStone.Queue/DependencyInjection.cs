@@ -1,8 +1,8 @@
 using System.Net.Mime;
+using AspNetCoreExtensions;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using NetStone.Common.Extensions;
 using NetStone.Queue.Consumers;
 using NetStone.Queue.Interfaces;
 using NetStone.Queue.Services;

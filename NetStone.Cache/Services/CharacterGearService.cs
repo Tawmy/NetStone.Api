@@ -1,6 +1,6 @@
+using AspNetCoreExtensions;
 using NetStone.Cache.Extensions.Mapping;
 using NetStone.Common.Enums;
-using NetStone.Common.Extensions;
 using NetStone.Model.Parseables.Character.Gear;
 using CharacterGear = NetStone.Cache.Db.Models.CharacterGear;
 

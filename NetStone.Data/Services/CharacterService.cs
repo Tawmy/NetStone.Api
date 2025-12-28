@@ -47,7 +47,8 @@ public class CharacterServiceV4(
         return result.ToDto();
     }
 
-    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackTypeV4 useFallback)
+    public async Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, bool cacheImages,
+        FallbackTypeV4 useFallback)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -107,7 +108,7 @@ public class CharacterServiceV4(
         }
 
         // cache character, send to queue, and return
-        cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
+        cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter, cacheImages);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
         return cachedCharacterDto;
     }
@@ -521,7 +522,7 @@ public class CharacterServiceV3(
         }
 
         // cache character, send to queue, and return
-        cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter);
+        cachedCharacterDto = await cachingService.CacheCharacterAsync(lodestoneId, lodestoneCharacter, false);
         _ = eventService.CharacterRefreshedAsync(cachedCharacterDto);
         return cachedCharacterDto;
     }

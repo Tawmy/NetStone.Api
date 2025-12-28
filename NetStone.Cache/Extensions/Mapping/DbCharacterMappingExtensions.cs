@@ -19,7 +19,9 @@ public static class DbCharacterMappingExtensions
             Server = character.Server,
             Title = character.Title,
             Avatar = character.Avatar,
+            AvatarS3 = character.AvatarS3,
             Portrait = character.Portrait,
+            PortraitS3 = character.PortraitS3,
             Bio = character.Bio,
             Nameday = character.Nameday,
 
