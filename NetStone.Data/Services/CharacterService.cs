@@ -61,7 +61,8 @@ public class CharacterServiceV4(
                 throw new InvalidOperationException($"{nameof(CharacterDto.LastUpdated)} must never be null here.");
             }
 
-            if ((DateTime.UtcNow - cachedCharacterDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue))
+            if ((DateTime.UtcNow - cachedCharacterDto.LastUpdated.Value).TotalMinutes <= (maxAge ?? int.MaxValue) &&
+                (!cacheImages || (cacheImages && cachedCharacterDto is { AvatarS3: not null, PortraitS3: not null })))
             {
                 // return cached character if possible
                 return cachedCharacterDto with { Cached = true };
