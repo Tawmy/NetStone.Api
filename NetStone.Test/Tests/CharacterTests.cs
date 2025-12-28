@@ -179,7 +179,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         var characterLodestone = await _netStoneService.GetCharacter(lodestoneId);
         Assert.NotNull(characterLodestone);
 
-        var characterDb = characterLodestone.ToDb(lodestoneId);
+        var characterDb = characterLodestone.ToDb(lodestoneId, "avatarS3", "portraitS3"); // TODO S3 tests?
         characterDb.Gear = CharacterGearService.GetGear(characterLodestone.Gear, characterDb.Gear);
         Assert.NotNull(characterDb);
 

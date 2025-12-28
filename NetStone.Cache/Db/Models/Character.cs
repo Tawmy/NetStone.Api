@@ -13,6 +13,7 @@ public class Character
     public required string ActiveClassJobIcon { get; set; }
 
     public required string Avatar { get; set; }
+    public required string? AvatarS3 { get; set; }
     public required string Bio { get; set; }
 
     public CharacterFreeCompany? FreeCompany { get; set; }
@@ -30,6 +31,7 @@ public class Character
     public required string Nameday { get; set; }
 
     public required string Portrait { get; set; }
+    public required string? PortraitS3 { get; set; }
 
     public string? PvpTeam { get; set; }
 

@@ -10,7 +10,8 @@ public static class NetStoneLodestoneCharacterMappingExtensions
 {
     private static readonly ActivitySource ActivitySource = new(nameof(NetStoneLodestoneCharacterMappingExtensions));
 
-    public static Character ToDb(this LodestoneCharacter source, string lodestoneId)
+    public static Character ToDb(this LodestoneCharacter source, string lodestoneId, string? avatarS3,
+        string? portraitS3)
     {
         using var activity = ActivitySource.StartActivity();
 
@@ -23,6 +24,8 @@ public static class NetStoneLodestoneCharacterMappingExtensions
 
             Avatar = source.Avatar?.ToString() ??
                      throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null"),
+            AvatarS3 = avatarS3,
+
             Bio = source.Bio,
 
             FreeCompany = source.FreeCompany?.ToDb(),
@@ -40,6 +43,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
 
             Portrait = source.Portrait?.ToString() ??
                        throw new InvalidOperationException($"{nameof(source.Portrait)} must not be null"),
+            PortraitS3 = portraitS3,
 
             PvpTeam = source.PvPTeam?.Name,
 
@@ -58,7 +62,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
         };
     }
 
-    public static void ToDb(this LodestoneCharacter source, Character target)
+    public static void ToDb(this LodestoneCharacter source, Character target, string? avatarS3, string? portraitS3)
     {
         target.ActiveClassJob = source.GetActiveClassJob();
         target.ActiveClassJobLevel = (short)source.ActiveClassJobLevel;
@@ -66,6 +70,8 @@ public static class NetStoneLodestoneCharacterMappingExtensions
 
         target.Avatar = source.Avatar?.ToString() ??
                         throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null");
+        target.AvatarS3 = avatarS3;
+
         target.Bio = source.Bio;
 
         if (source.FreeCompany is not null)
@@ -97,6 +103,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
 
         target.Portrait = source.Portrait?.ToString() ??
                           throw new InvalidOperationException($"{nameof(source.Portrait)} must not be null");
+        target.PortraitS3 = portraitS3;
 
         target.PvpTeam = source.PvPTeam?.Name;
 

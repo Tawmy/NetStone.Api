@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using AspNetCoreExtensions;
 using NetStone.Cache.Db.Models;
 using NetStone.Common.DTOs.FreeCompany;
 using NetStone.Common.Enums;

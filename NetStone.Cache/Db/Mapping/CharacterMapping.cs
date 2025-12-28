@@ -16,6 +16,7 @@ public class CharacterMapping : IEntityTypeConfiguration<Character>
         builder.Property(x => x.ActiveClassJobIcon).HasMaxLength(127);
 
         builder.Property(x => x.Avatar).HasMaxLength(255);
+        builder.Property(x => x.AvatarS3).HasMaxLength(255);
 
         builder.Property(x => x.Bio).HasMaxLength(3000);
 
@@ -28,6 +29,7 @@ public class CharacterMapping : IEntityTypeConfiguration<Character>
         builder.Property(x => x.Nameday).HasMaxLength(63);
 
         builder.Property(x => x.Portrait).HasMaxLength(255);
+        builder.Property(x => x.PortraitS3).HasMaxLength(255);
 
         builder.Property(x => x.PvpTeam).HasMaxLength(31);
 

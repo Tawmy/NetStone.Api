@@ -16,7 +16,7 @@ public class GetCharacterConsumer(ICharacterServiceV4 characterService, IRabbitM
 
         try
         {
-            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge,
+            var character = await characterService.GetCharacterAsync(m.LodestoneId, m.MaxAge, m.CacheImages ?? false,
                 m.UseFallback ?? FallbackTypeV4.None);
             await senderService.SendGetCharacterSuccessfulAsync(character);
         }

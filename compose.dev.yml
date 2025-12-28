@@ -6,6 +6,7 @@ services:
         condition: service_healthy
     environment:
       AUTH_AUTHORITY: https://dev.ffxiv.id/realms/eorzea
+      S3_BUCKET_NAME: netstone-api-dev
     volumes:
       - /opt/certificates/netstone-api:/mnt/cert
     networks:

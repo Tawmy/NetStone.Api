@@ -45,6 +45,10 @@ public class CharacterController(ICharacterServiceV4 characterService) : Control
     /// <param name="maxAge">
     ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="cacheImages">
+    ///     Whether to download and storage avatar and portrait separately.
+    ///     Please be mindful of storage requirements.
+    /// </param>
     /// <param name="useFallback">
     ///     API may return cached data if Lodestone unavailable or parsing failed.
     ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
@@ -56,12 +60,12 @@ public class CharacterController(ICharacterServiceV4 characterService) : Control
     [ProducesResponseType<CharacterDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status503ServiceUnavailable)]
-    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge,
+    public async Task<ActionResult<CharacterDto>> GetAsync(string lodestoneId, int? maxAge, bool cacheImages = false,
         FallbackTypeV4 useFallback = FallbackTypeV4.None)
     {
         try
         {
-            return await characterService.GetCharacterAsync(lodestoneId, maxAge, useFallback);
+            return await characterService.GetCharacterAsync(lodestoneId, maxAge, cacheImages, useFallback);
         }
         catch (NotFoundException)
         {

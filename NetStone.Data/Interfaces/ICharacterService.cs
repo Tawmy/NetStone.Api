@@ -29,6 +29,10 @@ public interface ICharacterServiceV4
     /// <param name="maxAge">
     ///     Optional maximum age of cached character, in minutes. If older, it will be refreshed from the Lodestone.
     /// </param>
+    /// <param name="cacheImages">
+    ///     Whether to download and storage avatar and portrait separately.
+    ///     Please be mindful of storage requirements.
+    /// </param>
     /// <param name="useFallback">
     ///     API may return cached data if Lodestone unavailable or parsing failed.
     ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
@@ -40,7 +44,8 @@ public interface ICharacterServiceV4
     /// <exception cref="InvalidOperationException">Thrown if last updated field not set, indicates bug.</exception>
     /// <exception cref="HttpRequestException">Thrown if fallback type is None and request failed.</exception>
     /// <exception cref="ParsingFailedException">Thrown if parsing failed (profile private or Lodestone under maintenance)</exception>
-    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, FallbackTypeV4 useFallback);
+    public Task<CharacterDto> GetCharacterAsync(string lodestoneId, int? maxAge, bool cacheImages,
+        FallbackTypeV4 useFallback);
 
     /// <summary>
     ///     Get character with the given name and home world from cache.

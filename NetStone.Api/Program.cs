@@ -1,11 +1,11 @@
 using System.Text.Json.Serialization;
+using AspNetCoreExtensions;
 using NetStone.Api;
 using NetStone.Api.Components;
 using NetStone.Api.Extensions;
 using NetStone.Api.HealthChecks;
 using NetStone.Cache;
 using NetStone.Cache.Db;
-using NetStone.Common.Extensions;
 using NetStone.Data;
 using NetStone.Queue;
 
@@ -24,7 +24,7 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<DatabaseContext>()
     .AddCheck<DataProtectionCertificateHealthCheck>("cert");
 
-builder.Services.AddCacheServices();
+builder.Services.AddCacheServices(builder.Configuration);
 await builder.Services.AddDataServices();
 builder.Services.AddQueueServices(builder.Configuration);
 
