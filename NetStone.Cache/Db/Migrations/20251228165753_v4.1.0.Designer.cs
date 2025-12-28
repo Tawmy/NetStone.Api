@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20251228150511_S3")]
-    partial class S3
+    [Migration("20251228165753_v4.1.0")]
+    partial class v410
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
