@@ -5,7 +5,7 @@
 namespace NetStone.Cache.Db.Migrations
 {
     /// <inheritdoc />
-    public partial class S3 : Migration
+    public partial class v410 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
