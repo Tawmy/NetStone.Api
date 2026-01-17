@@ -35,7 +35,7 @@
       AUTH_AUTHORITY: https://ffxiv.id/realms/eorzea
       SWAGGER_SCOPES: netstone-api
 
-      CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
+      CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD};GSS Encryption Mode=Disable
 
       S3_SERVICE_URL: s3.eu-central-003.backblazeb2.com
       S3_REGION: eu-central-003
