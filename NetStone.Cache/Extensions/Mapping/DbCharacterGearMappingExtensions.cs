@@ -18,9 +18,11 @@ public static class DbCharacterGearMappingExtensions
             ItemName = source.ItemName,
             ItemLevel = source.ItemLevel,
             ItemDatabaseLink = source.ItemDatabaseLink,
+            ItemIconLink = source.ItemIconLink,
             IsHq = source.IsHq,
             StrippedItemName = source.StrippedItemName,
             GlamourDatabaseLink = source.GlamourDatabaseLink,
+            GlamourIconLink = source.GlamourIconLink,
             GlamourName = source.GlamourName,
             CreatorName = source.CreatorName,
             Materia = source.GetMateriaList()

@@ -16,9 +16,11 @@ public class CharacterGear
     public required int ItemLevel { get; set; }
 
     public string? ItemDatabaseLink { get; set; }
+    public string? ItemIconLink { get; set; }
     public bool? IsHq { get; set; }
     public string? StrippedItemName { get; set; }
     public string? GlamourDatabaseLink { get; set; }
+    public string? GlamourIconLink { get; set; }
     public string? GlamourName { get; set; }
 
     public string? CreatorName { get; set; }

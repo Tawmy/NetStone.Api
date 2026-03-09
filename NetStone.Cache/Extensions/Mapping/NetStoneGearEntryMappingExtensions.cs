@@ -26,10 +26,14 @@ public static class NetStoneGearEntryMappingExtensions
             ItemDatabaseLink = source.ItemDatabaseLink?.ToString() ??
                                throw new InvalidOperationException(
                                    $"{nameof(source.ItemDatabaseLink)} must not be null"),
+            ItemIconLink = source.IconLink?.ToString() ??
+                           throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null"),
+
             IsHq = source.IsHq,
             StrippedItemName = source.StrippedItemName,
             GlamourName = !string.IsNullOrEmpty(source.GlamourName) ? source.GlamourName : null,
             GlamourDatabaseLink = source.GlamourDatabaseLink?.ToString(),
+            GlamourIconLink = source.GlamourIconLink?.ToString(),
             CreatorName = !string.IsNullOrEmpty(source.CreatorName) ? source.CreatorName : null,
             Materia1 = source.Materia.ElementAtOrDefault(0),
             Materia2 = source.Materia.ElementAtOrDefault(1),

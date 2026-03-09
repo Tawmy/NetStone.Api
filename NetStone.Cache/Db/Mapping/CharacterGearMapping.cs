@@ -19,8 +19,10 @@ public class CharacterGearMapping : IEntityTypeConfiguration<CharacterGear>
 
         builder.Property(x => x.ItemName).HasMaxLength(63);
         builder.Property(x => x.ItemDatabaseLink).HasMaxLength(255);
+        builder.Property(x => x.ItemIconLink).HasMaxLength(255);
         builder.Property(x => x.StrippedItemName).HasMaxLength(63);
         builder.Property(x => x.GlamourDatabaseLink).HasMaxLength(255);
+        builder.Property(x => x.GlamourIconLink).HasMaxLength(255);
         builder.Property(x => x.GlamourName).HasMaxLength(63);
         builder.Property(x => x.CreatorName).HasMaxLength(21);
         builder.Property(x => x.Materia1).HasMaxLength(63);
