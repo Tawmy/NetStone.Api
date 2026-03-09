@@ -13,4 +13,5 @@
     <Project Path="NetStone.Data/NetStone.Data.csproj"/>
     <Project Path="NetStone.Queue/NetStone.Queue.csproj"/>
     <Project Path="NetStone.Test/NetStone.Test.csproj"/>
+    <Project Path="NetStone/NetStone/NetStone.csproj"/>
 </Solution>

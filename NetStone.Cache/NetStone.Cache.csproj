@@ -19,12 +19,12 @@
         </PackageReference>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1"/>
         <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1"/>
-        <PackageReference Include="NetStone" Version="1.4.1"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\NetStone.Common\NetStone.Common\NetStone.Common.csproj"/>
+        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
     </ItemGroup>
 
 </Project>
