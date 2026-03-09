@@ -1,6 +1,6 @@
 services:
   api:
-    image: ghcr.io/tawmy/netstone.api:main
+    image: ghcr.io/tawmy/netstone.api:feature-icon-urls
     depends_on:
       db:
         condition: service_healthy
