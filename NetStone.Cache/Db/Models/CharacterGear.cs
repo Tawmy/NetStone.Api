@@ -30,4 +30,11 @@ public class CharacterGear
     public string? Materia3 { get; set; }
     public string? Materia4 { get; set; }
     public string? Materia5 { get; set; }
+
+    public string? Dye1Name { get; set; }
+    public string? Dye1Color { get; set; }
+    public string? Dye1DatabaseLink { get; set; }
+    public string? Dye2Name { get; set; }
+    public string? Dye2Color { get; set; }
+    public string? Dye2DatabaseLink { get; set; }
 }

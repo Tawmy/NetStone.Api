@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NetStone.Cache.Db;
 using NetStone.Common.Enums;
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20260314100003_Dye")]
+    partial class Dye
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -524,10 +527,9 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("creator_name");
 
                     b.Property<string>("Dye1Color")
-                        .HasMaxLength(6)
-                        .HasColumnType("character(6)")
-                        .HasColumnName("dye1color")
-                        .IsFixedLength();
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)")
+                        .HasColumnName("dye1color");
 
                     b.Property<string>("Dye1DatabaseLink")
                         .HasMaxLength(255)
@@ -540,10 +542,9 @@ namespace NetStone.Cache.Db.Migrations
                         .HasColumnName("dye1name");
 
                     b.Property<string>("Dye2Color")
-                        .HasMaxLength(6)
-                        .HasColumnType("character(6)")
-                        .HasColumnName("dye2color")
-                        .IsFixedLength();
+                        .HasMaxLength(8)
+                        .HasColumnType("character varying(8)")
+                        .HasColumnName("dye2color");
 
                     b.Property<string>("Dye2DatabaseLink")
                         .HasMaxLength(255)

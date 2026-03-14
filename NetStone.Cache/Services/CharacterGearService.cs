@@ -40,6 +40,32 @@ public static class CharacterGearService
             return null;
         }
 
+        if (!string.IsNullOrEmpty(gearEntry.Dye1Name))
+        {
+            if (string.IsNullOrEmpty(gearEntry.Dye1Color))
+            {
+                throw new InvalidOperationException("Dye 1 name was parsed, but dye 1 color failed.");
+            }
+
+            if (gearEntry.Dye1DatabaseLink is null)
+            {
+                throw new InvalidOperationException("Dye 1 name was parsed, but dye 1 database link failed.");
+            }
+        }
+
+        if (!string.IsNullOrEmpty(gearEntry.Dye2Name))
+        {
+            if (string.IsNullOrEmpty(gearEntry.Dye2Color))
+            {
+                throw new InvalidOperationException("Dye 2 name was parsed, but dye 2 color failed.");
+            }
+
+            if (gearEntry.Dye2DatabaseLink is null)
+            {
+                throw new InvalidOperationException("Dye 2 name was parsed, but dye 2 database link failed.");
+            }
+        }
+
         var gear = gearEntry.ToDb(slot);
         gear.Id = currentGear.Where(x => x.Slot == slot).Select(x => x.Id).FirstOrDefault();
         return gear;

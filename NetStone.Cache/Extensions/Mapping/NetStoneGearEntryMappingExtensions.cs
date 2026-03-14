@@ -39,7 +39,14 @@ public static class NetStoneGearEntryMappingExtensions
             Materia2 = source.Materia.ElementAtOrDefault(1),
             Materia3 = source.Materia.ElementAtOrDefault(2),
             Materia4 = source.Materia.ElementAtOrDefault(3),
-            Materia5 = source.Materia.ElementAtOrDefault(4)
+            Materia5 = source.Materia.ElementAtOrDefault(4),
+
+            Dye1Name = source.Dye1Name,
+            Dye1Color = source.Dye1Color,
+            Dye1DatabaseLink = source.Dye1DatabaseLink?.ToString(),
+            Dye2Name = source.Dye2Name,
+            Dye2Color = source.Dye2Color,
+            Dye2DatabaseLink = source.Dye2DatabaseLink?.ToString()
         };
     }
 }
