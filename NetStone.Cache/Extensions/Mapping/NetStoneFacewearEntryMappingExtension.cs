@@ -24,6 +24,7 @@ public static class NetStoneFacewearEntryMappingExtension
 
             // special case, usually gear must have level. facewear level 0 is the compromise to keep it non-nullable
             ItemLevel = 0,
+            Rarity = GearRarity.Common,
 
             // The naming of these properties is misleading, should be separate type of item
             // TODO API V5: Turn facewear and soulcrystal into their own entities instead of shoehorning into GearEntry

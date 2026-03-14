@@ -22,6 +22,7 @@ public static class NetStoneGearEntryMappingExtensions
 
             ItemName = source.ItemName,
             ItemLevel = source.ItemLevel,
+            Rarity = Enum.Parse<GearRarity>(source.Rarity, true),
 
             ItemDatabaseLink = source.ItemDatabaseLink?.ToString() ??
                                throw new InvalidOperationException(

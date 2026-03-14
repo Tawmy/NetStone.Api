@@ -24,6 +24,7 @@ public static class NetStoneSoulcrystalEntryMappingExtension
 
             // special case, usually gear must have level. crystal level 0 is the compromise to keep it non-nullable
             ItemLevel = 0,
+            Rarity = GearRarity.Common,
             
             ItemIconLink = source.IconLink?.ToString() ??
                            throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null")

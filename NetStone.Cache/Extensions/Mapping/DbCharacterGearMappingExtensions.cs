@@ -17,6 +17,7 @@ public static class DbCharacterGearMappingExtensions
             Slot = source.Slot,
             ItemName = source.ItemName,
             ItemLevel = source.ItemLevel,
+            Rarity = source.Rarity,
             ItemDatabaseLink = source.ItemDatabaseLink,
             ItemIconLink = source.ItemIconLink,
             IsHq = source.IsHq,

@@ -14,6 +14,8 @@ public class CharacterGear
     public required string ItemName { get; set; }
 
     public required int ItemLevel { get; set; }
+    
+    public required GearRarity Rarity { get; set; }
 
     public string? ItemDatabaseLink { get; set; }
     public string? ItemIconLink { get; set; }
