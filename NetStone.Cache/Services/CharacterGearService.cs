@@ -23,6 +23,7 @@ public static class CharacterGearService
         list.AddIfNotNull(ToGear(gear.Hands, GearSlot.Hands, currentGear));
         list.AddIfNotNull(ToGear(gear.Legs, GearSlot.Legs, currentGear));
         list.AddIfNotNull(ToGear(gear.Feet, GearSlot.Feet, currentGear));
+        list.AddIfNotNull(ToGear(gear.Facewear, currentGear));
         list.AddIfNotNull(ToGear(gear.Earrings, GearSlot.Earrings, currentGear));
         list.AddIfNotNull(ToGear(gear.Necklace, GearSlot.Necklace, currentGear));
         list.AddIfNotNull(ToGear(gear.Bracelets, GearSlot.Bracelets, currentGear));
@@ -80,6 +81,18 @@ public static class CharacterGearService
 
         var gear = gearEntry.ToDb();
         gear.Id = currentGear.Where(x => x.Slot is GearSlot.SoulCrystal).Select(x => x.Id).FirstOrDefault();
+        return gear;
+    }
+
+    private static CharacterGear? ToGear(FacewearEntry? gearEntry, IEnumerable<CharacterGear> currentGear)
+    {
+        if (gearEntry is null)
+        {
+            return null;
+        }
+
+        var gear = gearEntry.ToDb();
+        gear.Id = currentGear.Where(x => x.Slot is GearSlot.Facewear).Select(x => x.Id).FirstOrDefault();
         return gear;
     }
 }
