@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace NetStone.Cache.Db.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20260314145016_Facewear")]
-    partial class Facewear
+    [Migration("20260320114323_v4.2.0")]
+    partial class v420
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,6 +25,7 @@ namespace NetStone.Cache.Db.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "class_job", new[] { "alchemist", "arcanist", "archer", "armorer", "astrologian", "bard", "black_mage", "blacksmith", "blue_mage", "botanist", "carpenter", "conjurer", "culinarian", "dancer", "dark_knight", "dragoon", "fisher", "gladiator", "goldsmith", "gunbreaker", "lancer", "leatherworker", "machinist", "marauder", "miner", "monk", "ninja", "paladin", "pictomancer", "pugilist", "reaper", "red_mage", "rogue", "sage", "samurai", "scholar", "summoner", "thaumaturge", "viper", "warrior", "weaver", "white_mage" });
+            NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_rarity", new[] { "common", "epic", "magic", "rare", "uncommon" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gear_slot", new[] { "body", "bracelets", "earrings", "facewear", "feet", "hands", "head", "legs", "main_hand", "necklace", "off_hand", "ring1", "ring2", "soul_crystal" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "gender", new[] { "female", "male" });
             NpgsqlModelBuilderExtensions.HasPostgresEnum(modelBuilder, "grand_company", new[] { "immortal_flames", "maelstrom", "no_affiliation", "order_of_the_twin_adder" });
@@ -621,6 +622,10 @@ namespace NetStone.Cache.Db.Migrations
                         .HasMaxLength(63)
                         .HasColumnType("character varying(63)")
                         .HasColumnName("materia5");
+
+                    b.Property<GearRarity>("Rarity")
+                        .HasColumnType("gear_rarity")
+                        .HasColumnName("rarity");
 
                     b.Property<GearSlot>("Slot")
                         .HasColumnType("gear_slot")
