@@ -40,11 +40,12 @@ public class DatabaseContext : DbContext, IDataProtectionKeyContext
     private static void MapEnums(NpgsqlDbContextOptionsBuilder builder)
     {
         builder.MapEnum<ClassJob>();
-        builder.MapEnum<GrandCompany>();
+        builder.MapEnum<GearRarity>();
         builder.MapEnum<GearSlot>();
+        builder.MapEnum<Gender>();
+        builder.MapEnum<GrandCompany>();
         builder.MapEnum<Race>();
         builder.MapEnum<Tribe>();
-        builder.MapEnum<Gender>();
     }
 
     #region DbSets

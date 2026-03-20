@@ -10,7 +10,7 @@ services:
       dockerfile: NetStone.Api/Dockerfile
     environment:
       LOGGING__LOGLEVEL__DEFAULT: Debug
-      LOGGING__LOGLEVEL__ASPNETCORE: Debug
+      LOGGING__LOGLEVEL__MICROSOFT.ASPNETCORE: Debug
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Debug
       AUTH_AUTHORITY: https://id.ffxiv.local/realms/eorzea-dev
       S3_BUCKET_NAME: netstone-api-dev

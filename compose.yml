@@ -16,13 +16,13 @@
       retries: 5
 
   api:
-    image: ghcr.io/tawmy/netstone.api:4.1.3
+    image: ghcr.io/tawmy/netstone.api:4.2.0
     container_name: netstone-api
     restart: unless-stopped
     environment:
       ASPNETCORE_ENVIRONMENT:
       LOGGING__LOGLEVEL__DEFAULT: Information
-      LOGGING__LOGLEVEL__ASPNETCORE: Warning
+      LOGGING__LOGLEVEL__MICROSOFT.ASPNETCORE: Warning
       LOGGING__LOGLEVEL__MICROSOFT.ENTITYFRAMEWORKCORE: Warning
       OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_DISABLE_URL_QUERY_REDACTION: true
       DATA_PROTECTION_CERTIFICATE: /mnt/cert/data-protection
@@ -35,7 +35,7 @@
       AUTH_AUTHORITY: https://ffxiv.id/realms/eorzea
       SWAGGER_SCOPES: netstone-api
 
-      CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD}
+      CONNECTION_STRING: Host=db;Database=netstone-api;Username=netstone-api;Password=${DB_PASSWORD};GSS Encryption Mode=Disable
 
       S3_SERVICE_URL: s3.eu-central-003.backblazeb2.com
       S3_REGION: eu-central-003

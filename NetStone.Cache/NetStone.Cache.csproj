@@ -7,24 +7,24 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.17"/>
-        <PackageReference Include="AWSSDK.S3" Version="4.0.16"/>
-        <PackageReference Include="EFCore.NamingConventions" Version="10.0.0-rc.2"/>
-        <PackageReference Include="EntityFrameworkCore.Exceptions.PostgreSQL" Version="8.1.3"/>
-        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.1"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.1"/>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.1">
+        <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="4.0.3.26"/>
+        <PackageReference Include="AWSSDK.S3" Version="4.0.19.1"/>
+        <PackageReference Include="EFCore.NamingConventions" Version="10.0.1"/>
+        <PackageReference Include="EntityFrameworkCore.Exceptions.PostgreSQL" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.5">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.1"/>
-        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.1"/>
-        <PackageReference Include="NetStone" Version="1.4.1"/>
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.0"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Http" Version="10.0.5"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\NetStone.Common\NetStone.Common\NetStone.Common.csproj"/>
+        <ProjectReference Include="..\NetStone\NetStone\NetStone.csproj"/>
     </ItemGroup>
 
 </Project>

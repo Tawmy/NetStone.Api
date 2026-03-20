@@ -19,14 +19,24 @@ public class CharacterGearMapping : IEntityTypeConfiguration<CharacterGear>
 
         builder.Property(x => x.ItemName).HasMaxLength(63);
         builder.Property(x => x.ItemDatabaseLink).HasMaxLength(255);
+        builder.Property(x => x.ItemIconLink).HasMaxLength(255);
         builder.Property(x => x.StrippedItemName).HasMaxLength(63);
         builder.Property(x => x.GlamourDatabaseLink).HasMaxLength(255);
+        builder.Property(x => x.GlamourIconLink).HasMaxLength(255);
         builder.Property(x => x.GlamourName).HasMaxLength(63);
         builder.Property(x => x.CreatorName).HasMaxLength(21);
+
         builder.Property(x => x.Materia1).HasMaxLength(63);
         builder.Property(x => x.Materia2).HasMaxLength(63);
         builder.Property(x => x.Materia3).HasMaxLength(63);
         builder.Property(x => x.Materia4).HasMaxLength(63);
         builder.Property(x => x.Materia5).HasMaxLength(63);
+
+        builder.Property(x => x.Dye1Name).HasMaxLength(63);
+        builder.Property(x => x.Dye1Color).HasMaxLength(6).IsFixedLength();
+        builder.Property(x => x.Dye1DatabaseLink).HasMaxLength(255);
+        builder.Property(x => x.Dye2Name).HasMaxLength(63);
+        builder.Property(x => x.Dye2Color).HasMaxLength(6).IsFixedLength();
+        builder.Property(x => x.Dye2DatabaseLink).HasMaxLength(255);
     }
 }

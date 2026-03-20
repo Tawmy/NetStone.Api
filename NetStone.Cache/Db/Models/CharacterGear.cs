@@ -15,10 +15,14 @@ public class CharacterGear
 
     public required int ItemLevel { get; set; }
 
+    public required GearRarity Rarity { get; set; }
+
     public string? ItemDatabaseLink { get; set; }
+    public string? ItemIconLink { get; set; }
     public bool? IsHq { get; set; }
     public string? StrippedItemName { get; set; }
     public string? GlamourDatabaseLink { get; set; }
+    public string? GlamourIconLink { get; set; }
     public string? GlamourName { get; set; }
 
     public string? CreatorName { get; set; }
@@ -28,4 +32,11 @@ public class CharacterGear
     public string? Materia3 { get; set; }
     public string? Materia4 { get; set; }
     public string? Materia5 { get; set; }
+
+    public string? Dye1Name { get; set; }
+    public string? Dye1Color { get; set; }
+    public string? Dye1DatabaseLink { get; set; }
+    public string? Dye2Name { get; set; }
+    public string? Dye2Color { get; set; }
+    public string? Dye2DatabaseLink { get; set; }
 }

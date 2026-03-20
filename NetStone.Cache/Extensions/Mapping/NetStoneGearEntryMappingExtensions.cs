@@ -22,20 +22,32 @@ public static class NetStoneGearEntryMappingExtensions
 
             ItemName = source.ItemName,
             ItemLevel = source.ItemLevel,
+            Rarity = Enum.Parse<GearRarity>(source.Rarity, true),
 
             ItemDatabaseLink = source.ItemDatabaseLink?.ToString() ??
                                throw new InvalidOperationException(
                                    $"{nameof(source.ItemDatabaseLink)} must not be null"),
+            ItemIconLink = source.IconLink?.ToString() ??
+                           throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null"),
+
             IsHq = source.IsHq,
             StrippedItemName = source.StrippedItemName,
             GlamourName = !string.IsNullOrEmpty(source.GlamourName) ? source.GlamourName : null,
             GlamourDatabaseLink = source.GlamourDatabaseLink?.ToString(),
+            GlamourIconLink = source.GlamourIconLink?.ToString(),
             CreatorName = !string.IsNullOrEmpty(source.CreatorName) ? source.CreatorName : null,
             Materia1 = source.Materia.ElementAtOrDefault(0),
             Materia2 = source.Materia.ElementAtOrDefault(1),
             Materia3 = source.Materia.ElementAtOrDefault(2),
             Materia4 = source.Materia.ElementAtOrDefault(3),
-            Materia5 = source.Materia.ElementAtOrDefault(4)
+            Materia5 = source.Materia.ElementAtOrDefault(4),
+
+            Dye1Name = source.Dye1Name,
+            Dye1Color = source.Dye1Color,
+            Dye1DatabaseLink = source.Dye1DatabaseLink?.ToString(),
+            Dye2Name = source.Dye2Name,
+            Dye2Color = source.Dye2Color,
+            Dye2DatabaseLink = source.Dye2DatabaseLink?.ToString()
         };
     }
 }
