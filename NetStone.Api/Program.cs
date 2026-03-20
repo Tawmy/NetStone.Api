@@ -7,7 +7,6 @@ using NetStone.Api.HealthChecks;
 using NetStone.Cache;
 using NetStone.Cache.Db;
 using NetStone.Data;
-using NetStone.Queue;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +25,6 @@ builder.Services.AddHealthChecks()
 
 builder.Services.AddCacheServices(builder.Configuration);
 await builder.Services.AddDataServices();
-builder.Services.AddQueueServices(builder.Configuration);
 
 var metricsActive = builder.AddOtelMetrics(builder.Configuration);
 var tracingActive = builder.AddOtelTracing(builder.Configuration);

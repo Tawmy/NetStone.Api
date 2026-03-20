@@ -11,7 +11,6 @@
     <Project Path="NetStone.Cache/NetStone.Cache.csproj"/>
     <Project Path="NetStone.Common/NetStone.Common/NetStone.Common.csproj"/>
     <Project Path="NetStone.Data/NetStone.Data.csproj"/>
-    <Project Path="NetStone.Queue/NetStone.Queue.csproj"/>
     <Project Path="NetStone.Test/NetStone.Test.csproj"/>
     <Project Path="NetStone/NetStone/NetStone.csproj"/>
 </Solution>
