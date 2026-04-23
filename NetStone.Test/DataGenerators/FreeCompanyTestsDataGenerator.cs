@@ -8,6 +8,7 @@ internal sealed class FreeCompanyTestsDataGenerator : TheoryData<string>
         Add("9228438586435670171"); // Anxiety's End, Lich
         Add("9232660711086325985"); // A Darling A Day, Odin
         Add("9228438586435573203"); // Blue Moon, Lich
+        Add("9234771773411719877"); // A new story, Goblin
 
         // the following free companies have been chosen randomly on the Lodestone, since I don't know people overseas
         Add("9234490298434849357"); // The Tabard Cloud, Cactuar
