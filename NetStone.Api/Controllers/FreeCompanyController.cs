@@ -10,7 +10,7 @@ using NetStone.Data.Interfaces;
 namespace NetStone.Api.Controllers;
 
 /// <summary>
-///     Free Company controller. Parses Lodestone for Free Company data.
+/// Free Company controller. Parses Lodestone for Free Company data.
 /// </summary>
 [Route("[controller]")]
 [ApiController]
@@ -19,7 +19,7 @@ namespace NetStone.Api.Controllers;
 public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : ControllerBase
 {
     /// <summary>
-    ///     Search for free company with provided search query.
+    /// Search for free company with provided search query.
     /// </summary>
     /// <param name="query">Search query, Name, and World are needed.</param>
     /// <param name="page">Which page of the paginated results to return.</param>
@@ -39,18 +39,18 @@ public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : C
     }
 
     /// <summary>
-    ///     Get free company with the given ID from the Lodestone.
+    /// Get free company with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Parsed free company data.</returns>
     [HttpGet("{lodestoneId}")]
@@ -71,24 +71,24 @@ public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : C
     }
 
     /// <summary>
-    ///     Get a free company's members.
+    /// Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Search endpoint first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company members, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company members, in minutes. If older, it will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <remarks>
-    ///     If free company was never cached using <see cref="GetAsync" />,
-    ///     <see cref="FreeCompanyMembersOuterDto.LastUpdated" />cannot be set. Its value will be null as a result. In this
-    ///     case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
-    ///     least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
+    /// If free company was never cached using <see cref="GetAsync" />,
+    /// <see cref="FreeCompanyMembersOuterDto.LastUpdated" />cannot be set. Its value will be null as a result. In this
+    /// case, if <paramref name="maxAge" /> is set to ANY value, the data will be refreshed. If free company was cached at
+    /// least once and the value can be saved, <paramref name="maxAge" /> applies as expected.
     /// </remarks>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
     [HttpGet("{lodestoneId}/Members")]
@@ -109,7 +109,7 @@ public class FreeCompanyController(IFreeCompanyServiceV4 freeCompanyService) : C
     }
 
     /// <summary>
-    ///     Get free company with the given name and world <b>FROM CACHE</b>.
+    /// Get free company with the given name and world <b>FROM CACHE</b>.
     /// </summary>
     /// <param name="world">World, case insensitive.</param>
     /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>

@@ -6,7 +6,7 @@ namespace NetStone.Cache.Extensions;
 public static class LodestoneCharacterExtensions
 {
     /// <summary>
-    ///     Checks whether a profile is fully public for parsing. If it's not, parsing would fail.
+    /// Checks whether a profile is fully public for parsing. If it's not, parsing would fail.
     /// </summary>
     /// <param name="character">Character to check attributes of.</param>
     /// <returns>True if fully public, false if not.</returns>
@@ -30,7 +30,7 @@ public static class LodestoneCharacterExtensions
     }
 
     /// <summary>
-    ///     Convert a job icon URL to its respective ClassJob
+    /// Convert a job icon URL to its respective ClassJob
     /// </summary>
     /// <param name="character">Character to get the active ClassJob of</param>
     /// <returns>The user's active <see cref="ArgumentOutOfRangeException" /></returns>

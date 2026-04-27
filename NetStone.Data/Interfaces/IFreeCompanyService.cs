@@ -6,16 +6,16 @@ using NetStone.Common.Queries;
 namespace NetStone.Data.Interfaces;
 
 /// <summary>
-///     Data service for free company data.
+/// Data service for free company data.
 /// </summary>
 public interface IFreeCompanyServiceV4
 {
     /// <summary>
-    ///     Search for free company with provided search query.
+    /// Search for free company with provided search query.
     /// </summary>
     /// <param name="query">
-    ///     Search query, only <see cref="FreeCompanySearchQuery.Name" /> and
-    ///     <see cref="FreeCompanySearchQuery.World" /> are needed.
+    /// Search query, only <see cref="FreeCompanySearchQuery.Name" /> and
+    /// <see cref="FreeCompanySearchQuery.World" /> are needed.
     /// </param>
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Instance of <see cref="FreeCompanySearchPageDto" /> with the results returned from the Lodestone.</returns>
@@ -23,18 +23,18 @@ public interface IFreeCompanyServiceV4
     Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page);
 
     /// <summary>
-    ///     Get free company with the given ID from the Lodestone.
+    /// Get free company with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
@@ -43,7 +43,7 @@ public interface IFreeCompanyServiceV4
     Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackTypeV4 useFallback);
 
     /// <summary>
-    ///     Get free company with the given name and home world from cache.
+    /// Get free company with the given name and home world from cache.
     /// </summary>
     /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
     /// <param name="world">Home World, case insensitive.</param>
@@ -53,18 +53,18 @@ public interface IFreeCompanyServiceV4
     public Task<FreeCompanyDto> GetFreeCompanyByNameAsync(string name, string world);
 
     /// <summary>
-    ///     Get a free company's members.
+    /// Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
@@ -75,16 +75,16 @@ public interface IFreeCompanyServiceV4
 }
 
 /// <summary>
-///     Data service for free company data.
+/// Data service for free company data.
 /// </summary>
 public interface IFreeCompanyServiceV3
 {
     /// <summary>
-    ///     Search for free company with provided search query.
+    /// Search for free company with provided search query.
     /// </summary>
     /// <param name="query">
-    ///     Search query, only <see cref="FreeCompanySearchQuery.Name" /> and
-    ///     <see cref="FreeCompanySearchQuery.World" /> are needed.
+    /// Search query, only <see cref="FreeCompanySearchQuery.Name" /> and
+    /// <see cref="FreeCompanySearchQuery.World" /> are needed.
     /// </param>
     /// <param name="page">Which page of the paginated results to return.</param>
     /// <returns>Instance of <see cref="FreeCompanySearchPageDto" /> with the results returned from the Lodestone.</returns>
@@ -92,18 +92,18 @@ public interface IFreeCompanyServiceV3
     Task<FreeCompanySearchPageDto> SearchFreeCompanyAsync(FreeCompanySearchQuery query, int page);
 
     /// <summary>
-    ///     Get free company with the given ID from the Lodestone.
+    /// Get free company with the given ID from the Lodestone.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company, in minutes. If older, it will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Parsed free company data.</returns>
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
@@ -112,7 +112,7 @@ public interface IFreeCompanyServiceV3
     Task<FreeCompanyDto> GetFreeCompanyAsync(string lodestoneId, int? maxAge, FallbackTypeV3 useFallback);
 
     /// <summary>
-    ///     Get free company with the given name and home world from cache.
+    /// Get free company with the given name and home world from cache.
     /// </summary>
     /// <param name="name">Free company name. Must be exact match, but is case insensitive.</param>
     /// <param name="world">Home World, case insensitive.</param>
@@ -122,18 +122,18 @@ public interface IFreeCompanyServiceV3
     public Task<FreeCompanyDto> GetFreeCompanyByNameAsync(string name, string world);
 
     /// <summary>
-    ///     Get a free company's members.
+    /// Get a free company's members.
     /// </summary>
     /// <param name="lodestoneId">Lodestone free company ID. Use Use <see cref="SearchFreeCompanyAsync" /> first if unknown.</param>
     /// <param name="maxAge">
-    ///     Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
-    ///     Lodestone.
+    /// Optional maximum age of cached free company members, in minutes. If older, they will be refreshed from the
+    /// Lodestone.
     /// </param>
     /// <param name="useFallback">
-    ///     API may return cached data if Lodestone unavailable or parsing failed.
-    ///     Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
-    ///     and to Any to handle any exception including errors in the parser.
-    ///     Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
+    /// API may return cached data if Lodestone unavailable or parsing failed.
+    /// Set to Http to handle HttpRequestExceptions (eg. when the Lodestone is down),
+    /// and to Any to handle any exception including errors in the parser.
+    /// Do note that exceptions in the parser may have to be fixed manually and will not resolve themselves.
     /// </param>
     /// <returns>Free company members.</returns>
     /// <exception cref="NotFoundException">Thrown if free company not found.</exception>
