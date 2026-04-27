@@ -1,0 +1,15 @@
+@using NetStone.Api.Components.Pages
+
+<QuickGrid Items="Libraries.AsQueryable()">
+    <TemplateColumn Title="Library">
+        <a href="@context.Url">@context.Name</a>
+    </TemplateColumn>
+    <PropertyColumn Property="@(x => x.License)" Align="Align.End"/>
+</QuickGrid>
+
+@code {
+
+    [Parameter]
+    public required IEnumerable<Library> Libraries { get; set; }
+
+}
