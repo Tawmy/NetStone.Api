@@ -324,10 +324,29 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
                 return string.IsNullOrEmpty(source) ? target is null : target == source;
             }
         }
+
+        if (gearLodestone.Facewear is { } facewear)
+        {
+            var facewearDto = characterDto.Gear.FirstOrDefault(x => x.Slot == GearSlot.Facewear);
+            Assert.NotNull(facewearDto);
+            Assert.Equal(facewear.ItemName, facewearDto.ItemName);
+            Assert.Equal(facewear.DbLink?.ToString(), facewearDto.ItemDatabaseLink);
+            Assert.Equal(facewear.IconLink.ToString(), facewearDto.ItemIconLink);
+            Assert.Equal(facewear.UnlockedByIconLink.ToString(), facewearDto.GlamourIconLink);
+        }
+
+        if (gearLodestone.Soulcrystal is { } soulcrystal)
+        {
+            var soulcrystalDto = characterDto.Gear.FirstOrDefault(x => x.Slot == GearSlot.SoulCrystal);
+            Assert.NotNull(soulcrystalDto);
+            Assert.Equal(soulcrystal.ItemName, soulcrystalDto.ItemName);
+            Assert.Equal(soulcrystal.IconLink.ToString(), soulcrystalDto.ItemIconLink);
+        }
     }
 
     private static void CompareAttributes(CharacterAttributes attributes, CharacterDto characterDto)
     {
+        Assert.Equal(attributes.Hp, characterDto.Attributes[CharacterAttribute.Hp]);
         Assert.Equal(attributes.Strength, characterDto.Attributes[CharacterAttribute.Strength]);
         Assert.Equal(attributes.Dexterity, characterDto.Attributes[CharacterAttribute.Dexterity]);
         Assert.Equal(attributes.Vitality, characterDto.Attributes[CharacterAttribute.Vitality]);
