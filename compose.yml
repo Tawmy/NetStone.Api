@@ -19,12 +19,6 @@
     image: ghcr.io/tawmy/netstone.api:4.2.0
     container_name: netstone-api
     restart: unless-stopped
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -f http://localhost:8080/health || exit 1" ]
-      interval: 30s
-      timeout: 10s
-      retries: 3
-      start_period: 15s
     environment:
       ASPNETCORE_ENVIRONMENT:
       LOGGING__LOGLEVEL__DEFAULT: Information

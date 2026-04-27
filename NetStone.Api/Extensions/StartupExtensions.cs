@@ -183,7 +183,7 @@ internal static class StartupExtensions
 
     public static void UseHealthChecks(this WebApplication app)
     {
-        app.MapHealthChecks("/health").AllowAnonymous();
+        app.MapHealthChecks("/health").RequireAuthorization();
 
         app.MapHealthChecks("/health/db", new HealthCheckOptions
                 { Predicate = check => check.Name.Equals(nameof(DatabaseContext), StringComparison.OrdinalIgnoreCase) })
