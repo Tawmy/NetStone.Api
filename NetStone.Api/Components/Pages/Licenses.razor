@@ -1,13 +1,12 @@
 @page "/libs"
 
-<h1>Libraries</h1>
+<h1 class="center">Libraries (API)</h1>
 
-<QuickGrid Items="Libraries.AsQueryable()">
-    <TemplateColumn Title="Library">
-        <a href="@context.Url">@context.Name</a>
-    </TemplateColumn>
-    <PropertyColumn Property="@(x => x.License)"/>
-</QuickGrid>
+<LibrariesGrid Libraries="Libraries"/>
+
+<h1 class="center">Additional Libraries (SDK)</h1>
+
+<LibrariesGrid Libraries="LibrariesSdk"/>
 
 <div class="ms">
     <div>Built on top of .NET and many Microsoft libraries</div>
@@ -28,6 +27,12 @@
         new("OpenTelemetry", "https://github.com/open-telemetry/opentelemetry-dotnet-contrib", "Apache-2.0"),
         new("Swashbuckle.AspNetCore", "https://github.com/domaindrivendev/Swashbuckle.AspNetCore", "MIT"),
         new("xunit", "https://github.com/xunit/xunit", "Apache-2.0")
+    ];
+
+    private static IEnumerable<Library> LibrariesSdk =>
+    [
+        new("Duende.AccessTokenManagement", "https://github.com/DuendeSoftware/foss/tree/main/access-token-management", "Apache-2.0"),
+        new("Refit", "https://github.com/reactiveui/refit", "MIT")
     ];
 
 }

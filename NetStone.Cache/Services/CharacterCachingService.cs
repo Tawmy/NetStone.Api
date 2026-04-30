@@ -408,7 +408,7 @@ internal class CharacterCachingService(DatabaseContext context, IS3Service s3, I
             .ToListAsync(ct);
 
         var newLodestoneAchievements = lodestoneAchievements.Where(x =>
-            x.Id is not null && !dbAchievements.Select(y => y.AchievementId).Contains((ulong)x.Id!));
+            !dbAchievements.Select(y => y.AchievementId).Contains(x.Id));
         var newDbAchievements = newLodestoneAchievements.Select(x => x.ToDb(lodestoneId)).ToList();
 
         await context.CharacterAchievements.AddRangeAsync(newDbAchievements, ct);

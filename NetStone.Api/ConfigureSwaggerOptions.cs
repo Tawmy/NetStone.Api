@@ -15,7 +15,7 @@ internal class ConfigureSwaggerOptions(
     private const string SecurityScheme = "Keycloak";
 
     /// <summary>
-    ///     Configure each API discovered for Swagger Documentation
+    /// Configure each API discovered for Swagger Documentation
     /// </summary>
     public void Configure(SwaggerGenOptions options)
     {
@@ -60,7 +60,7 @@ internal class ConfigureSwaggerOptions(
     }
 
     /// <summary>
-    ///     Configure Swagger Options. Inherited from the Interface
+    /// Configure Swagger Options. Inherited from the Interface
     /// </summary>
     public void Configure(string? name, SwaggerGenOptions options)
     {

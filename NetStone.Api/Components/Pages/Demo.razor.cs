@@ -6,7 +6,7 @@ using NetStone.Data.Interfaces;
 namespace NetStone.Api.Components.Pages;
 
 /// <summary>
-///     Logic for Demo page.
+/// Logic for Demo page.
 /// </summary>
 public partial class Demo : ComponentBase
 {
@@ -20,13 +20,13 @@ public partial class Demo : ComponentBase
     #region Character Clicks
 
     /// <summary>
-    ///     Character service for data retrieval
+    /// Character service for data retrieval
     /// </summary>
     [Inject]
     public ICharacterServiceV4 CharacterService { get; set; } = default!;
 
     /// <summary>
-    ///     Free Company service for data retrieval
+    /// Free Company service for data retrieval
     /// </summary>
     [Inject]
     public IFreeCompanyServiceV4 FreeCompanyService { get; set; } = default!;

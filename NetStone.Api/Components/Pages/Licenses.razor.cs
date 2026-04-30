@@ -1,3 +1,6 @@
 namespace NetStone.Api.Components.Pages;
 
-internal record Library(string Name, string Url, string License);
+/// <summary>
+/// Library used by the application.
+/// </summary>
+public record Library(string Name, string Url, string License);

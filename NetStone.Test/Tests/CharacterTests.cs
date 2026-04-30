@@ -289,6 +289,34 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
                 Assert.Contains(materiaLodestone, gearPieceDto.Materia);
             }
 
+            Assert.Equal(Enum.Parse<GearRarity>(gearPieceLodestone.Rarity, true), gearPieceDto.Rarity);
+            Assert.Equal(gearPieceLodestone.IconLink.ToString(), gearPieceDto.ItemIconLink);
+            Assert.Equal(gearPieceLodestone.GlamourIconLink?.ToString(), gearPieceDto.GlamourIconLink);
+
+            if (gearPieceLodestone.Dye1Name is null)
+            {
+                Assert.Null(gearPieceDto.Dye1);
+            }
+            else
+            {
+                Assert.NotNull(gearPieceDto.Dye1);
+                Assert.Equal(gearPieceLodestone.Dye1Name, gearPieceDto.Dye1.Name);
+                Assert.Equal(gearPieceLodestone.Dye1Color, gearPieceDto.Dye1.Color);
+                Assert.Equal(gearPieceLodestone.Dye1DatabaseLink?.ToString(), gearPieceDto.Dye1.DatabaseLink);
+            }
+
+            if (gearPieceLodestone.Dye2Name is null)
+            {
+                Assert.Null(gearPieceDto.Dye2);
+            }
+            else
+            {
+                Assert.NotNull(gearPieceDto.Dye2);
+                Assert.Equal(gearPieceLodestone.Dye2Name, gearPieceDto.Dye2.Name);
+                Assert.Equal(gearPieceLodestone.Dye2Color, gearPieceDto.Dye2.Color);
+                Assert.Equal(gearPieceLodestone.Dye2DatabaseLink?.ToString(), gearPieceDto.Dye2.DatabaseLink);
+            }
+
             continue;
 
             bool TargetNullIfSourceEmpty(string? source, string? target)
@@ -296,10 +324,29 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
                 return string.IsNullOrEmpty(source) ? target is null : target == source;
             }
         }
+
+        if (gearLodestone.Facewear is { } facewear)
+        {
+            var facewearDto = characterDto.Gear.FirstOrDefault(x => x.Slot == GearSlot.Facewear);
+            Assert.NotNull(facewearDto);
+            Assert.Equal(facewear.ItemName, facewearDto.ItemName);
+            Assert.Equal(facewear.DbLink?.ToString(), facewearDto.ItemDatabaseLink);
+            Assert.Equal(facewear.IconLink.ToString(), facewearDto.ItemIconLink);
+            Assert.Equal(facewear.UnlockedByIconLink.ToString(), facewearDto.GlamourIconLink);
+        }
+
+        if (gearLodestone.Soulcrystal is { } soulcrystal)
+        {
+            var soulcrystalDto = characterDto.Gear.FirstOrDefault(x => x.Slot == GearSlot.SoulCrystal);
+            Assert.NotNull(soulcrystalDto);
+            Assert.Equal(soulcrystal.ItemName, soulcrystalDto.ItemName);
+            Assert.Equal(soulcrystal.IconLink.ToString(), soulcrystalDto.ItemIconLink);
+        }
     }
 
     private static void CompareAttributes(CharacterAttributes attributes, CharacterDto characterDto)
     {
+        Assert.Equal(attributes.Hp, characterDto.Attributes[CharacterAttribute.Hp]);
         Assert.Equal(attributes.Strength, characterDto.Attributes[CharacterAttribute.Strength]);
         Assert.Equal(attributes.Dexterity, characterDto.Attributes[CharacterAttribute.Dexterity]);
         Assert.Equal(attributes.Vitality, characterDto.Attributes[CharacterAttribute.Vitality]);

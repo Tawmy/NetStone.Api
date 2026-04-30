@@ -16,6 +16,8 @@ internal sealed class CharacterTestsDataGenerator : TheoryData<string>
         Add("44756827"); // Silver Arkrome, Phantom
         Add("2648055"); // E'rio Ninfix, Phoenix
         Add("18188832"); // Rhayn Akiba, Lich
+        Add("18888129"); // Tamias Li'tora, Odin
+        Add("14687879"); // Neku Taiyou, Moogle
 
         // the following characters have been chosen randomly on the Lodestone, since I don't know people overseas
         Add("3386216"); // Ace Ataeru, Cactuar
