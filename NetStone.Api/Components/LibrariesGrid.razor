@@ -1,5 +1,4 @@
 @using NetStone.Api.Components.Pages
-
 <QuickGrid Items="Libraries.AsQueryable()">
     <TemplateColumn Title="Library">
         <a href="@context.Url">@context.Name</a>
@@ -9,7 +8,6 @@
 
 @code {
 
-    [Parameter]
-    public required IEnumerable<Library> Libraries { get; set; }
+    [Parameter] public required IEnumerable<Library> Libraries { get; set; }
 
 }

@@ -23,8 +23,7 @@ public static class NetStoneFreeCompanyMembersEntryMappingExtensions
             RankIcon = source.RankIcon?.ToString(),
             Server = source.Server,
             DataCenter = source.Datacenter,
-            Avatar = source.Avatar?.ToString() ??
-                     throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null.")
+            Avatar = source.Avatar.ToString()
         };
     }
 
@@ -35,7 +34,6 @@ public static class NetStoneFreeCompanyMembersEntryMappingExtensions
         target.Name = source.Name;
         target.Rank = source.Rank;
         target.RankIcon = source.RankIcon?.ToString();
-        target.Avatar = source.Avatar?.ToString() ??
-                        throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null.");
+        target.Avatar = source.Avatar.ToString();
     }
 }

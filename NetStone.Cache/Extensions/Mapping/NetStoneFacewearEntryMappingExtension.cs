@@ -29,10 +29,9 @@ public static class NetStoneFacewearEntryMappingExtension
             // The naming of these properties is misleading, should be separate type of item
             // TODO API V5: Turn facewear and soulcrystal into their own entities instead of shoehorning into GearEntry
             ItemDatabaseLink = source.DbLink?.ToString(),
-            ItemIconLink = source.IconLink?.ToString() ??
-                           throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null"),
+            ItemIconLink = source.IconLink.ToString(),
             GlamourName = source.UnlockedBy,
-            GlamourIconLink = source.UnlockedByIconLink?.ToString()
+            GlamourIconLink = source.UnlockedByIconLink.ToString()
         };
     }
 }

@@ -18,7 +18,7 @@ public class CharacterGear
     public required GearRarity Rarity { get; set; }
 
     public string? ItemDatabaseLink { get; set; }
-    public string? ItemIconLink { get; set; }
+    public required string ItemIconLink { get; set; }
     public bool? IsHq { get; set; }
     public string? StrippedItemName { get; set; }
     public string? GlamourDatabaseLink { get; set; }

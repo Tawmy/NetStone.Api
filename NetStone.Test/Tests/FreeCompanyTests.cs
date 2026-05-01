@@ -55,7 +55,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             Assert.Equal(memberLodestone.RankIcon?.ToString(), memberDto.RankIcon);
             Assert.Equal(memberLodestone.Server, memberDto.Server);
             Assert.Equal(memberLodestone.Datacenter, memberDto.DataCenter);
-            Assert.Equal(memberLodestone.Avatar?.ToString(), memberDto.Avatar);
+            Assert.Equal(memberLodestone.Avatar.ToString(), memberDto.Avatar);
         }
     }
 
@@ -165,7 +165,7 @@ public class FreeCompanyTests(ITestOutputHelper testOutputHelper, FreeCompanyTes
             Assert.NotNull(focusDto);
 
             // name already got implicitly compared in FirstOrDefault call, only compare icon
-            Assert.Equal(focusLodestoneEntry.Icon?.ToString(), focusDto.Icon);
+            Assert.Equal(focusLodestoneEntry.Icon.ToString(), focusDto.Icon);
         }
     }
 

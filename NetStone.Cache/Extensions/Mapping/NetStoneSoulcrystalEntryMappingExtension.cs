@@ -26,8 +26,7 @@ public static class NetStoneSoulcrystalEntryMappingExtension
             ItemLevel = 0,
             Rarity = GearRarity.Common,
 
-            ItemIconLink = source.IconLink?.ToString() ??
-                           throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null")
+            ItemIconLink = source.IconLink.ToString()
         };
     }
 }

@@ -192,8 +192,8 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         Assert.Equal(characterLodestone.Name, characterDto.Name);
         Assert.Equal(characterLodestone.Server, characterDto.Server);
         Assert.Equal(characterLodestone.Title, characterDto.Title);
-        Assert.Equal(characterLodestone.Avatar?.ToString(), characterDto.Avatar);
-        Assert.Equal(characterLodestone.Portrait?.ToString(), characterDto.Portrait);
+        Assert.Equal(characterLodestone.Avatar.ToString(), characterDto.Avatar);
+        Assert.Equal(characterLodestone.Portrait.ToString(), characterDto.Portrait);
         Assert.Equal(characterLodestone.Bio, characterDto.Bio);
         Assert.Equal(characterLodestone.Nameday, characterDto.Nameday);
 
@@ -229,7 +229,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         }
 
         Assert.Equal(characterLodestone.GuardianDeityName, characterDto.GuardianDeityName);
-        Assert.Equal(characterLodestone.GuardianDeityIcon?.ToString(), characterDto.GuardianDeityIcon);
+        Assert.Equal(characterLodestone.GuardianDeityIcon.ToString(), characterDto.GuardianDeityIcon);
 
         Assert.Equal(characterLodestone.PvPTeam?.Name, characterDto.PvpTeam);
         Assert.Equal(EnumHelper.ParseFromDisplayString<Race>(characterLodestone.Race), characterDto.Race);
@@ -246,7 +246,7 @@ public class CharacterTests(ITestOutputHelper testOutputHelper, CharacterTestsFi
         }
 
         Assert.Equal(characterLodestone.TownName, characterDto.TownName);
-        Assert.Equal(characterLodestone.TownIcon?.ToString(), characterDto.TownIcon);
+        Assert.Equal(characterLodestone.TownIcon.ToString(), characterDto.TownIcon);
 
         CompareGear(characterLodestone.Gear, characterDto);
         CompareAttributes(characterLodestone.Attributes, characterDto);
