@@ -44,7 +44,7 @@ public class Character
     public string? Title { get; set; }
 
     public string? TownName { get; set; }
-    public string? TownIcon { get; set; }
+    public required string TownIcon { get; set; }
 
     public ICollection<CharacterGear> Gear { get; set; } = new HashSet<CharacterGear>();
 

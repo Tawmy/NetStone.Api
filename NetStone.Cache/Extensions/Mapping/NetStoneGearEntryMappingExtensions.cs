@@ -27,8 +27,7 @@ public static class NetStoneGearEntryMappingExtensions
             ItemDatabaseLink = source.ItemDatabaseLink?.ToString() ??
                                throw new InvalidOperationException(
                                    $"{nameof(source.ItemDatabaseLink)} must not be null"),
-            ItemIconLink = source.IconLink?.ToString() ??
-                           throw new InvalidOperationException($"{nameof(source.IconLink)} must not be null"),
+            ItemIconLink = source.IconLink.ToString(),
 
             IsHq = source.IsHq,
             StrippedItemName = source.StrippedItemName,

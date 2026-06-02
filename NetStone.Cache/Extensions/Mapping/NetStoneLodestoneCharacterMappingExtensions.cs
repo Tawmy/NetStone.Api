@@ -22,8 +22,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
             ActiveClassJobLevel = (short)source.ActiveClassJobLevel,
             ActiveClassJobIcon = source.ActiveClassJobIcon,
 
-            Avatar = source.Avatar?.ToString() ??
-                     throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null"),
+            Avatar = source.Avatar.ToString(),
             AvatarS3 = avatarS3,
 
             Bio = source.Bio,
@@ -34,15 +33,12 @@ public static class NetStoneLodestoneCharacterMappingExtensions
             GrandCompanyRank = source.GrandCompanyRank,
 
             GuardianDeityName = source.GuardianDeityName,
-            GuardianDeityIcon = source.GuardianDeityIcon?.ToString() ??
-                                throw new InvalidOperationException(
-                                    $"{nameof(source.GuardianDeityIcon)} must not be null"),
+            GuardianDeityIcon = source.GuardianDeityIcon.ToString(),
 
             Name = source.Name,
             Nameday = source.Nameday,
 
-            Portrait = source.Portrait?.ToString() ??
-                       throw new InvalidOperationException($"{nameof(source.Portrait)} must not be null"),
+            Portrait = source.Portrait.ToString(),
             PortraitS3 = portraitS3,
 
             PvpTeam = source.PvPTeam?.Name,
@@ -56,7 +52,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
             Title = source.Title,
 
             TownName = source.TownName,
-            TownIcon = source.TownIcon?.ToString(),
+            TownIcon = source.TownIcon.ToString(),
 
             Attributes = source.Attributes.ToDb()
         };
@@ -68,8 +64,7 @@ public static class NetStoneLodestoneCharacterMappingExtensions
         target.ActiveClassJobLevel = (short)source.ActiveClassJobLevel;
         target.ActiveClassJobIcon = source.ActiveClassJobIcon;
 
-        target.Avatar = source.Avatar?.ToString() ??
-                        throw new InvalidOperationException($"{nameof(source.Avatar)} must not be null");
+        target.Avatar = source.Avatar.ToString();
         target.AvatarS3 = avatarS3;
 
         target.Bio = source.Bio;
@@ -94,15 +89,12 @@ public static class NetStoneLodestoneCharacterMappingExtensions
         target.GrandCompanyRank = source.GrandCompanyRank;
 
         target.GuardianDeityName = source.GuardianDeityName;
-        target.GuardianDeityIcon = source.GuardianDeityIcon?.ToString() ??
-                                   throw new InvalidOperationException(
-                                       $"{nameof(source.GuardianDeityIcon)} must not be null");
+        target.GuardianDeityIcon = source.GuardianDeityIcon.ToString();
 
         target.Name = source.Name;
         target.Nameday = source.Nameday;
 
-        target.Portrait = source.Portrait?.ToString() ??
-                          throw new InvalidOperationException($"{nameof(source.Portrait)} must not be null");
+        target.Portrait = source.Portrait.ToString();
         target.PortraitS3 = portraitS3;
 
         target.PvpTeam = source.PvPTeam?.Name;
