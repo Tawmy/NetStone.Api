@@ -16,8 +16,8 @@ public static class DependencyInjection
 
         var s3Config = new AmazonS3Config
         {
-            ServiceURL = $"https://{config.GetGuardedConfiguration(EnvironmentVariables.S3ServiceUrl)}",
-            AuthenticationRegion = config.GetGuardedConfiguration(EnvironmentVariables.S3Region),
+            ServiceURL = $"https://{config.GetRequiredConfiguration(EnvironmentVariables.S3ServiceUrl)}",
+            AuthenticationRegion = config.GetRequiredConfiguration(EnvironmentVariables.S3Region),
             ForcePathStyle = true
         };
         services.AddSingleton<IAmazonS3>(new AmazonS3Client(new EnvironmentVariablesAWSCredentials(), s3Config));

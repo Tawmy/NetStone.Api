@@ -55,9 +55,9 @@ internal static class StartupExtensions
             .AddJwtBearer(options =>
             {
                 options.Authority =
-                    webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
+                    webAppBuilder.Configuration.GetRequiredConfiguration(EnvironmentVariables.AuthAuthority);
                 options.Audience =
-                    webAppBuilder.Configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAudience);
+                    webAppBuilder.Configuration.GetRequiredConfiguration(EnvironmentVariables.AuthAudience);
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
@@ -146,7 +146,7 @@ internal static class StartupExtensions
 
     public static void AddDataProtection(this IServiceCollection services, IConfiguration configuration)
     {
-        var certificatePath = configuration.GetGuardedConfiguration(EnvironmentVariables.DataProtectionCertificate);
+        var certificatePath = configuration.GetRequiredConfiguration(EnvironmentVariables.DataProtectionCertificate);
         var certificate = X509Certificate2.CreateFromPemFile($"{certificatePath}.pem", $"{certificatePath}.key");
 
         X509Certificate2[] decryptionCertificates;

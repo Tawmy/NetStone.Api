@@ -35,7 +35,7 @@ internal class CharacterCachingService(DatabaseContext context, IS3Service s3, I
         string? portraitS3 = null;
         if (cacheImages)
         {
-            var bucket = config.GetGuardedConfiguration(EnvironmentVariables.S3BucketName);
+            var bucket = config.GetRequiredConfiguration(EnvironmentVariables.S3BucketName);
             avatarS3 = await s3.ReuploadAsync(bucket, $"avatar_{lodestoneId}_{Guid.CreateVersion7()}.jpg",
                 lodestoneCharacter.Avatar ??
                 throw new ArgumentNullException(nameof(lodestoneCharacter), nameof(lodestoneCharacter.Avatar)),

@@ -20,7 +20,7 @@ internal class ConfigureSwaggerOptions(
     public void Configure(SwaggerGenOptions options)
     {
         // Get environment variables for Swagger auth
-        var authority = configuration.GetGuardedConfiguration(EnvironmentVariables.AuthAuthority);
+        var authority = configuration.GetRequiredConfiguration(EnvironmentVariables.AuthAuthority);
         var scopes = configuration[EnvironmentVariables.SwaggerScopes] ?? string.Empty;
 
         var scopesDict = scopes.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries)

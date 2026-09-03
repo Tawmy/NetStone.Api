@@ -30,8 +30,8 @@ public class CollectionDataService(IConfiguration configuration)
 
     private Task LoadTotalsAsync()
     {
-        _totalMinions = configuration.GetGuardedConfiguration<int>(EnvironmentVariables.FfxivTotalMinions);
-        _totalMounts = configuration.GetGuardedConfiguration<int>(EnvironmentVariables.FfxivTotalMounts);
+        _totalMinions = configuration.GetRequiredConfiguration<int>(EnvironmentVariables.FfxivTotalMinions);
+        _totalMounts = configuration.GetRequiredConfiguration<int>(EnvironmentVariables.FfxivTotalMounts);
         return Task.CompletedTask;
     }
 }
