@@ -59,7 +59,7 @@ internal class S3Service(IAmazonS3 s3, HttpClient httpClient, IConfiguration con
 
     private string CreateS3Url(string bucket, string key)
     {
-        var s3Url = configuration.GetGuardedConfiguration(EnvironmentVariables.S3ServiceUrl);
+        var s3Url = configuration.GetRequiredConfiguration(EnvironmentVariables.S3ServiceUrl);
         return $"https://{bucket}.{s3Url}/{key}";
     }
 }

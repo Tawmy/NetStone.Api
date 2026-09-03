@@ -89,7 +89,7 @@ if (metricsActive)
 if (tracingActive)
 {
     app.Logger.LogInformation("Tracing active. OTLP Endpoint: {a}",
-        builder.Configuration.GetGuardedConfiguration(EnvironmentVariables.OtelEndpointUri));
+        builder.Configuration.GetRequiredConfiguration(EnvironmentVariables.OtelEndpointUri));
 }
 
 app.Run();

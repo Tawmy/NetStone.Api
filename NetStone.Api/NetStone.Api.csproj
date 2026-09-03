@@ -6,25 +6,25 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <InvariantGlobalization>true</InvariantGlobalization>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <AssemblyVersion>4.3.2</AssemblyVersion>
+        <AssemblyVersion>4.4.0</AssemblyVersion>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.0.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.7"/>
-        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.7"/>
-        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.15.1-beta.1"/>
-        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.7"/>
-        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.7"/>
-        <PackageReference Include="OpenTelemetry" Version="1.15.3"/>
-        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.15.3"/>
-        <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.15.3-beta.1"/>
-        <PackageReference Include="OpenTelemetry.Extensions" Version="1.15.0-beta.1"/>
-        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.15.3"/>
-        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.15.2"/>
-        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.15.1"/>
-        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.1.7"/>
+        <PackageReference Include="Asp.Versioning.Mvc.ApiExplorer" Version="10.2.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="10.0.11"/>
+        <PackageReference Include="Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore" Version="10.0.11"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.EntityFrameworkCore" Version="1.18.0-beta.1"/>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.11"/>
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11"/>
+        <PackageReference Include="OpenTelemetry" Version="1.18.0"/>
+        <PackageReference Include="OpenTelemetry.Exporter.OpenTelemetryProtocol" Version="1.18.0"/>
+        <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.18.0-beta.1"/>
+        <PackageReference Include="OpenTelemetry.Extensions" Version="1.18.0-beta.1"/>
+        <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.18.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.AspNetCore" Version="1.18.0"/>
+        <PackageReference Include="OpenTelemetry.Instrumentation.Http" Version="1.18.0"/>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3"/>
     </ItemGroup>
 
     <ItemGroup>
