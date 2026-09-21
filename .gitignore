@@ -6,3 +6,6 @@ riderModule.iml
 .DS_Store
 NetStone.Api.sln.DotSettings.user
 .idea
+
+/certificates/
+.env
