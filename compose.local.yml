@@ -16,7 +16,7 @@ services:
       AUTH_AUTHORITY: https://id.ffxiv.local/realms/eorzea-dev
       S3_BUCKET_NAME: netstone-api-dev
     volumes:
-      - /Users/tawmy/Desktop/cert/netstone-api:/mnt/cert
+      - ./certificates:/mnt/cert
     labels:
       - dev.orbstack.domains=api.netstone.local
 
